@@ -1,12 +1,12 @@
 {
-    "id": "3CA68D44",
-    "path": "~/ScriptsR/Meu Nome e Job/posts/afinal_como_se_calcula_os_quartis/index.qmd",
-    "project_path": "posts/afinal_como_se_calcula_os_quartis/index.qmd",
+    "id": "20F57A24",
+    "path": "~/ScriptsR/Meu Nome e Job/index.qmd",
+    "project_path": "index.qmd",
     "type": "quarto_markdown",
     "hash": "0",
     "contents": "",
     "dirty": false,
-    "created": 1767710554950.0,
+    "created": 1767719792539.0,
     "source_on_save": false,
     "relative_order": 1,
     "properties": {
@@ -16,14 +16,16 @@
         "Source": "Source",
         "docOutlineVisible": "1",
         "rmdVisualCollapsedChunks": "",
-        "rmdVisualModeLocation": "158:0"
+        "rmdVisualModeLocation": "2:0",
+        "cursorPosition": "0,0",
+        "scrollLine": "0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1748713057,
+    "lastKnownWriteTime": 1767632860,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1748713057,
+    "last_content_update": 1767632860,
     "read_only": false,
     "read_only_alternatives": []
 }
