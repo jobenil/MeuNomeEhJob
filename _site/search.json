@@ -1,0 +1,198 @@
+[
+  {
+    "objectID": "posts.html",
+    "href": "posts.html",
+    "title": "Posts",
+    "section": "",
+    "text": "Post With Code\n\n\n\n\n\n\n\nnews\n\n\ncode\n\n\nanalysis\n\n\n\n\n\n\n\n\n\n\n\nMar 15, 2024\n\n\nHarlow Malloc\n\n\n\n\n\n\n  \n\n\n\n\nWelcome To My Blog\n\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\n\n\nMar 12, 2024\n\n\nTristan O’Malley\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "posts/post-with-code/index.html",
+    "href": "posts/post-with-code/index.html",
+    "title": "Post With Code",
+    "section": "",
+    "text": "This is a post with executable code.\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "posts/welcome/index.html",
+    "href": "posts/welcome/index.html",
+    "title": "Welcome To My Blog",
+    "section": "",
+    "text": "This is the first post in a Quarto blog. Welcome!\n\nSince this post doesn’t specify an explicit image, the first image in the post will be used in the listing page of posts."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Posts",
+    "section": "",
+    "text": "Para que serve o Teste de Hausman-McFadden?\n\n\n\nr-code\n\nalfabetização de dados\n\ndata literacy\n\nteste\n\nestatística\n\n\n\n\n\n\n\n\n\nOct 10, 2025\n\n\nJobenil Júnior\n\n\n\n\n\n\n\n\n\n\n\n\nAgente de IA: O Que Faz? Como Usa? Andrew Ng Explica (e a resposta envolve ‘Falar a Língua’ dos Dados!)\n\n\n\ninteligencia artificial\n\nagentes inteligentes\n\nalfabetização de dados\n\ndata literacy\n\n\n\n\n\n\n\n\n\nMay 31, 2025\n\n\nJobenil Júnior\n\n\n\n\n\n\n\n\n\n\n\n\nAfinal, como se calcula os quartis?\n\n\n\nr-code\n\nalfabetização de dados\n\ndata literacy\n\n\n\n\n\n\n\n\n\nMay 20, 2025\n\n\nJobenil Júnior\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "index.html#educação",
+    "href": "index.html#educação",
+    "title": "Prof. Jobenil Júnior",
+    "section": "",
+    "text": "B.Sc. Matemática | UFG (1993)\nEsp. Estatística | UFG (1996)\nEsp. Docência Superior | Universo (2005)\nEsp. TI - Negócios na Internet | Universo (2011)\nMBA Business Intelligence | Positivo (2016)\nEsp. Big Data e Machine Learning | FASAM (2020)"
+  },
+  {
+    "objectID": "index.html#experiência",
+    "href": "index.html#experiência",
+    "title": "Prof. Jobenil Júnior",
+    "section": "Experiência",
+    "text": "Experiência\nMentoria Análise Dados | 2020 - (atual)\nProfessor Universitário | UFG - Anhanguera - Fac. Alfa - Universo (1994 - 2020)\nGestor Comissão Própria Avaliação | 2002 - 2019"
+  },
+  {
+    "objectID": "index.html#atuação",
+    "href": "index.html#atuação",
+    "title": "Prof. Jobenil Júnior",
+    "section": "Atuação",
+    "text": "Atuação\nOferecemos serviços de consultoria e mentoria em análise de dados para estudantes de graduação, pós-graduação e empreendedores incluindo estatística descritiva, modelagem estatística e visualização de dados.\nANOVA | MODELOS DE REGRESSÃO | ANÁLISE FATORIAL | MODELAGEM DE EQUAÇÕES ESTRUTURAIS | ANÁLISE DE REDES | TRI"
+  },
+  {
+    "objectID": "index.html#atividade-atual-freelance",
+    "href": "index.html#atividade-atual-freelance",
+    "title": "Prof. Jobenil Júnior",
+    "section": "Atividade atual (Freelance)",
+    "text": "Atividade atual (Freelance)\nAtua em mentorias e consultorias em análise de dados para empreendedores e estudantes (graduação e pós-graduação) incluindo estatística descritiva, modelagem estatística e visualização de dados.\nEDA | ENQUETES | ANOVA | MODELOS DE REGRESSÃO | ANÁLISE FATORIAL | MODELAGEM DE EQUAÇÕES ESTRUTURAIS | ANÁLISE DE REDES | TRI"
+  },
+  {
+    "objectID": "index.html#ferramentas",
+    "href": "index.html#ferramentas",
+    "title": "Prof. Jobenil Júnior",
+    "section": "Ferramentas",
+    "text": "Ferramentas"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "Posts",
+    "section": "",
+    "text": "Por volta de 1990 migrei para o centro-oeste em busca de melhor qualidade de vida para mim e minha família. Trabalhando desde os 13 anos, tenho tido uma vida profissional muito diversificada, sendo os últimos 30 anos, como professor universitário. Além de pesquisa me dediquei a formação profissional de mais de 6000 graduandos em Administração de Empresas, Ciências Contábeis, Sistemas de Informação, Matemática, Engenharia de Produção e mais recentemente para alunos de Psicologia, Educação Física, Enfermagem e Fisioterapia. Proporcionei sobretudo o ensino de Estatística aplicada em várias vertentes, mas também cheguei a trabalhar com Cálculo, Cálculo Numérico, Probabilidades, Computação Gráfica e por 4 anos para o curso de Fisioterapia, a disciplina de Empreendedorismo.\nMinhas áreas de interesse em pesquisa tem sido Avaliação Institucional (assessoria por 20 anos à CPA - Comissão Própria de Avaliação da universidade) e da Aprendizagem passando por métodos psicométricos como Teoria Clássica dos Testes e Teoria da Resposta ao Item e últimamente métodos de machine learning empregados em dados educacionais. Neste percurso acabei aprimorando habilidades em algumas linguagens e plataformas como o R, Python (Jupyter Lab, Google Colab), Excel, Sphinx®, SPSS®, Knime e Jasp.\nConsidero relevantes cada uma das experiências que tive ao longo de minha carreira. No entanto, acho mais importantes meus atos e atitudes perante a vida e os colegas e amizades que cultivei nesse tempo.\nA tempos venho ensaiando criar este blog no qual pretendo compartilhar minhas experiências com todas as ferramentas que utilizo e também meus estudos e projetos aos quais estou trabalhando neste momento.\nEspero que apreciem e aproveitem os posts e que eles lhes sejam realmente proveitosos."
+  },
+  {
+    "objectID": "about.html#educação",
+    "href": "about.html#educação",
+    "title": "Posts",
+    "section": "Educação",
+    "text": "Educação\nB.Sc. Matemática | UFG (1993)\nEsp. Estatística | UFG (1996)\nEsp. Docência Superior | Universo (2005)\nEsp. TI - Negócios na Internet | Universo (2011)\nMBA Business Intelligence | Positivo (2016)\nEsp. Big Data e Machine Learning | FASAM (2020)"
+  },
+  {
+    "objectID": "about.html#experiência",
+    "href": "about.html#experiência",
+    "title": "Posts",
+    "section": "Experiência",
+    "text": "Experiência\nTutoria em Análise Dados | 2020 - (atual)\nProfessor Universitário (UFG - Anhanguera - Fac. Alfa - Universo) | 1994 - 2020\nGestor Comissão Própria Avaliação | 2002 - 2019"
+  },
+  {
+    "objectID": "about.html#atividade-atual-freelance",
+    "href": "about.html#atividade-atual-freelance",
+    "title": "Prof. Jobenil Júnior",
+    "section": "Atividade atual (Freelance)",
+    "text": "Atividade atual (Freelance)\nAtua em consultoria e mentoria em análise de dados para empreendedores, estudantes de graduação e de pós-graduação, incluindo estatística descritiva, modelagem, visualização e comunicação.\nEDA | ENQUETES | ANOVA | MODELOS DE REGRESSÃO | ANÁLISE FATORIAL | MODELAGEM DE EQUAÇÕES ESTRUTURAIS | ANÁLISE DE REDES | TRI | ANÁLISE DADOS FINANCEIROS"
+  },
+  {
+    "objectID": "about.html#ferramentas",
+    "href": "about.html#ferramentas",
+    "title": "Posts",
+    "section": "Ferramentas",
+    "text": "Ferramentas"
+  },
+  {
+    "objectID": "about.html#consultoria-e-mentoria",
+    "href": "about.html#consultoria-e-mentoria",
+    "title": "Prof. Jobenil Júnior",
+    "section": "Consultoria e Mentoria",
+    "text": "Consultoria e Mentoria\nRealiza consultoria e mentoria em análise de dados para estudantes de graduação e de pós-graduação, incluindo estatística descritiva, modelagem, visualização e comunicação de dados.\nEDA | ENQUETES | ANOVA | MODELOS DE REGRESSÃO | ANÁLISE FATORIAL | MODELAGEM DE EQUAÇÕES ESTRUTURAIS | TRI"
+  },
+  {
+    "objectID": "about.html#formação",
+    "href": "about.html#formação",
+    "title": "Prof. Jobenil Júnior",
+    "section": "Formação",
+    "text": "Formação\nB.Sc. Matemática | UFG (1993)\nEsp. Estatística | UFG (1996)\nEsp. Docência Superior | Universo (2005)\nEsp. TI - Negócios na Internet | Universo (2011)\nMBA Business Intelligence | Positivo (2016)\nEsp. Big Data e Machine Learning | FASAM (2020)"
+  },
+  {
+    "objectID": "about.html#consultoria-e-tutoria",
+    "href": "about.html#consultoria-e-tutoria",
+    "title": "Posts",
+    "section": "Consultoria e Tutoria",
+    "text": "Consultoria e Tutoria\nRealiza consultoria e tutoria em análise de dados para estudantes de graduação e de pós-graduação, incluindo estatística descritiva, modelagem, visualização e comunicação de dados.\nEDA | ENQUETES | ANOVA | MODELOS DE REGRESSÃO | ANÁLISE FATORIAL | MODELAGEM DE EQUAÇÕES ESTRUTURAIS | TRI"
+  },
+  {
+    "objectID": "posts/agente_de_ia_o_que_faz/index.html",
+    "href": "posts/agente_de_ia_o_que_faz/index.html",
+    "title": "Agente de IA: O Que Faz? Como Usa? Andrew Ng Explica (e a resposta envolve ‘Falar a Língua’ dos Dados!)",
+    "section": "",
+    "text": "Agente de IA: O Que Faz? Como Usa? Andrew Ng Explica (e a Resposta envolve ‘Falar a Língua’ dos Dados!)\n\nRecebi esse video em um dos inúmeros grupos de WhatsApp que participo e como é um assunto atual fiquei pensando em qual seria a relação de Inteligência Artificial com a Literácia de Dados.\nNele Andrew Ng, que já pode ser considerado uma lenda da IA e Harrison Chase criador do LangChain, falam justamente sobre isso.\nAssistir à essa entrevista me fez pensar sobre como aquela conversa se conecta com o assunto de nosso blog.\nDurante a entrevista, Ng começa explicando que, em vez de ficar discutindo se algo é ou não é um agente de IA, é melhor pensar no grau de agenticidade que um sistema tem – ou seja, o quão autônomo ele consegue ser. Para construir esses sistemas, que têm algum nível de autonomia, Ng diz que tem: desde coisas mais simples, como automatizar um processo de negócio que é um pouco linear, como “olhar um formulário, buscar na web e colar em outro lugar”, até fluxos bem mais complexos. Mas o ponto que conecta com a nossa ideia de alfabetização de dados é o seguinte: para qualquer um desses sistemas multi-agentes funcionar bem, ele precisa de informação – ou seja, de dados! Andrew Ng, comenta que um dos grandes desafios hoje é pegar o que as pessoas fazem (que muitas vezes envolve lidar com dados de vários lugares) e transformar isso num fluxo para IA. Ele disse que se gasta muito de tempo na ingestão dos dados para processá-los. Como achar onde os dados estão (em formulários, bases de dados, na web), conseguir acessar e “dar na mão” do modelo de linguagem (LLM). Sabe por quê? Porque, como ele disse, os LLMs são “bastante inteligentes” quando você lhes dá o “contexto correto”. E adivinha de onde vem esse contexto dos dados?\n\nIsso, para mim, é a alfabetização de dados na veia!\n\nNão adianta ter o LLM super potente se você não sabe quais dados ele precisa, onde encontrá-los, como juntá-los e como apresentá-los para ele entender o que fazer. É ter a capacidade de compreender os dados, saber usá-los e comunicá-los como explicado na conceituação de alfabetização de dados, apresentado em uma conversa anterior.\nNg mencionou uma ferramenta chamada MCP (Model Context Protocol) que é um passo legal para tentar padronizar a forma de se conectar a diferentes fontes de dados e ferramentas. A ideia é que, em vez de ter que criar uma conexão única para cada ferramenta e cada fonte de dados - o que daria um trabalhão - que você tenha um padrão que facilite essa “conversa”. Isso ajuda diretamente na parte da alfabetização de dados ligada à integração e acesso à informação.\nEm minha opinião, o que ele falou, e que se alinha com a alfabetização de dados, é que uma das habilidades mais importantes para o futuro, para todo mundo (não só para quem programa como profissão!), vai ser conseguir dizer para o computador exatamente o que você quer que ele faça. Muitas vezes, dizer para o computador o que fazer significa instruir ele a buscar, analisar ou manipular dados. Ter uma noção de como o computador “pensa” e lida com a informação – mesmo que não seja no nível de um engenheiro de software – permite dar instruções muito mais precisas. No vídeo Ng encoraja a todo mundo, aprender pelo menos uma linguagem de programação (tipo Python) para ter essa base, não para se tornar um dev, mas para melhorar a comunicação com a máquina sobre as tarefas que envolvem dados.\nNg menciona também a importância de testar (fazer “evals”) para ver se o sistema está funcionando direito, o que também envolve analisar os resultados (dados de saída), e como isso se parece com um monte de “peças de Lego” (ferramentas de IA) para montar esses sistemas. Saber quais peças lidar com dados (como as de busca, memória, etc.) e como usá-las faz parte desse quebra-cabeça.\nResumo da ópera! Para mim, nesse mundo de IA cada vez mais autônomo, saber lidar com dados, entender de onde eles vêm, como se juntam e, principalmente, como “falar a língua” dos dados para instruir o computador, é uma habilidade fundamental que está totalmente ligada a alfabetização de dados. Não é só para quem está construindo os robôs, mas para quem vai usá-los para resolver problemas no dia a dia.\n\n🤖 É um novo tipo de leitura e escrita para o século XXI!\n\nEDA | TESTE T | ENQUETES | ANOVA | MODELOS DE REGRESSÃO | ANÁLISE FATORIAL | MODELAGEM DE EQUAÇÕES ESTRUTURAIS | TRI | RASCH MODELS | MACHINE LEARNING\n Prof. Jobenil Júnior"
+  },
+  {
+    "objectID": "posts/afinal_como_se_calcula_os_quartis/index.html",
+    "href": "posts/afinal_como_se_calcula_os_quartis/index.html",
+    "title": "Afinal, como se calcula os quartis?",
+    "section": "",
+    "text": "Você sabia que exitem nove formas diferentes para se calcular os quartís no R?\nA tempos venho ensaiando escrever sobre esse assunto. Embora calcular essas estatísticas seja uma tarefa relativamente simples ao estudar a documentação do R, descobri que existem 9 maneiras diferentes para calcular esta estatística.\nO comando quantile() do pacote {stats} , um dos pacotes básicos do R, trás a seguinte definição:\n\nA função genérica quantil produz quantis amostrais correspondentes às probabilidades fornecidas. A menor observação corresponde a uma probabilidade de 0 e a maior, a uma probabilidade de 1.\n\nNote que essa é na verdade a definição do que chamaríamos de percentil, pois pode-se escolher qualquer valor de probabilidade entre 0 e 1. Por exemplo se quisessemos obter os quartís \\(Q_1, Q_2 \\mbox{ e }Q_3\\), empregaríamos no comando da função uma lista contendo os valores c(0.25, 0.50, 0.75). O resultado seria correspondente aos valores da variável que são menores que 25%, 50% e 75% respectivamente. Estas são chamadas de estatísticas de ordem e ajuda o analista a entender como é o comportamento das sequencias numericas colecionadas. A depender desse comportamento pode-se verifica a adequabilidade do uso da mesma nos testes estatísticos ou ainda, de empregá-la em modelagem como análise de regressão por exemplo. Bem o que tudo isso tem a ver com nossa discussão? Existe um parâmetro que pode ser modificado dentro da função que permite escolher qual método de cálculo dessas estatísticas se quer usar. Em geral, nos cursos de Estatística Básica, são apresentadas uma ou duas formas para realizar esse cálculo - variáveis discretas ou contínuas - mas nove maneiras diferentes parece ser um exagero, não é mesmo? Uma das preocupações dos Estatísticos é que as estatísticas (resumos amostrais) possuam algumas propriedades específicas para a as mesma seja considerada como boa representante daquele parâmetro (resultado se tívessemos acesso aos dados de toda a população). Uma dessas propriedades é o seu viés, ou seja, a diferença da mesma em relação ao que deveria ser. No basilar artigo de Rob J. Hyndman e Yanan Fan encontramos uma extensiva análise sobre os nove algoritmos utilizados na criação da função quantile(). Nele, os leitores mais técnicos, podem encontrar maiores detalhes sobre quem desenvolveu cada um e os motivos que os originaram. Uma discussão bem completa também poderá ser encontrada no Wikipedia. Para ilustrar como isso pode afetar os resultados na análise descritiva das variáveis elaboramos o código abaixo com duas simulações de variáveis - uma com distribuição normal e outra assimétrica e os efeitos de cada um dos algoritmos na computação dos percentis.\n\n# Carregando pacotes\nlibrary(ggplot2)\nlibrary(tidyr)\nlibrary(dplyr)\n\n# Gerando os dados\nset.seed(123)\nx &lt;- rnorm(1001, 15, 2.5)\ny &lt;- rgamma(1001, shape = 2, rate = 1)\n\n# Definindo os percentis e os rótulos\np &lt;- c(1, 5, 10, 20, 30, 40, 50)/100\npercent_labels &lt;- paste0(p * 100, \"%\")\n\n# Função para calcular quantis usando os 9 tipos - extraida da própria documentação\nquantAll &lt;- function(x, prob, ...) {\n  t(vapply(1:9, function(typ) quantile(x, probs = prob, type = typ, ...),\n           numeric(length(prob))))\n}\n\n# Calculando quantis com os 9 tipos para cada variável\nqmat_x &lt;- quantAll(x, p)\nqmat_y &lt;- quantAll(y, p)\n\n# Organizando os dados\n\ndf_x &lt;- as.data.frame(qmat_x)\ncolnames(df_x) &lt;- percent_labels\ndf_x$Type &lt;- factor(1:9)\n\ndf_y &lt;- as.data.frame(qmat_y)\ncolnames(df_y) &lt;- percent_labels\ndf_y$Type &lt;- factor(1:9)\n\n\ndf_x_long &lt;- pivot_longer(df_x, -Type, names_to = \"Percentil\", values_to = \"Quantile\")\n\ndf_y_long &lt;- pivot_longer(df_y, -Type, names_to = \"Percentil\", values_to = \"Quantile\")\n\n\ndf_x_long$Percentil &lt;- factor(df_x_long$Percentil, levels = percent_labels)\n\ndf_y_long$Percentil &lt;- factor(df_y_long$Percentil, levels = percent_labels)\n\n# Gerando os gráficos\nggplot(df_x_long, aes(x = Percentil, y = Quantile, color = Type)) +\n  geom_point(position = position_dodge(width = 0.5), size = 1.5) +\n  labs(title = \"Comparação de Quantis por Tipo (1 a 9) - Normal\",\n       x = \"Percentil\",\n       y = \"Valor do Quantil\",\n       color = \"Tipo de Quantile\") +\n  theme_minimal(base_size = 14)\n\n\n\n\n\n\n\nggplot(df_y_long, aes(x = Percentil, y = Quantile, color = Type)) +\n  geom_point(position = position_dodge(width = 0.5), size = 1.5) +\n  labs(title = \"Comparação de Quantis por Tipo (1 a 9) - Assimétrica\",\n       x = \"Percentil\",\n       y = \"Valor do Quantil\",\n       color = \"Tipo de Quantile\") +\n  theme_minimal(base_size = 14)\n\n\n\n\n\n\n\n\nNote que na simulação dos dados normais, as estimativas dos percentís 1%, 5% e 10% apresentaram maior diversidade de resultados para cada tipo de algoritmo utilizado. Já para os dados com assimetria para a direita essa diversidade torna-se imperceptível na representação gráfica.\nEspero que tenha gostado desse tipo de artigo. Pretendo trazer mais análises sobre os pacotes e funções do R e Python ao longo do tempo. Obrigado pelo interesse.\nEDA | TESTE T | ENQUETES | ANOVA | MODELOS DE REGRESSÃO | ANÁLISE FATORIAL | MODELAGEM DE EQUAÇÕES ESTRUTURAIS | TRI | RASCH MODELS | MACHINE LEARNING\n Prof. Jobenil Júnior"
+  },
+  {
+    "objectID": "posts/para_que_serve_o_teste_de_hausman_mcfadden/index.html",
+    "href": "posts/para_que_serve_o_teste_de_hausman_mcfadden/index.html",
+    "title": "Para que serve o Teste de Hausman-McFadden?",
+    "section": "",
+    "text": "Me explique como se eu fosse um bebê o que é e para que serve o teste de Hausman-McFadden.\nRecentemente estive trabalhando em um problema e me deparei com uma dúvida sobre um teste estatístico que tive que realizar. Apelei para o [ChatGPT](https://chatgpt.com) da OpenAi Inc. que me forneceu uma resposta tão boa que resolvi reproduzí-la aqui.\nPerfeito, Jobenil 😊 — vamos começar bem simples, como se estivéssemos brincando de explicar um conceito estatístico para uma criança curiosa."
+  },
+  {
+    "objectID": "posts/para_que_serve_o_teste_de_hausman_mcfadden/index.html#imagine-assim",
+    "href": "posts/para_que_serve_o_teste_de_hausman_mcfadden/index.html#imagine-assim",
+    "title": "Para que serve o Teste de Hausman-McFadden?",
+    "section": "🧸 Imagine assim:",
+    "text": "🧸 Imagine assim:\nTemos três brinquedos: um carrinho 🚗, uma boneca 🧍‍♀️ e um aviãozinho ✈️. E você pode escolher um só para brincar.\nAgora, pense que algumas crianças escolhem o carrinho, outras a boneca, e outras o aviãozinho. Você quer entender por que cada uma escolhe o que escolhe. Pode ser por causa da cor, do tamanho, do barulho que faz, etc."
+  },
+  {
+    "objectID": "posts/para_que_serve_o_teste_de_hausman_mcfadden/index.html#o-modelo-que-usamos",
+    "href": "posts/para_que_serve_o_teste_de_hausman_mcfadden/index.html#o-modelo-que-usamos",
+    "title": "Para que serve o Teste de Hausman-McFadden?",
+    "section": "🧠 O modelo que usamos",
+    "text": "🧠 O modelo que usamos\nPara estudar isso, usamos um modelo chamado Logit Multinomial (MNL) — ele tenta prever a probabilidade de uma criança escolher cada brinquedo com base em características (das crianças ou dos brinquedos).\nEsse modelo tem uma regra importante chamada IIA — em inglês, Independence of Irrelevant Alternatives, ou seja:\n\n“A chance de escolher entre dois brinquedos não muda se eu colocar um novo brinquedo parecido na caixa.”"
+  },
+  {
+    "objectID": "posts/para_que_serve_o_teste_de_hausman_mcfadden/index.html#por-exemplo",
+    "href": "posts/para_que_serve_o_teste_de_hausman_mcfadden/index.html#por-exemplo",
+    "title": "Para que serve o Teste de Hausman-McFadden?",
+    "section": "Por exemplo:",
+    "text": "Por exemplo:\nSe uma criança escolhe entre 🚗 e ✈️, e gosta mais do carro, a relação entre carro e avião não deveria mudar só porque eu coloquei uma moto 🏍️ nova na caixa.\nMas… será que isso é verdade na vida real?"
+  },
+  {
+    "objectID": "posts/para_que_serve_o_teste_de_hausman_mcfadden/index.html#entra-o-teste-de-hausman-mcfadden",
+    "href": "posts/para_que_serve_o_teste_de_hausman_mcfadden/index.html#entra-o-teste-de-hausman-mcfadden",
+    "title": "Para que serve o Teste de Hausman-McFadden?",
+    "section": "🔍 Entra o Teste de Hausman-McFadden",
+    "text": "🔍 Entra o Teste de Hausman-McFadden\nO Teste de Hausman-McFadden (ou teste H-M) serve para verificar se essa regra IIA é válida no seu modelo.\nEle faz o seguinte:\n\nPrimeiro, o modelo é estimado com todas as opções (🚗, 🧍‍♀️, ✈️).\nDepois, é estimado tirando uma das opções (por exemplo, sem o avião ✈️).\nO teste compara os coeficientes estimados nos dois modelos.\n\nSe não houver diferença significativa, quer dizer que:\n\nAs alternativas realmente são independentes → o modelo MNL é adequado ✅\n\nMas se houver diferença grande, então:\n\nAs escolhas não são independentes → o modelo MNL não serve bem, e precisamos de um modelo mais flexível (como o Logit Aninhado, o nested logit) 🚫"
+  },
+  {
+    "objectID": "posts/para_que_serve_o_teste_de_hausman_mcfadden/index.html#em-resumo",
+    "href": "posts/para_que_serve_o_teste_de_hausman_mcfadden/index.html#em-resumo",
+    "title": "Para que serve o Teste de Hausman-McFadden?",
+    "section": "🎯 Em resumo:",
+    "text": "🎯 Em resumo:\n\n\n\n\n\n\n\nConceito\nExplicação “de bebê”\n\n\n\n\nO que é?\nUm teste para ver se as opções de escolha são realmente independentes entre si.\n\n\nPor que serve?\nPara saber se o modelo Logit Multinomial está “pensando certo” ou está enganando a gente.\n\n\nComo faz isso?\nCompara os resultados do modelo completo e de um modelo onde tiramos uma opção.\n\n\nO que significa o resultado?\nSe der diferente → o modelo está violando a regra IIA. Se der igual → o modelo é adequado."
+  },
+  {
+    "objectID": "posts/para_que_serve_o_teste_de_hausman_mcfadden/index.html#um-exemplo-prático-real",
+    "href": "posts/para_que_serve_o_teste_de_hausman_mcfadden/index.html#um-exemplo-prático-real",
+    "title": "Para que serve o Teste de Hausman-McFadden?",
+    "section": "🧩 Um exemplo prático real:",
+    "text": "🧩 Um exemplo prático real:\nSuponha que estejamos estudando o modo de transporte que as pessoas escolhem para ir ao trabalho: 🚗 carro, 🚌 ônibus, 🚲 bicicleta, 🚶‍♂️ a pé.\nSe o teste Hausman-McFadden mostrar que tirar o ônibus muda os coeficientes do carro e da bicicleta, então significa que:\n\nas escolhas não são independentes — talvez quem pega ônibus também escolheria metrô, se houvesse. Logo, o modelo Logit Multinomial simples não é o mais indicado.\n\nFizemos uma simulação em R, onde tentamos representar uma situação prática — o modo de transporte para o trabalho — e aplicando o teste de Hausman-McFadden para verificar se a hipótese de independência das alternativas (IIA) é válida."
+  },
+  {
+    "objectID": "posts/para_que_serve_o_teste_de_hausman_mcfadden/index.html#exemplo-escolha-do-modo-de-transporte",
+    "href": "posts/para_que_serve_o_teste_de_hausman_mcfadden/index.html#exemplo-escolha-do-modo-de-transporte",
+    "title": "Para que serve o Teste de Hausman-McFadden?",
+    "section": "🚗 Exemplo: Escolha do modo de transporte",
+    "text": "🚗 Exemplo: Escolha do modo de transporte\nCom 4 alternativas possíveis:\n\ncarro\nônibus\nbicicleta\na pé\n\nCada pessoa escolhe um modo para ir ao trabalho, dependendo de:\n\ntempo de viagem (tempo)\ncusto da viagem (custo)\nrenda mensal (renda)\n\n\n📊 Interpretação do resultado\nO comando hmftest() retorna algo assim:\nHausman-McFadden test  data:  modelo_completo and modelo_sem_bike chisq = 5.42, df = 3, p-value = 0.143 \nInterpretação:\n\nO valor-p = 0.143 é maior que 0.05,\no que nos indica que não rejeitamos H₀, ou seja, que as alternativas são independentes.\n✅ O modelo respeita a suposição de IIA.\nSe o valor-p fosse menor que 0.05, teríamos que rejeitar a hipótese de independência, indicando que as escolhas estão correlacionadas — nesse caso, o modelo Logistico Multinomial (MNL) não seria apropriado."
+  },
+  {
+    "objectID": "posts/para_que_serve_o_teste_de_hausman_mcfadden/index.html#resumo-didático",
+    "href": "posts/para_que_serve_o_teste_de_hausman_mcfadden/index.html#resumo-didático",
+    "title": "Para que serve o Teste de Hausman-McFadden?",
+    "section": "🧩 Resumo didático",
+    "text": "🧩 Resumo didático\n\n\n\n\n\n\n\n\nEtapa\nO que fizemos\nPor quê\n\n\n\n\n1️⃣\nSimulamos escolhas de transporte\nPara ter dados realistas\n\n\n2️⃣\nMontamos o modelo Logit Multinomial\nPara estimar preferências\n\n\n3️⃣\nRetiramos uma alternativa\nPara testar a regra de independência\n\n\n4️⃣\nAplicamos o Teste de Hausman-McFadden\nPara verificar a validade do modelo\n\n\n5️⃣\nInterpretamos o p-valor\nPara decidir se o modelo é adequado\n\n\n\nSe você quiser se aprofundar no assunto recomendo a leitura desse artigo. Nele você encontrará outras referências. Obrigado pela leitura!!!\nEDA | TESTE T | ENQUETES | ANOVA | MODELOS DE REGRESSÃO | ANÁLISE FATORIAL | MODELAGEM DE EQUAÇÕES ESTRUTURAIS | TRI | RASCH MODELS | MACHINE LEARNING\n Prof. Jobenil Júnior"
+  }
+]

@@ -1,0 +1,23 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Posts"
+  navbar:
+    logo: /images/meunomeejog_logo.png
+    background: "#00CC00"
+    right:
+      - index.qmd
+      - icon: whatsapp
+        href: https://wa.me/5562992138972
+      - icon: linkedin
+        href: https://www.linkedin.com/in/jobeniljunior/
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+
+editor: visual
+

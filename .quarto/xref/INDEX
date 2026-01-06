@@ -1,0 +1,26 @@
+{
+  "posts.qmd": {
+    "posts.html": "d2af1412"
+  },
+  "posts/post-with-code/index.qmd": {
+    "index.html": "9aa1a12a"
+  },
+  "posts/welcome/index.qmd": {
+    "index.html": "015c0b92"
+  },
+  "index.qmd": {
+    "index.html": "3a5558e0"
+  },
+  "about.qmd": {
+    "about.html": "51b30e81"
+  },
+  "posts/afinal_como_se_calcula_os_quartis/index.qmd": {
+    "index.html": "cbdf3ec1"
+  },
+  "posts/agente_de_ia_o_que_faz/index.qmd": {
+    "index.html": "b58c9262"
+  },
+  "posts/para_que_serve_o_teste_de_hausman_mcfadden/index.qmd": {
+    "index.html": "7b28e7c5"
+  }
+}

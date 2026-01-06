@@ -1,0 +1,19 @@
+/* css styles */
+
+.navbar {
+  height: 100px;
+  text-align: center;
+}
+
+.navbar-logo {
+  height: 100px !important;
+  width: 250px !important;
+  max-width: unset !important;
+  max-height: unset !important;
+
+
+}
+
+p {
+  text-align: justify
+}
