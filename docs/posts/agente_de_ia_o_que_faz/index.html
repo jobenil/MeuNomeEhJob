@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Jobenil Júnior">
+<meta name="dcterms.date" content="2025-05-31">
 
-<title>Posts</title>
+<title>Agente de IA: O Que Faz? Como Usa? Andrew Ng Explica (e a resposta envolve ‘Falar a Língua’ dos Dados!) – Posts</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,25 +25,23 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-8c6a8c9286efdcd48da6225c886b3ad4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-8c6a8c9286efdcd48da6225c886b3ad4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -69,80 +69,22 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
 
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="./index.html" class="navbar-brand navbar-brand-logo">
-    <img src="./images/meunomeejog_logo.png" alt="" class="navbar-logo">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/meunomeejog_logo.png" alt="" class="navbar-logo">
     </a>
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Posts</span>
     </a>
   </div>
@@ -153,7 +95,7 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
+    <a class="nav-link" href="../../index.html"> 
 <span class="menu-text">Prof.&nbsp;Jobenil Júnior</span></a>
   </li>  
   <li class="nav-item compact">
@@ -176,150 +118,72 @@ window.Quarto = {
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page-left">
-      <h1 class="title">Posts</h1>
-                      </div>
+    <div class="quarto-title column-body">
+      <h1 class="title">Agente de IA: O Que Faz? Como Usa? Andrew Ng Explica (e a resposta envolve ‘Falar a Língua’ dos Dados!)</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">inteligencia artificial</div>
+                <div class="quarto-category">agentes inteligentes</div>
+                <div class="quarto-category">alfabetização de dados</div>
+                <div class="quarto-category">data literacy</div>
+              </div>
+                  </div>
   </div>
     
   
-  <div class="quarto-title-meta column-page-left">
+  <div class="quarto-title-meta">
 
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Jobenil Júnior </p>
+            </div>
+    </div>
       
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">May 31, 2025</p>
+      </div>
+    </div>
     
       
     </div>
     
   
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(3)</span></div><div class="category" data-category="YWdlbnRlcyUyMGludGVsaWdlbnRlcw==">agentes inteligentes <span class="quarto-category-count">(1)</span></div><div class="category" data-category="YWxmYWJldGl6YSVDMyVBNyVDMyVBM28lMjBkZSUyMGRhZG9z">alfabetização de dados <span class="quarto-category-count">(3)</span></div><div class="category" data-category="ZGF0YSUyMGxpdGVyYWN5">data literacy <span class="quarto-category-count">(3)</span></div><div class="category" data-category="ZXN0YXQlQzMlQURzdGljYQ==">estatística <span class="quarto-category-count">(1)</span></div><div class="category" data-category="aW50ZWxpZ2VuY2lhJTIwYXJ0aWZpY2lhbA==">inteligencia artificial <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ci1jb2Rl">r-code <span class="quarto-category-count">(2)</span></div><div class="category" data-category="dGVzdGU=">teste <span class="quarto-category-count">(1)</span></div></div></div>
+    
 <!-- main -->
-<main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
 
+<p><strong>Agente de IA: O Que Faz? Como Usa? Andrew Ng Explica (e a Resposta envolve ‘Falar a Língua’ dos Dados!)</strong></p>
+<p><a href="https://www.youtube.com/watch?v=4pYzYmSdSH4"><img src="images/andrewng_langchain.jpg" class="img-fluid"></a></p>
+<p>Recebi esse video em um dos inúmeros grupos de WhatsApp que participo e como é um assunto atual fiquei pensando em qual seria a relação de <strong>Inteligência Artificial</strong> com a <strong>Literácia de Dados</strong>.</p>
+<p>Nele <a href="https://www.andrewng.org/">Andrew Ng</a>, que já pode ser considerado uma lenda da IA e <a href="https://blog.langchain.dev/author/harrison/">Harrison Chase</a> criador do LangChain, falam justamente sobre isso.</p>
+<p>Assistir à essa entrevista me fez pensar sobre como aquela conversa se conecta com o assunto de nosso blog.</p>
+<p>Durante a entrevista, Ng começa explicando que, em vez de ficar discutindo se algo é ou não é um agente de IA, é melhor pensar no grau de <em>agenticidade</em> que um sistema tem – ou seja, o quão <strong>autônomo</strong> ele consegue ser. Para construir esses sistemas, que têm algum nível de autonomia, Ng diz que tem: desde coisas mais simples, como automatizar um processo de negócio que é um pouco linear, como “olhar um formulário, buscar na web e colar em outro lugar”, até fluxos bem mais complexos. Mas o ponto que conecta com a nossa ideia de <strong>alfabetização de dados</strong> é o seguinte: para qualquer um desses sistemas multi-agentes funcionar bem, ele precisa de informação – ou seja, de <strong>dados!</strong> Andrew Ng, comenta que um dos grandes desafios hoje é pegar o que as pessoas fazem (que muitas vezes envolve lidar com dados de vários lugares) e transformar isso num fluxo para IA. Ele disse que se gasta muito de tempo na ingestão dos dados para processá-los. Como achar onde os dados estão (em formulários, bases de dados, na web), conseguir acessar e “dar na mão” do modelo de linguagem (LLM). Sabe por quê? Porque, como ele disse, os LLMs são “bastante inteligentes” quando você lhes dá o “contexto correto”. E adivinha de onde vem esse contexto dos dados?</p>
+<blockquote class="blockquote">
+<p><strong>Isso, para mim, é a alfabetização de dados na veia!</strong></p>
+</blockquote>
+<p>Não adianta ter o LLM super potente se você não sabe quais dados ele precisa, onde encontrá-los, como juntá-los e como apresentá-los para ele entender o que fazer. É ter a capacidade de compreender os dados, saber usá-los e comunicá-los como explicado na conceituação de <strong>alfabetização de dados</strong>, apresentado em uma conversa <a href="https://www.dataliteracy.com.br/posts/alfabetizacao-de-dados/">anterior</a>.</p>
+<p>Ng mencionou uma ferramenta chamada <a href="https://softdesign.com.br/blog/model-context-protocol/">MCP</a> (Model Context Protocol) que é um passo legal para tentar padronizar a forma de se conectar a diferentes fontes de dados e ferramentas. A ideia é que, em vez de ter que criar uma conexão única para cada ferramenta e cada fonte de dados - o que daria um trabalhão - que você tenha um padrão que facilite essa “conversa”. Isso ajuda diretamente na parte da alfabetização de dados ligada à integração e acesso à informação.</p>
+<p>Em minha opinião, o que ele falou, e que se alinha com a alfabetização de dados, é que uma das habilidades mais importantes para o futuro, para todo mundo (não só para quem programa como profissão!), vai ser conseguir dizer para o computador exatamente o que você quer que ele faça. Muitas vezes, dizer para o computador o que fazer significa instruir ele a buscar, analisar ou manipular dados. Ter uma noção de como o computador “pensa” e lida com a informação – mesmo que não seja no nível de um engenheiro de software – permite dar instruções muito mais precisas. No vídeo Ng encoraja a todo mundo, aprender pelo menos uma linguagem de programação (tipo Python) para ter essa base, não para se tornar um dev, mas para melhorar a comunicação com a máquina sobre as tarefas que envolvem dados.</p>
+<p>Ng menciona também a importância de testar (fazer “evals”) para ver se o sistema está funcionando direito, o que também envolve analisar os resultados (dados de saída), e como isso se parece com um monte de “peças de Lego” (ferramentas de IA) para montar esses sistemas. Saber quais peças lidar com dados (como as de busca, memória, etc.) e como usá-las faz parte desse quebra-cabeça.</p>
+<p>Resumo da ópera! Para mim, nesse mundo de IA cada vez mais autônomo, saber lidar com dados, entender de onde eles vêm, como se juntam e, principalmente, como “falar a língua” dos dados para instruir o computador, é uma habilidade fundamental que está totalmente ligada a <strong>alfabetização de dados</strong>. Não é só para quem está construindo os robôs, mas para quem vai usá-los para resolver problemas no dia a dia.</p>
+<blockquote class="blockquote">
+<p><strong>🤖 É um novo tipo de leitura e escrita para o século XXI!</strong></p>
+</blockquote>
+<p>EDA | TESTE T | ENQUETES | ANOVA | MODELOS DE REGRESSÃO | ANÁLISE FATORIAL | MODELAGEM DE EQUAÇÕES ESTRUTURAIS | TRI | RASCH MODELS | MACHINE LEARNING</p>
+<p><img src="images/whatsapp_logo.png" width="20" height="20"> <a href="https://wa.me/5562992138972"><strong>Prof.&nbsp;Jobenil Júnior</strong></a></p>
 
 
 
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="ci1jb2RlJTJDYWxmYWJldGl6YSVDMyVBNyVDMyVBM28lMjBkZSUyMGRhZG9zJTJDZGF0YSUyMGxpdGVyYWN5JTJDdGVzdGUlMkNlc3RhdCVDMyVBRHN0aWNh" data-listing-date-sort="1760065200000" data-listing-file-modified-sort="1760127533019" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="849">
-<div class="thumbnail"><a href="./posts/para_que_serve_o_teste_de_hausman_mcfadden/index.html" class="no-external">
-
-<img loading="lazy" src="./posts/para_que_serve_o_teste_de_hausman_mcfadden/images/generatedImage3.jpg" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/para_que_serve_o_teste_de_hausman_mcfadden/index.html" class="no-external">Para que serve o Teste de Hausman-McFadden?</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('ci1jb2Rl'); return false;">r-code</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('YWxmYWJldGl6YSVDMyVBNyVDMyVBM28lMjBkZSUyMGRhZG9z'); return false;">alfabetização de dados</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('ZGF0YSUyMGxpdGVyYWN5'); return false;">data literacy</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('dGVzdGU='); return false;">teste</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('ZXN0YXQlQzMlQURzdGljYQ=='); return false;">estatística</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/para_que_serve_o_teste_de_hausman_mcfadden/index.html" class="no-external">
-Me explique como se eu fosse um bebê o que é e para que serve o teste de Hausman-McFadden.
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/para_que_serve_o_teste_de_hausman_mcfadden/index.html" class="no-external">
-<div class="listing-date">
-Oct 10, 2025
-</div>
-<div class="listing-author">
-Jobenil Júnior
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="aW50ZWxpZ2VuY2lhJTIwYXJ0aWZpY2lhbCUyQ2FnZW50ZXMlMjBpbnRlbGlnZW50ZXMlMkNhbGZhYmV0aXphJUMzJUE3JUMzJUEzbyUyMGRlJTIwZGFkb3MlMkNkYXRhJTIwbGl0ZXJhY3k=" data-listing-date-sort="1748660400000" data-listing-file-modified-sort="1748714877272" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="770">
-<div class="thumbnail"><a href="./posts/agente_de_ia_o_que_faz/index.html" class="no-external">
-
-<img loading="lazy" src="./posts/agente_de_ia_o_que_faz/images/andrewng_langchain.jpg" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/agente_de_ia_o_que_faz/index.html" class="no-external">Agente de IA: O Que Faz? Como Usa? Andrew Ng Explica (e a resposta envolve ‘Falar a Língua’ dos Dados!)</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('aW50ZWxpZ2VuY2lhJTIwYXJ0aWZpY2lhbA=='); return false;">inteligencia artificial</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('YWdlbnRlcyUyMGludGVsaWdlbnRlcw=='); return false;">agentes inteligentes</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('YWxmYWJldGl6YSVDMyVBNyVDMyVBM28lMjBkZSUyMGRhZG9z'); return false;">alfabetização de dados</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('ZGF0YSUyMGxpdGVyYWN5'); return false;">data literacy</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/agente_de_ia_o_que_faz/index.html" class="no-external">
-<strong>Agente de IA: O Que Faz? Como Usa? Andrew Ng Explica (e a Resposta envolve ‘Falar a Língua’ dos Dados!)</strong>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/agente_de_ia_o_que_faz/index.html" class="no-external">
-<div class="listing-date">
-May 31, 2025
-</div>
-<div class="listing-author">
-Jobenil Júnior
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="ci1jb2RlJTJDYWxmYWJldGl6YSVDMyVBNyVDMyVBM28lMjBkZSUyMGRhZG9zJTJDZGF0YSUyMGxpdGVyYWN5" data-listing-date-sort="1747710000000" data-listing-file-modified-sort="1748713057651" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="795">
-<div class="thumbnail"><a href="./posts/afinal_como_se_calcula_os_quartis/index.html" class="no-external">
-
-<p class="card-img-top"><img src="posts\afinal_como_se_calcula_os_quartis\index_files\figure-html\unnamed-chunk-1-1.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/afinal_como_se_calcula_os_quartis/index.html" class="no-external">Afinal, como se calcula os quartis?</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('ci1jb2Rl'); return false;">r-code</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('YWxmYWJldGl6YSVDMyVBNyVDMyVBM28lMjBkZSUyMGRhZG9z'); return false;">alfabetização de dados</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('ZGF0YSUyMGxpdGVyYWN5'); return false;">data literacy</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/afinal_como_se_calcula_os_quartis/index.html" class="no-external">
-Você sabia que exitem nove formas diferentes para se calcular os quartís no R?
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/afinal_como_se_calcula_os_quartis/index.html" class="no-external">
-<div class="listing-date">
-May 20, 2025
-</div>
-<div class="listing-author">
-Jobenil Júnior
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

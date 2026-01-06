@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Jobenil Júnior">
+<meta name="dcterms.date" content="2025-10-10">
 
-<title>Posts</title>
+<title>Para que serve o Teste de Hausman-McFadden? – Posts</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,25 +25,23 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-8c6a8c9286efdcd48da6225c886b3ad4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-8c6a8c9286efdcd48da6225c886b3ad4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -69,80 +69,22 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
 
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="./index.html" class="navbar-brand navbar-brand-logo">
-    <img src="./images/meunomeejog_logo.png" alt="" class="navbar-logo">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/meunomeejog_logo.png" alt="" class="navbar-logo">
     </a>
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Posts</span>
     </a>
   </div>
@@ -153,7 +95,7 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
+    <a class="nav-link" href="../../index.html"> 
 <span class="menu-text">Prof.&nbsp;Jobenil Júnior</span></a>
   </li>  
   <li class="nav-item compact">
@@ -176,150 +118,213 @@ window.Quarto = {
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page-left">
-      <h1 class="title">Posts</h1>
-                      </div>
+    <div class="quarto-title column-body">
+      <h1 class="title">Para que serve o Teste de Hausman-McFadden?</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">r-code</div>
+                <div class="quarto-category">alfabetização de dados</div>
+                <div class="quarto-category">data literacy</div>
+                <div class="quarto-category">teste</div>
+                <div class="quarto-category">estatística</div>
+              </div>
+                  </div>
   </div>
     
   
-  <div class="quarto-title-meta column-page-left">
+  <div class="quarto-title-meta">
 
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Jobenil Júnior </p>
+            </div>
+    </div>
       
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">October 10, 2025</p>
+      </div>
+    </div>
     
       
     </div>
     
   
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(3)</span></div><div class="category" data-category="YWdlbnRlcyUyMGludGVsaWdlbnRlcw==">agentes inteligentes <span class="quarto-category-count">(1)</span></div><div class="category" data-category="YWxmYWJldGl6YSVDMyVBNyVDMyVBM28lMjBkZSUyMGRhZG9z">alfabetização de dados <span class="quarto-category-count">(3)</span></div><div class="category" data-category="ZGF0YSUyMGxpdGVyYWN5">data literacy <span class="quarto-category-count">(3)</span></div><div class="category" data-category="ZXN0YXQlQzMlQURzdGljYQ==">estatística <span class="quarto-category-count">(1)</span></div><div class="category" data-category="aW50ZWxpZ2VuY2lhJTIwYXJ0aWZpY2lhbA==">inteligencia artificial <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ci1jb2Rl">r-code <span class="quarto-category-count">(2)</span></div><div class="category" data-category="dGVzdGU=">teste <span class="quarto-category-count">(1)</span></div></div></div>
+    
 <!-- main -->
-<main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
 
+<blockquote class="blockquote">
+<p>Me explique como se eu fosse um bebê o que é e para que serve o teste de Hausman-McFadden.</p>
+</blockquote>
+<p>Recentemente estive trabalhando em um problema e me deparei com uma dúvida sobre um teste estatístico que tive que realizar. Apelei para o [ChatGPT](https://chatgpt.com) da <em>OpenAi Inc.</em> que me forneceu uma resposta tão boa que resolvi reproduzí-la aqui.</p>
+<p>Perfeito, Jobenil 😊 — vamos começar bem simples, como se estivéssemos brincando de explicar um conceito estatístico para uma criança curiosa.</p>
+<section id="imagine-assim" class="level2">
+<h2 class="anchored" data-anchor-id="imagine-assim">🧸 Imagine assim:</h2>
+<p>Temos três brinquedos: um carrinho 🚗, uma boneca 🧍‍♀️ e um aviãozinho ✈️. E você pode escolher um só para brincar.</p>
+<p>Agora, pense que algumas crianças escolhem o carrinho, outras a boneca, e outras o aviãozinho. Você quer entender por que cada uma escolhe o que escolhe. Pode ser por causa da cor, do tamanho, do barulho que faz, etc.</p>
+</section>
+<section id="o-modelo-que-usamos" class="level2">
+<h2 class="anchored" data-anchor-id="o-modelo-que-usamos">🧠 O modelo que usamos</h2>
+<p>Para estudar isso, usamos um modelo chamado <strong>Logit Multinomial (MNL)</strong> — ele tenta prever a <strong>probabilidade</strong> de uma criança escolher cada brinquedo com base em características (das crianças ou dos brinquedos).</p>
+<p>Esse modelo tem uma regra importante chamada <strong>IIA</strong> — em inglês, <em>Independence of Irrelevant Alternatives</em>, ou seja:</p>
+<blockquote class="blockquote">
+<p>“A chance de escolher entre dois brinquedos não muda se eu colocar um novo brinquedo parecido na caixa.”</p>
+</blockquote>
+</section>
+<section id="por-exemplo" class="level2">
+<h2 class="anchored" data-anchor-id="por-exemplo">Por exemplo:</h2>
+<p>Se uma criança escolhe entre 🚗 e ✈️, e gosta mais do carro, a relação entre carro e avião não deveria mudar só porque eu coloquei uma moto 🏍️ nova na caixa.</p>
+<p>Mas… será que isso é verdade na vida real?</p>
+</section>
+<section id="entra-o-teste-de-hausman-mcfadden" class="level2">
+<h2 class="anchored" data-anchor-id="entra-o-teste-de-hausman-mcfadden">🔍 Entra o Teste de Hausman-McFadden</h2>
+<p>O Teste de <strong>Hausman-McFadden</strong> (ou teste <strong>H-M</strong>) serve para verificar se essa regra <strong>IIA</strong> é válida no seu modelo.</p>
+<p>Ele faz o seguinte:</p>
+<ol type="1">
+<li><p>Primeiro, o modelo é estimado com <strong>todas as opções</strong> (🚗, 🧍‍♀️, ✈️).</p></li>
+<li><p>Depois, é estimado <strong>tirando uma das opções</strong> (por exemplo, sem o avião ✈️).</p></li>
+<li><p>O teste compara os <strong>coeficientes estimados</strong> nos dois modelos.</p></li>
+</ol>
+<p>Se não <strong>houver diferença significativa</strong>, quer dizer que:</p>
+<blockquote class="blockquote">
+<p>As alternativas realmente são independentes → o modelo MNL é adequado ✅</p>
+</blockquote>
+<p>Mas se <strong>houver diferença grande</strong>, então:</p>
+<blockquote class="blockquote">
+<p>As escolhas não são independentes → o modelo MNL não serve bem, e precisamos de um modelo mais flexível (como o Logit Aninhado, o nested logit) 🚫</p>
+</blockquote>
+</section>
+<section id="em-resumo" class="level2">
+<h2 class="anchored" data-anchor-id="em-resumo">🎯 Em resumo:</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 31%">
+<col style="width: 68%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Conceito</th>
+<th>Explicação “de bebê”</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>O que é?</td>
+<td>Um teste para ver se as opções de escolha são realmente independentes entre si.</td>
+</tr>
+<tr class="even">
+<td>Por que serve?</td>
+<td>Para saber se o modelo Logit Multinomial está “pensando certo” ou está enganando a gente.</td>
+</tr>
+<tr class="odd">
+<td>Como faz isso?</td>
+<td>Compara os resultados do modelo completo e de um modelo onde tiramos uma opção.</td>
+</tr>
+<tr class="even">
+<td>O que significa o resultado?</td>
+<td>Se der diferente → o modelo está violando a regra IIA. Se der igual → o modelo é adequado.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="um-exemplo-prático-real" class="level2">
+<h2 class="anchored" data-anchor-id="um-exemplo-prático-real">🧩 Um exemplo prático real:</h2>
+<p>Suponha que estejamos estudando o modo de transporte que as pessoas escolhem para ir ao trabalho: 🚗 carro, 🚌 ônibus, 🚲 bicicleta, 🚶‍♂️ a pé.</p>
+<p>Se o teste Hausman-McFadden mostrar que tirar o ônibus muda os coeficientes do carro <strong>e da bicicleta</strong>, então significa que:</p>
+<blockquote class="blockquote">
+<p>as escolhas não são independentes — talvez quem pega ônibus também escolheria metrô, se houvesse. Logo, o modelo Logit Multinomial simples não é o mais indicado.</p>
+</blockquote>
+<p>Fizemos uma simulação <strong>em R</strong>, onde tentamos representar uma situação prática — o <strong>modo de transporte para o trabalho</strong> — e aplicando o <strong>teste de Hausman-McFadden</strong> para verificar se a hipótese de independência das alternativas (IIA) é válida.</p>
+</section>
+<section id="exemplo-escolha-do-modo-de-transporte" class="level2">
+<h2 class="anchored" data-anchor-id="exemplo-escolha-do-modo-de-transporte">🚗 Exemplo: Escolha do modo de transporte</h2>
+<p>Com 4 alternativas possíveis:</p>
+<ul>
+<li><p><strong>carro</strong></p></li>
+<li><p><strong>ônibus</strong></p></li>
+<li><p><strong>bicicleta</strong></p></li>
+<li><p><strong>a pé</strong></p></li>
+</ul>
+<p>Cada pessoa escolhe <strong>um modo</strong> para ir ao trabalho, dependendo de:</p>
+<ul>
+<li><p>tempo de viagem (<code>tempo</code>)</p></li>
+<li><p>custo da viagem (<code>custo</code>)</p></li>
+<li><p>renda mensal (<code>renda</code>)</p></li>
+</ul>
+<section id="interpretação-do-resultado" class="level3">
+<h3 class="anchored" data-anchor-id="interpretação-do-resultado">📊 Interpretação do resultado</h3>
+<p>O comando <code>hmftest()</code> retorna algo assim:</p>
+<pre><code>Hausman-McFadden test  data:  modelo_completo and modelo_sem_bike chisq = 5.42, df = 3, p-value = 0.143 </code></pre>
+<p><strong>Interpretação:</strong></p>
+<ul>
+<li><p>O <strong>valor-p = 0.143</strong> é <strong>maior que 0.05</strong>,<br>
+o que nos indica que <strong>não rejeitamos H₀</strong>, ou seja, que as alternativas são independentes.<br>
+✅ O modelo <strong>respeita a suposição de IIA</strong>.</p></li>
+<li><p>Se o valor-p fosse <strong>menor que 0.05</strong>, teríamos que rejeitar a hipótese de independência, indicando que as escolhas estão <strong>correlacionadas</strong> — nesse caso, o <strong>modelo Logistico Multinomial (MNL) não seria apropriado</strong>.</p></li>
+</ul>
+<p><img src="images/probabilidades.png" class="img-fluid"></p>
+</section>
+</section>
+<section id="resumo-didático" class="level2">
+<h2 class="anchored" data-anchor-id="resumo-didático">🧩 Resumo didático</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 37%">
+<col style="width: 37%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Etapa</th>
+<th>O que fizemos</th>
+<th>Por quê</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1️⃣</td>
+<td>Simulamos escolhas de transporte</td>
+<td>Para ter dados realistas</td>
+</tr>
+<tr class="even">
+<td>2️⃣</td>
+<td>Montamos o modelo Logit Multinomial</td>
+<td>Para estimar preferências</td>
+</tr>
+<tr class="odd">
+<td>3️⃣</td>
+<td>Retiramos uma alternativa</td>
+<td>Para testar a regra de independência</td>
+</tr>
+<tr class="even">
+<td>4️⃣</td>
+<td>Aplicamos o Teste de Hausman-McFadden</td>
+<td>Para verificar a validade do modelo</td>
+</tr>
+<tr class="odd">
+<td>5️⃣</td>
+<td>Interpretamos o p-valor</td>
+<td>Para decidir se o modelo é adequado</td>
+</tr>
+</tbody>
+</table>
+<p>Se você quiser se aprofundar no assunto recomendo a leitura desse <a href="https://statisticalhorizons.com/iia">artigo</a>. Nele você encontrará outras referências. Obrigado pela leitura!!!</p>
+<p>EDA | TESTE T | ENQUETES | ANOVA | MODELOS DE REGRESSÃO | ANÁLISE FATORIAL | MODELAGEM DE EQUAÇÕES ESTRUTURAIS | TRI | RASCH MODELS | MACHINE LEARNING</p>
+<p><img src="images/whatsapp_logo.png" width="20" height="20"> <a href="https://wa.me/5562992138972"><strong>Prof.&nbsp;Jobenil Júnior</strong></a></p>
 
 
+</section>
 
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="ci1jb2RlJTJDYWxmYWJldGl6YSVDMyVBNyVDMyVBM28lMjBkZSUyMGRhZG9zJTJDZGF0YSUyMGxpdGVyYWN5JTJDdGVzdGUlMkNlc3RhdCVDMyVBRHN0aWNh" data-listing-date-sort="1760065200000" data-listing-file-modified-sort="1760127533019" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="849">
-<div class="thumbnail"><a href="./posts/para_que_serve_o_teste_de_hausman_mcfadden/index.html" class="no-external">
-
-<img loading="lazy" src="./posts/para_que_serve_o_teste_de_hausman_mcfadden/images/generatedImage3.jpg" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/para_que_serve_o_teste_de_hausman_mcfadden/index.html" class="no-external">Para que serve o Teste de Hausman-McFadden?</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('ci1jb2Rl'); return false;">r-code</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('YWxmYWJldGl6YSVDMyVBNyVDMyVBM28lMjBkZSUyMGRhZG9z'); return false;">alfabetização de dados</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('ZGF0YSUyMGxpdGVyYWN5'); return false;">data literacy</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('dGVzdGU='); return false;">teste</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('ZXN0YXQlQzMlQURzdGljYQ=='); return false;">estatística</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/para_que_serve_o_teste_de_hausman_mcfadden/index.html" class="no-external">
-Me explique como se eu fosse um bebê o que é e para que serve o teste de Hausman-McFadden.
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/para_que_serve_o_teste_de_hausman_mcfadden/index.html" class="no-external">
-<div class="listing-date">
-Oct 10, 2025
-</div>
-<div class="listing-author">
-Jobenil Júnior
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="aW50ZWxpZ2VuY2lhJTIwYXJ0aWZpY2lhbCUyQ2FnZW50ZXMlMjBpbnRlbGlnZW50ZXMlMkNhbGZhYmV0aXphJUMzJUE3JUMzJUEzbyUyMGRlJTIwZGFkb3MlMkNkYXRhJTIwbGl0ZXJhY3k=" data-listing-date-sort="1748660400000" data-listing-file-modified-sort="1748714877272" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="770">
-<div class="thumbnail"><a href="./posts/agente_de_ia_o_que_faz/index.html" class="no-external">
-
-<img loading="lazy" src="./posts/agente_de_ia_o_que_faz/images/andrewng_langchain.jpg" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/agente_de_ia_o_que_faz/index.html" class="no-external">Agente de IA: O Que Faz? Como Usa? Andrew Ng Explica (e a resposta envolve ‘Falar a Língua’ dos Dados!)</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('aW50ZWxpZ2VuY2lhJTIwYXJ0aWZpY2lhbA=='); return false;">inteligencia artificial</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('YWdlbnRlcyUyMGludGVsaWdlbnRlcw=='); return false;">agentes inteligentes</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('YWxmYWJldGl6YSVDMyVBNyVDMyVBM28lMjBkZSUyMGRhZG9z'); return false;">alfabetização de dados</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('ZGF0YSUyMGxpdGVyYWN5'); return false;">data literacy</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/agente_de_ia_o_que_faz/index.html" class="no-external">
-<strong>Agente de IA: O Que Faz? Como Usa? Andrew Ng Explica (e a Resposta envolve ‘Falar a Língua’ dos Dados!)</strong>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/agente_de_ia_o_que_faz/index.html" class="no-external">
-<div class="listing-date">
-May 31, 2025
-</div>
-<div class="listing-author">
-Jobenil Júnior
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="ci1jb2RlJTJDYWxmYWJldGl6YSVDMyVBNyVDMyVBM28lMjBkZSUyMGRhZG9zJTJDZGF0YSUyMGxpdGVyYWN5" data-listing-date-sort="1747710000000" data-listing-file-modified-sort="1748713057651" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="795">
-<div class="thumbnail"><a href="./posts/afinal_como_se_calcula_os_quartis/index.html" class="no-external">
-
-<p class="card-img-top"><img src="posts\afinal_como_se_calcula_os_quartis\index_files\figure-html\unnamed-chunk-1-1.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/afinal_como_se_calcula_os_quartis/index.html" class="no-external">Afinal, como se calcula os quartis?</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('ci1jb2Rl'); return false;">r-code</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('YWxmYWJldGl6YSVDMyVBNyVDMyVBM28lMjBkZSUyMGRhZG9z'); return false;">alfabetização de dados</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('ZGF0YSUyMGxpdGVyYWN5'); return false;">data literacy</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/afinal_como_se_calcula_os_quartis/index.html" class="no-external">
-Você sabia que exitem nove formas diferentes para se calcular os quartís no R?
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/afinal_como_se_calcula_os_quartis/index.html" class="no-external">
-<div class="listing-date">
-May 20, 2025
-</div>
-<div class="listing-author">
-Jobenil Júnior
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
