@@ -1,0 +1,1521 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jobenil Júnior">
+<meta name="dcterms.date" content="2026-07-28">
+
+<title>O que a escolha de seu iogurte tem a ver com Regressão Logística Multinomial? – Posts</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-21a3740376502132c29c43002ded69a4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/meunomeejog_logo.png" alt="" class="navbar-logo light-content">
+    <img src="../../images/meunomeejog_logo.png" alt="" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Posts</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">Educação</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://wa.me/5562992138972"> <i class="bi bi-whatsapp" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/jobeniljunior/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">O que a escolha de seu iogurte tem a ver com Regressão Logística Multinomial?</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">r-code</div>
+                <div class="quarto-category">alfabetização de dados</div>
+                <div class="quarto-category">data literacy</div>
+                <div class="quarto-category">regressão logística multinomial</div>
+                <div class="quarto-category">nnet</div>
+                <div class="quarto-category">gtsummary</div>
+                <div class="quarto-category">estatística</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Jobenil Júnior </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">July 28, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>Como prever, entre <strong>três ou mais opções</strong>, qual delas uma pessoa vai escolher?</p>
+<p>Já conversamos por aqui sobre a regressão logística “tradicional” — aquela que responde perguntas de sim ou não, como “o cliente vai cancelar o serviço?” ou “o paciente vai se curar?”. Mas o mundo real raramente se resume a duas alternativas. As pessoas escolhem entre <em>carro, ônibus ou bicicleta</em>; entre planos de saúde <em>Básico, Intermediário ou Completo</em>; entre cores de carro. Recentemente um leitor me perguntou: “Prof.&nbsp;Jobenil, existe uma regressão logística para quando temos mais de duas categorias?” Existe sim, e ela se chama <strong>Regressão Logística Multinomial</strong>. Vamos entender juntos.</p>
+<section id="pense-em-clientes-escolhendo-iogurtes" class="level2">
+<h2 class="anchored" data-anchor-id="pense-em-clientes-escolhendo-iogurtes">🛒 Pense em clientes escolhendo Iogurtes</h2>
+<p>Imagine a prateleira de iogurtes de um supermercado: lado a lado estão o <strong>Natural</strong>, o <strong>Grego</strong> e o <strong>Zero/Light</strong>. Um cliente para na frente da gôndola e, em poucos segundos, decide qual vai para o carrinho.</p>
+<p>Se você observasse centenas de clientes ao longo de um mês, começaria a notar padrões: quem está com crianças no carrinho tende a levar o <strong>Natural</strong> (mais barato, embalagem maior); quem claramente segue uma rotina fitness vai direto no <strong>Grego</strong> (mais proteína); quem está de olho na dieta escolhe o <strong>Zero</strong>. Não é acaso — é o perfil de cada cliente (idade, renda, se está fazendo dieta, se tem filhos, etc.) empurrando a escolha para uma direção.</p>
+<blockquote class="blockquote">
+<p><strong>A Regressão Logística Multinomial é exatamente esse mapeamento: com base no perfil de cada cliente, ela estima a probabilidade de ele escolher cada um dos iogurtes disponíveis na prateleira — não um “sim ou não”, mas uma probabilidade para cada opção da gôndola.</strong></p>
+</blockquote>
+<p>A diferença para a regressão logística binária é simples e crucial:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Tipo de Modelo</th>
+<th style="text-align: left;">Quantas opções?</th>
+<th style="text-align: left;">Exemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Regressão Logística <strong>Binária</strong></td>
+<td style="text-align: left;">2 (sim/não)</td>
+<td style="text-align: left;">O cliente vai cancelar a assinatura?</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Regressão Logística <strong>Multinomial</strong></td>
+<td style="text-align: left;">3 ou mais, <strong>sem ordem natural</strong></td>
+<td style="text-align: left;">Qual iogurte o cliente vai levar: Natural, Grego ou Zero?</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Regressão Logística <strong>Ordinal</strong></td>
+<td style="text-align: left;">3 ou mais, <strong>com ordem natural</strong></td>
+<td style="text-align: left;">Qual nota de satisfação: Ruim, Regular ou Ótimo?</td>
+</tr>
+</tbody>
+</table>
+<p>Repare no detalhe: se as categorias tivessem uma ordem natural (ruim &lt; regular &lt; ótimo), o modelo certo seria o <strong>ordinal</strong>. Como carro, ônibus e bicicleta não têm uma “ordem” entre si — e nem Natural, Grego e Zero, do ponto de vista das combinações de atributos que levam à escolha —, usamos a versão <strong>multinomial</strong>.</p>
+</section>
+<section id="a-categoria-de-referência" class="level2">
+<h2 class="anchored" data-anchor-id="a-categoria-de-referência">🎯 A Categoria de Referência</h2>
+<p>Em regressão logística multinomial devemos <strong>sempre escolher uma categoria como ponto de partida</strong>, chamada de <strong>categoria de referência</strong> (ou <em>baseline</em>). Todas as demais categorias são interpretadas <em>em comparação</em> a ela.</p>
+<p>Na prateleira de iogurtes, o modelo pode definir o <strong>Natural</strong> como referência — afinal, é o tipo mais tradicional e mais consumido. A partir daí, ele nos diz algo como: “Para cada ano a mais de idade do cliente, a chance de ele escolher o <strong>Grego</strong> em vez do <strong>Natural</strong> aumenta em X%.” O modelo nunca fala do Grego ou do Zero sozinhos — sempre em comparação à referência escolhida.</p>
+<blockquote class="blockquote">
+<p><strong>Essa comparação com uma categoria de base é o que torna os coeficientes do modelo interpretáveis, mesmo quando existem cinco, dez ou vinte categorias em disputa.</strong></p>
+</blockquote>
+</section>
+<section id="qual-iogurte-o-cliente-vai-colocar-no-carrinho" class="level2">
+<h2 class="anchored" data-anchor-id="qual-iogurte-o-cliente-vai-colocar-no-carrinho">🥣 Qual Iogurte o Cliente Vai Colocar no Carrinho?</h2>
+<p>Vamos sair da teoria e simular uma situação real de varejo. Imagine uma rede de supermercados que, através do aplicativo de fidelidade, quer prever qual tipo de iogurte um cliente tem mais chance de comprar na próxima visita — para personalizar cupons de desconto e garantir que a prateleira certa esteja sempre abastecida. Três tipos disputam o carrinho:</p>
+<ul>
+<li><strong>Natural</strong> (categoria de referência)</li>
+<li><strong>Grego</strong></li>
+<li><strong>Zero/Light</strong></li>
+</ul>
+<p>O time de marketing e a equipe de estoque querem prever, com base no perfil de cada cliente cadastrado no aplicativo, qual desses três tipos ele tem mais chance de levar.</p>
+</section>
+<section id="as-variáves-são-os-sinais-que-o-cliente-dá" class="level2">
+<h2 class="anchored" data-anchor-id="as-variáves-são-os-sinais-que-o-cliente-dá">🔍 As variáves são os Sinais que o cliente dá</h2>
+<p>O modelo não adivinha o futuro: ele aprende com pistas do comportamento e do perfil do cliente. Neste exemplo, vamos usar três sinais:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 80%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Variável</th>
+<th style="text-align: left;">Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>idade</code></td>
+<td style="text-align: left;">Idade do cliente, em anos</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>renda</code></td>
+<td style="text-align: left;">Renda mensal estimada, em reais</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>perfil</code></td>
+<td style="text-align: left;">Perfil de consumo: Família com Crianças, Rotina Fitness ou Foco em Dieta</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="simulação-em-r-com-ajuda-de-ia" class="level2">
+<h2 class="anchored" data-anchor-id="simulação-em-r-com-ajuda-de-ia">💻 Simulação em R (com ajuda de IA)</h2>
+<p>Vamos simular uma base com 600 clientes fictícios do supermercado e ajustar o modelo com o pacote <code>{nnet}</code>, que traz a função <code>multinom()</code> — a forma mais direta de rodar uma regressão logística multinomial no R.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Carregando os pacotes necessários</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nnet)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Definindo a semente para reprodutibilidade</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Simulando o perfil de 600 clientes</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>n_clientes <span class="ot">&lt;-</span> <span class="dv">600</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>idade <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">runif</span>(n_clientes, <span class="dv">18</span>, <span class="dv">65</span>))</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>renda <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">rnorm</span>(n_clientes, <span class="at">mean =</span> <span class="dv">4500</span>, <span class="at">sd =</span> <span class="dv">1800</span>))</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>renda[renda <span class="sc">&lt;</span> <span class="dv">800</span>] <span class="ot">&lt;-</span> <span class="dv">800</span>  <span class="co"># renda mínima plausível</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>perfil <span class="ot">&lt;-</span> <span class="fu">sample</span>(</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"Família com Crianças"</span>, <span class="st">"Rotina Fitness"</span>, <span class="st">"Foco em Dieta"</span>),</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">size =</span> n_clientes, <span class="at">replace =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.45</span>, <span class="fl">0.30</span>, <span class="fl">0.25</span>)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>perfil <span class="ot">&lt;-</span> <span class="fu">factor</span>(perfil, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Família com Crianças"</span>, <span class="st">"Rotina Fitness"</span>, <span class="st">"Foco em Dieta"</span>))</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Definindo a propensão (log-odds) de escolher Grego e Zero,</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="co">#    sempre em relação à categoria de referência "Natural"</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>eta_grego <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">1.2</span> <span class="sc">+</span> <span class="fl">0.015</span> <span class="sc">*</span> idade <span class="sc">+</span> <span class="fl">0.00035</span> <span class="sc">*</span> renda <span class="sc">+</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ifelse</span>(perfil <span class="sc">==</span> <span class="st">"Rotina Fitness"</span>, <span class="fl">1.3</span>, <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ifelse</span>(perfil <span class="sc">==</span> <span class="st">"Foco em Dieta"</span>, <span class="fl">0.3</span>, <span class="dv">0</span>)</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>eta_zero <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">4.5</span> <span class="sc">+</span> <span class="fl">0.010</span> <span class="sc">*</span> idade <span class="sc">+</span> <span class="fl">0.00090</span> <span class="sc">*</span> renda <span class="sc">+</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ifelse</span>(perfil <span class="sc">==</span> <span class="st">"Foco em Dieta"</span>, <span class="fl">2.5</span>, <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ifelse</span>(perfil <span class="sc">==</span> <span class="st">"Rotina Fitness"</span>, <span class="fl">0.6</span>, <span class="dv">0</span>)</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Convertendo a propensão em probabilidades (fórmula do logit multinomial)</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>denominador <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(eta_grego) <span class="sc">+</span> <span class="fu">exp</span>(eta_zero)</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>p_natural <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">/</span> denominador</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>p_grego   <span class="ot">&lt;-</span> <span class="fu">exp</span>(eta_grego) <span class="sc">/</span> denominador</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>p_zero    <span class="ot">&lt;-</span> <span class="fu">exp</span>(eta_zero) <span class="sc">/</span> denominador</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>probabilidades <span class="ot">&lt;-</span> <span class="fu">cbind</span>(p_natural, p_grego, p_zero)</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. Sorteando o iogurte escolhido por cada cliente, com base nas probabilidades</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>iogurte <span class="ot">&lt;-</span> <span class="fu">apply</span>(probabilidades, <span class="dv">1</span>, <span class="cf">function</span>(p) {</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"Natural"</span>, <span class="st">"Grego"</span>, <span class="st">"Zero"</span>), <span class="at">size =</span> <span class="dv">1</span>, <span class="at">prob =</span> p)</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>df_iogurte <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>  idade, renda, perfil,</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>  <span class="at">iogurte =</span> <span class="fu">factor</span>(iogurte, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Natural"</span>, <span class="st">"Grego"</span>, <span class="st">"Zero"</span>))</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="co"># Conferindo a distribuição dos iogurtes escolhidos</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(df_iogurte<span class="sc">$</span>iogurte)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Natural   Grego    Zero 
+     90     318     192 </code></pre>
+</div>
+</div>
+<p>Repare que a base foi construída para que a chance de levar o <strong>Zero</strong> cresça bastante com a renda e com o perfil de <strong>Foco em Dieta</strong>, e que o <strong>Grego</strong> seja puxado principalmente pela <strong>Rotina Fitness</strong> — exatamente o tipo de padrão que o time de marketing suspeita existir, mas precisa comprovar com dados.</p>
+<section id="ajustando-o-modelo" class="level3">
+<h3 class="anchored" data-anchor-id="ajustando-o-modelo">📈 Ajustando o modelo</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 7. Ajustando a regressão logística multinomial</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#    "Natural" já é a categoria de referência (primeiro nível do factor)</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>modelo_iogurte <span class="ot">&lt;-</span> <span class="fu">multinom</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  iogurte <span class="sc">~</span> idade <span class="sc">+</span> renda <span class="sc">+</span> perfil,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> df_iogurte,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">trace =</span> <span class="cn">FALSE</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo_iogurte)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call:
+multinom(formula = iogurte ~ idade + renda + perfil, data = df_iogurte, 
+    trace = FALSE)
+
+Coefficients:
+      (Intercept)      idade        renda perfilRotina Fitness
+Grego   -1.161952 0.01712940 0.0003499607            0.9991963
+Zero    -5.182067 0.01384942 0.0009934536            0.3750249
+      perfilFoco em Dieta
+Grego           0.6549127
+Zero            2.9669890
+
+Std. Errors:
+       (Intercept)       idade        renda perfilRotina Fitness
+Grego 1.080776e-04 0.005795999 6.215401e-05         4.252219e-05
+Zero  8.066346e-05 0.007681828 7.214469e-05         3.326176e-06
+      perfilFoco em Dieta
+Grego        3.314672e-05
+Zero         7.241131e-05
+
+Residual Deviance: 921.355 
+AIC: 941.355 </code></pre>
+</div>
+</div>
+</section>
+<section id="tabela-de-odds-ratios-com-gtsummary" class="level3">
+<h3 class="anchored" data-anchor-id="tabela-de-odds-ratios-com-gtsummary">📑 Tabela de Odds Ratios com <code>{gtsummary}</code></h3>
+<p>Ler a saída bruta do <code>summary()</code> é pouco amigável. O pacote <code>{gtsummary}</code> monta, em segundos, uma tabela pronta para publicação com os <em>odds ratios</em> (razões de chance) de cada variável, já separados por tipo de iogurte — sempre em comparação ao Natural:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 8. Tabela de odds ratios (exponenciando os coeficientes)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_regression</span>(</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  modelo_iogurte,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">exponentiate =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> <span class="fu">list</span>(</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    idade <span class="sc">~</span> <span class="st">"Idade (anos)"</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    renda <span class="sc">~</span> <span class="st">"Renda mensal (R$)"</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    perfil <span class="sc">~</span> <span class="st">"Perfil de consumo"</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bold_p</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bold_labels</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="rkrbueetzw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#rkrbueetzw table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#rkrbueetzw thead, #rkrbueetzw tbody, #rkrbueetzw tfoot, #rkrbueetzw tr, #rkrbueetzw td, #rkrbueetzw th {
+  border-style: none;
+}
+
+#rkrbueetzw p {
+  margin: 0;
+  padding: 0;
+}
+
+#rkrbueetzw .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#rkrbueetzw .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#rkrbueetzw .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#rkrbueetzw .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#rkrbueetzw .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#rkrbueetzw .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rkrbueetzw .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#rkrbueetzw .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#rkrbueetzw .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#rkrbueetzw .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#rkrbueetzw .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#rkrbueetzw .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#rkrbueetzw .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#rkrbueetzw .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#rkrbueetzw .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#rkrbueetzw .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#rkrbueetzw .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#rkrbueetzw .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#rkrbueetzw .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rkrbueetzw .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#rkrbueetzw .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#rkrbueetzw .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#rkrbueetzw .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rkrbueetzw .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#rkrbueetzw .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#rkrbueetzw .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rkrbueetzw .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rkrbueetzw .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#rkrbueetzw .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rkrbueetzw .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#rkrbueetzw .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rkrbueetzw .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#rkrbueetzw .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rkrbueetzw .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#rkrbueetzw .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rkrbueetzw .gt_left {
+  text-align: left;
+}
+
+#rkrbueetzw .gt_center {
+  text-align: center;
+}
+
+#rkrbueetzw .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#rkrbueetzw .gt_font_normal {
+  font-weight: normal;
+}
+
+#rkrbueetzw .gt_font_bold {
+  font-weight: bold;
+}
+
+#rkrbueetzw .gt_font_italic {
+  font-style: italic;
+}
+
+#rkrbueetzw .gt_super {
+  font-size: 65%;
+}
+
+#rkrbueetzw .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#rkrbueetzw .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#rkrbueetzw .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#rkrbueetzw .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#rkrbueetzw .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#rkrbueetzw .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#rkrbueetzw .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#rkrbueetzw .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#rkrbueetzw div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="gt_col_headings header">
+<th id="label" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"><strong>Characteristic</strong></th>
+<th id="estimate" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>OR</strong></th>
+<th id="conf.low" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>95% CI</strong></th>
+<th id="p.value" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>p-value</strong></th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="gt_group_heading_row odd">
+<th colspan="4" id="Grego" class="gt_group_heading" data-quarto-table-cell-role="th" scope="colgroup">Grego</th>
+</tr>
+<tr class="gt_row_group_first even">
+<td class="gt_row gt_left" headers="Grego  label">Idade (anos)</td>
+<td class="gt_row gt_center" headers="Grego  estimate">1.02</td>
+<td class="gt_row gt_center" headers="Grego  conf.low">1.01, 1.03</td>
+<td class="gt_row gt_center" headers="Grego  p.value" style="font-weight: bold">0.003</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Grego  label">Renda mensal (R$)</td>
+<td class="gt_row gt_center" headers="Grego  estimate">1.00</td>
+<td class="gt_row gt_center" headers="Grego  conf.low">1.00, 1.00</td>
+<td class="gt_row gt_center" headers="Grego  p.value" style="font-weight: bold">&lt;0.001</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Grego  label">Perfil de consumo</td>
+<td class="gt_row gt_center" headers="Grego  estimate"><br>
+</td>
+<td class="gt_row gt_center" headers="Grego  conf.low"><br>
+</td>
+<td class="gt_row gt_center" headers="Grego  p.value"><br>
+</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Grego  label">&nbsp;&nbsp;&nbsp;&nbsp;Família com Crianças</td>
+<td class="gt_row gt_center" headers="Grego  estimate">—</td>
+<td class="gt_row gt_center" headers="Grego  conf.low">—</td>
+<td class="gt_row gt_center" headers="Grego  p.value"><br>
+</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Grego  label">&nbsp;&nbsp;&nbsp;&nbsp;Rotina Fitness</td>
+<td class="gt_row gt_center" headers="Grego  estimate">2.72</td>
+<td class="gt_row gt_center" headers="Grego  conf.low">2.72, 2.72</td>
+<td class="gt_row gt_center" headers="Grego  p.value" style="font-weight: bold">&lt;0.001</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Grego  label">&nbsp;&nbsp;&nbsp;&nbsp;Foco em Dieta</td>
+<td class="gt_row gt_center" headers="Grego  estimate">1.92</td>
+<td class="gt_row gt_center" headers="Grego  conf.low">1.92, 1.93</td>
+<td class="gt_row gt_center" headers="Grego  p.value" style="font-weight: bold">&lt;0.001</td>
+</tr>
+<tr class="gt_group_heading_row even">
+<th colspan="4" id="Zero" class="gt_group_heading" data-quarto-table-cell-role="th" scope="colgroup">Zero</th>
+</tr>
+<tr class="gt_row_group_first odd">
+<td class="gt_row gt_left" headers="Zero  label">Idade (anos)</td>
+<td class="gt_row gt_center" headers="Zero  estimate">1.01</td>
+<td class="gt_row gt_center" headers="Zero  conf.low">1.00, 1.03</td>
+<td class="gt_row gt_center" headers="Zero  p.value">0.071</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Zero  label">Renda mensal (R$)</td>
+<td class="gt_row gt_center" headers="Zero  estimate">1.00</td>
+<td class="gt_row gt_center" headers="Zero  conf.low">1.00, 1.00</td>
+<td class="gt_row gt_center" headers="Zero  p.value" style="font-weight: bold">&lt;0.001</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Zero  label">Perfil de consumo</td>
+<td class="gt_row gt_center" headers="Zero  estimate"><br>
+</td>
+<td class="gt_row gt_center" headers="Zero  conf.low"><br>
+</td>
+<td class="gt_row gt_center" headers="Zero  p.value"><br>
+</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Zero  label">&nbsp;&nbsp;&nbsp;&nbsp;Família com Crianças</td>
+<td class="gt_row gt_center" headers="Zero  estimate">—</td>
+<td class="gt_row gt_center" headers="Zero  conf.low">—</td>
+<td class="gt_row gt_center" headers="Zero  p.value"><br>
+</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Zero  label">&nbsp;&nbsp;&nbsp;&nbsp;Rotina Fitness</td>
+<td class="gt_row gt_center" headers="Zero  estimate">1.46</td>
+<td class="gt_row gt_center" headers="Zero  conf.low">1.46, 1.46</td>
+<td class="gt_row gt_center" headers="Zero  p.value" style="font-weight: bold">&lt;0.001</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Zero  label">&nbsp;&nbsp;&nbsp;&nbsp;Foco em Dieta</td>
+<td class="gt_row gt_center" headers="Zero  estimate">19.4</td>
+<td class="gt_row gt_center" headers="Zero  conf.low">19.4, 19.4</td>
+<td class="gt_row gt_center" headers="Zero  p.value" style="font-weight: bold">&lt;0.001</td>
+</tr>
+</tbody><tfoot>
+<tr class="gt_sourcenotes odd">
+<td colspan="4" class="gt_sourcenote">Abbreviations: CI = Confidence Interval, OR = Odds Ratio</td>
+</tr>
+</tfoot>
+
+</table>
+
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="interpretação-dos-coeficientes-odds-ratios" class="level2">
+<h2 class="anchored" data-anchor-id="interpretação-dos-coeficientes-odds-ratios">📊 Interpretação dos Coeficientes (Odds Ratios)</h2>
+<p>Cada coluna da tabela acima compara um tipo de iogurte ao <strong>Natural</strong>. Um <em>odds ratio</em> (OR):</p>
+<ul>
+<li><strong>Maior que 1</strong> → a variável <strong>aumenta</strong> a chance de escolher aquele iogurte em vez do Natural.</li>
+<li><strong>Menor que 1</strong> → a variável <strong>diminui</strong> essa chance.</li>
+<li><strong>Igual a 1</strong> (intervalo de confiança cruzando o 1) → não há evidência de efeito.</li>
+</ul>
+<p>Na prática, esperamos observar que o perfil de <strong>Foco em Dieta</strong> eleva fortemente as chances de o cliente escolher o <strong>Zero</strong> em vez do Natural, que a <strong>Rotina Fitness</strong> empurra a escolha para o <strong>Grego</strong>, e que a <strong>Renda</strong> também contribui para tipos mais caros — exatamente o comportamento que embutimos na simulação.</p>
+<blockquote class="blockquote">
+<p><strong>É esse tipo de leitura — “a cada mil reais a mais de renda, a chance de escolher o Zero em vez do Natural aumenta em X%” — que transforma coeficientes em decisão de negócio, seja para precificar, seja para posicionar produtos na prateleira.</strong></p>
+</blockquote>
+</section>
+<section id="visualizando-as-probabilidades-preditas" class="level2">
+<h2 class="anchored" data-anchor-id="visualizando-as-probabilidades-preditas">🔮 Visualizando as Probabilidades Preditas</h2>
+<p>Coeficientes são úteis, mas um gráfico de probabilidades preditas conta a história de forma muito mais intuitiva. Vamos manter a idade fixa na média da base e variar a <strong>renda</strong> para cada <strong>perfil de consumo</strong>, observando como a probabilidade de cada tipo de iogurte se comporta:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 9. Criando uma grade de cenários hipotéticos para prever probabilidades</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>grade_predicao <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">renda =</span> <span class="fu">seq</span>(<span class="dv">800</span>, <span class="dv">10000</span>, <span class="at">by =</span> <span class="dv">200</span>),</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">perfil =</span> <span class="fu">c</span>(<span class="st">"Família com Crianças"</span>, <span class="st">"Rotina Fitness"</span>, <span class="st">"Foco em Dieta"</span>),</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">idade =</span> <span class="fu">round</span>(<span class="fu">mean</span>(df_iogurte<span class="sc">$</span>idade))</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 10. Prevendo as probabilidades de cada iogurte para cada cenário</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>probs_preditas <span class="ot">&lt;-</span> <span class="fu">predict</span>(modelo_iogurte, <span class="at">newdata =</span> grade_predicao, <span class="at">type =</span> <span class="st">"probs"</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>grade_predicao <span class="ot">&lt;-</span> <span class="fu">cbind</span>(grade_predicao, probs_preditas)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 11. Reorganizando os dados para o formato "longo", ideal para o ggplot2</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>dados_grafico <span class="ot">&lt;-</span> grade_predicao <span class="sc">%&gt;%</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="fu">c</span>(Natural, Grego, Zero),</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"iogurte"</span>,</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"probabilidade"</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">iogurte =</span> <span class="fu">factor</span>(iogurte, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Natural"</span>, <span class="st">"Grego"</span>, <span class="st">"Zero"</span>)),</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">perfil =</span> <span class="fu">factor</span>(perfil, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Família com Crianças"</span>, <span class="st">"Rotina Fitness"</span>, <span class="st">"Foco em Dieta"</span>))</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co"># 12. Gráfico de probabilidades preditas por renda, separado por perfil de consumo</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dados_grafico, <span class="fu">aes</span>(<span class="at">x =</span> renda, <span class="at">y =</span> probabilidade, <span class="at">color =</span> iogurte)) <span class="sc">+</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="fl">1.1</span>) <span class="sc">+</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>perfil) <span class="sc">+</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">percent_format</span>()) <span class="sc">+</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Natural"</span> <span class="ot">=</span> <span class="st">"#8c8c8c"</span>, <span class="st">"Grego"</span> <span class="ot">=</span> <span class="st">"#4c8bf5"</span>, <span class="st">"Zero"</span> <span class="ot">=</span> <span class="st">"#e0575b"</span>)) <span class="sc">+</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Probabilidade predita de escolha do iogurte"</span>,</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Em função da renda mensal e do perfil de consumo (idade média)"</span>,</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Renda mensal (R$)"</span>,</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Probabilidade predita"</span>,</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Tipo de Iogurte"</span></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">13</span>) <span class="sc">+</span></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="dv">15</span>),</span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"gray30"</span>),</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>)</span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>O gráfico deixa muito claro um padrão: entre clientes com <strong>Foco em Dieta</strong>, a curva do <strong>Zero</strong> dispara com a renda e ultrapassa as demais rapidamente. Já entre <strong>famílias com crianças</strong>, o <strong>Natural</strong> segue dominante mesmo em rendas mais altas — sinal de que o perfil de consumo, sozinho, já é um forte indício da intenção de compra.</p>
+</section>
+<section id="por-que-isso-é-valioso-para-o-marketing-e-o-estoque" class="level2">
+<h2 class="anchored" data-anchor-id="por-que-isso-é-valioso-para-o-marketing-e-o-estoque">💡 Por que isso é valioso para o Marketing (e o Estoque)?</h2>
+<p>Sabendo dessas probabilidades por cliente, a rede pode agir de forma muito mais cirúrgica:</p>
+<ul>
+<li><strong>Personalizar cupons</strong>: se o modelo aponta altíssima chance de Zero, o aplicativo de fidelidade já pode enviar um cupom exatamente para esse tipo de iogurte.</li>
+<li><strong>Campanhas direcionadas</strong>: oferecer amostras grátis ou descontos para quem está “na dúvida” entre o Grego e o Zero — exatamente os clientes com probabilidades próximas entre os dois tipos.</li>
+<li><strong>Planejamento de estoque</strong>: entender que perfis (ex: foco em dieta e renda alta) merecem mais espaço de prateleira e reposição para o Zero, evitando ruptura no ponto de venda.</li>
+</ul>
+</section>
+<section id="em-resumo" class="level2">
+<h2 class="anchored" data-anchor-id="em-resumo">🎯 Em resumo:</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Etapa</th>
+<th style="text-align: left;">O que fizemos</th>
+<th style="text-align: left;">Por quê</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1️⃣</td>
+<td style="text-align: left;">Simulamos o perfil de 600 clientes fictícios do supermercado</td>
+<td style="text-align: left;">Para ter dados realistas de idade, renda e perfil de consumo</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2️⃣</td>
+<td style="text-align: left;">Ajustamos o modelo com <code>multinom()</code></td>
+<td style="text-align: left;">Para estimar a chance de cada iogurte em relação ao Natural</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">3️⃣</td>
+<td style="text-align: left;">Tabulamos os odds ratios com <code>{gtsummary}</code></td>
+<td style="text-align: left;">Para interpretar o efeito de cada variável de forma clara</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4️⃣</td>
+<td style="text-align: left;">Geramos probabilidades preditas</td>
+<td style="text-align: left;">Para simular cenários hipotéticos de cliente</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5️⃣</td>
+<td style="text-align: left;">Visualizamos com <code>{ggplot2}</code></td>
+<td style="text-align: left;">Para enxergar o padrão de escolha de forma instantânea</td>
+</tr>
+</tbody>
+</table>
+<p>Da próxima vez que você passar pela prateleira de iogurtes do supermercado, lembre-se: por trás de cada escolha — a sua e a de todo mundo no corredor — existe um padrão estatístico esperando para ser encontrado. A Regressão Logística Multinomial não decide por você, mas consegue apostar, com números, no que você provavelmente vai colocar no carrinho.</p>
+<blockquote class="blockquote">
+<p>Deixe seus comentários ou dúvidas. Obrigado pela leitura!</p>
+</blockquote>
+<p>EDA | TESTE T | ENQUETES | ANOVA | MODELOS DE REGRESSÃO | ANÁLISE FATORIAL | MODELAGEM DE EQUAÇÕES ESTRUTURAIS | TRI | RASCH MODELS | MACHINE LEARNING</p>
+<p><img src="images/whatsapp_logo.png" width="20" height="20"> <a href="https://wa.me/5562992138972"><strong>Prof.&nbsp;Jobenil Júnior</strong></a></p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

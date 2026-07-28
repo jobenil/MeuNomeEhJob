@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Posts</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -38,10 +41,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-8c6a8c9286efdcd48da6225c886b3ad4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-21a3740376502132c29c43002ded69a4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -100,7 +103,7 @@ ul.task-list li input[type="checkbox"] {
   </script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -113,7 +116,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -140,7 +143,8 @@ window.Quarto = {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="./index.html" class="navbar-brand navbar-brand-logo">
-    <img src="./images/meunomeejog_logo.png" alt="" class="navbar-logo">
+    <img src="./images/meunomeejog_logo.png" alt="" class="navbar-logo light-content">
+    <img src="./images/meunomeejog_logo.png" alt="" class="navbar-logo dark-content">
     </a>
     <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">Posts</span>
@@ -195,7 +199,7 @@ window.Quarto = {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(3)</span></div><div class="category" data-category="YWdlbnRlcyUyMGludGVsaWdlbnRlcw==">agentes inteligentes <span class="quarto-category-count">(1)</span></div><div class="category" data-category="YWxmYWJldGl6YSVDMyVBNyVDMyVBM28lMjBkZSUyMGRhZG9z">alfabetização de dados <span class="quarto-category-count">(3)</span></div><div class="category" data-category="ZGF0YSUyMGxpdGVyYWN5">data literacy <span class="quarto-category-count">(3)</span></div><div class="category" data-category="ZXN0YXQlQzMlQURzdGljYQ==">estatística <span class="quarto-category-count">(1)</span></div><div class="category" data-category="aW50ZWxpZ2VuY2lhJTIwYXJ0aWZpY2lhbA==">inteligencia artificial <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ci1jb2Rl">r-code <span class="quarto-category-count">(2)</span></div><div class="category" data-category="dGVzdGU=">teste <span class="quarto-category-count">(1)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(5)</span></div><div class="category" data-category="YWdlbnRlcyUyMGludGVsaWdlbnRlcw==">agentes inteligentes <span class="quarto-category-count">(1)</span></div><div class="category" data-category="YWxmYWJldGl6YSVDMyVBNyVDMyVBM28lMjBkZSUyMGRhZG9z">alfabetização de dados <span class="quarto-category-count">(5)</span></div><div class="category" data-category="ZGF0YSUyMGxpdGVyYWN5">data literacy <span class="quarto-category-count">(5)</span></div><div class="category" data-category="ZXNjYWxhJTIwbGlrZXJ0">escala likert <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ZXN0YXQlQzMlQURzdGljYQ==">estatística <span class="quarto-category-count">(3)</span></div><div class="category" data-category="Z2dwbG90Mg==">ggplot2 <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Z3RzdW1tYXJ5">gtsummary <span class="quarto-category-count">(2)</span></div><div class="category" data-category="aW50ZWxpZ2VuY2lhJTIwYXJ0aWZpY2lhbA==">inteligencia artificial <span class="quarto-category-count">(1)</span></div><div class="category" data-category="bm5ldA==">nnet <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ci1jb2Rl">r-code <span class="quarto-category-count">(4)</span></div><div class="category" data-category="cmVncmVzcyVDMyVBM28lMjBsb2clQzMlQURzdGljYSUyMG11bHRpbm9taWFs">regressão logística multinomial <span class="quarto-category-count">(1)</span></div><div class="category" data-category="dGVzdGU=">teste <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
 <main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
 
@@ -209,7 +213,91 @@ window.Quarto = {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="ci1jb2RlJTJDYWxmYWJldGl6YSVDMyVBNyVDMyVBM28lMjBkZSUyMGRhZG9zJTJDZGF0YSUyMGxpdGVyYWN5JTJDdGVzdGUlMkNlc3RhdCVDMyVBRHN0aWNh" data-listing-date-sort="1760065200000" data-listing-file-modified-sort="1760127533019" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="849">
+<div class="quarto-post image-right" data-index="0" data-categories="ci1jb2RlJTJDYWxmYWJldGl6YSVDMyVBNyVDMyVBM28lMjBkZSUyMGRhZG9zJTJDZGF0YSUyMGxpdGVyYWN5JTJDcmVncmVzcyVDMyVBM28lMjBsb2clQzMlQURzdGljYSUyMG11bHRpbm9taWFsJTJDbm5ldCUyQ2d0c3VtbWFyeSUyQ2VzdGF0JUMzJUFEc3RpY2E=" data-listing-date-sort="1785207600000" data-listing-file-modified-sort="1785249287852" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2021">
+<div class="thumbnail"><a href="./posts/o_que_e_regressao_logistica_multinomial/index.html" class="no-external">
+
+<img loading="lazy" src="./posts/o_que_e_regressao_logistica_multinomial/images/capa_carrinho_iogurte.svg" class="thumbnail-image">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/o_que_e_regressao_logistica_multinomial/index.html" class="no-external">O que a escolha de seu iogurte tem a ver com Regressão Logística Multinomial?</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('ci1jb2Rl'); return false;">r-code</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('YWxmYWJldGl6YSVDMyVBNyVDMyVBM28lMjBkZSUyMGRhZG9z'); return false;">alfabetização de dados</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZGF0YSUyMGxpdGVyYWN5'); return false;">data literacy</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('cmVncmVzcyVDMyVBM28lMjBsb2clQzMlQURzdGljYSUyMG11bHRpbm9taWFs'); return false;">regressão logística multinomial</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('bm5ldA=='); return false;">nnet</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Z3RzdW1tYXJ5'); return false;">gtsummary</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZXN0YXQlQzMlQURzdGljYQ=='); return false;">estatística</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/o_que_e_regressao_logistica_multinomial/index.html" class="no-external">
+Como prever, entre <strong>três ou mais opções</strong>, qual delas uma pessoa vai escolher?
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/o_que_e_regressao_logistica_multinomial/index.html" class="no-external">
+<div class="listing-date">
+Jul 28, 2026
+</div>
+<div class="listing-author">
+Jobenil Júnior
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="1" data-categories="ci1jb2RlJTJDYWxmYWJldGl6YSVDMyVBNyVDMyVBM28lMjBkZSUyMGRhZG9zJTJDZGF0YSUyMGxpdGVyYWN5JTJDZXNjYWxhJTIwbGlrZXJ0JTJDZ3RzdW1tYXJ5JTJDZ2dwbG90MiUyQ2VzdGF0JUMzJUFEc3RpY2E=" data-listing-date-sort="1784602800000" data-listing-file-modified-sort="1785241145898" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1468">
+<div class="thumbnail"><a href="./posts/como_medir_opinioes_escala_likert/index.html" class="no-external">
+
+<img loading="lazy" src="./posts/como_medir_opinioes_escala_likert/images/escala_likert_capa.png" class="thumbnail-image">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/como_medir_opinioes_escala_likert/index.html" class="no-external">Entendendo e Analisando a Escala Likert no R com {gtsummary} e {ggplot2}</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('ci1jb2Rl'); return false;">r-code</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('YWxmYWJldGl6YSVDMyVBNyVDMyVBM28lMjBkZSUyMGRhZG9z'); return false;">alfabetização de dados</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZGF0YSUyMGxpdGVyYWN5'); return false;">data literacy</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZXNjYWxhJTIwbGlrZXJ0'); return false;">escala likert</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Z3RzdW1tYXJ5'); return false;">gtsummary</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Z2dwbG90Mg=='); return false;">ggplot2</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZXN0YXQlQzMlQURzdGljYQ=='); return false;">estatística</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/como_medir_opinioes_escala_likert/index.html" class="no-external">
+Como você realmente mede o que as pessoas pensam ou sentem?
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/como_medir_opinioes_escala_likert/index.html" class="no-external">
+<div class="listing-date">
+Jul 21, 2026
+</div>
+<div class="listing-author">
+Jobenil Júnior
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="2" data-categories="ci1jb2RlJTJDYWxmYWJldGl6YSVDMyVBNyVDMyVBM28lMjBkZSUyMGRhZG9zJTJDZGF0YSUyMGxpdGVyYWN5JTJDdGVzdGUlMkNlc3RhdCVDMyVBRHN0aWNh" data-listing-date-sort="1760065200000" data-listing-file-modified-sort="1760127533019" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="849">
 <div class="thumbnail"><a href="./posts/para_que_serve_o_teste_de_hausman_mcfadden/index.html" class="no-external">
 
 <img loading="lazy" src="./posts/para_que_serve_o_teste_de_hausman_mcfadden/images/generatedImage3.jpg" class="thumbnail-image">
@@ -247,7 +335,7 @@ Jobenil Júnior
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="1" data-categories="aW50ZWxpZ2VuY2lhJTIwYXJ0aWZpY2lhbCUyQ2FnZW50ZXMlMjBpbnRlbGlnZW50ZXMlMkNhbGZhYmV0aXphJUMzJUE3JUMzJUEzbyUyMGRlJTIwZGFkb3MlMkNkYXRhJTIwbGl0ZXJhY3k=" data-listing-date-sort="1748660400000" data-listing-file-modified-sort="1748714877272" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="770">
+<div class="quarto-post image-right" data-index="3" data-categories="aW50ZWxpZ2VuY2lhJTIwYXJ0aWZpY2lhbCUyQ2FnZW50ZXMlMjBpbnRlbGlnZW50ZXMlMkNhbGZhYmV0aXphJUMzJUE3JUMzJUEzbyUyMGRlJTIwZGFkb3MlMkNkYXRhJTIwbGl0ZXJhY3k=" data-listing-date-sort="1748660400000" data-listing-file-modified-sort="1748714877272" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="770">
 <div class="thumbnail"><a href="./posts/agente_de_ia_o_que_faz/index.html" class="no-external">
 
 <img loading="lazy" src="./posts/agente_de_ia_o_que_faz/images/andrewng_langchain.jpg" class="thumbnail-image">
@@ -283,10 +371,10 @@ Jobenil Júnior
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="2" data-categories="ci1jb2RlJTJDYWxmYWJldGl6YSVDMyVBNyVDMyVBM28lMjBkZSUyMGRhZG9zJTJDZGF0YSUyMGxpdGVyYWN5" data-listing-date-sort="1747710000000" data-listing-file-modified-sort="1748713057651" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="795">
+<div class="quarto-post image-right" data-index="4" data-categories="ci1jb2RlJTJDYWxmYWJldGl6YSVDMyVBNyVDMyVBM28lMjBkZSUyMGRhZG9zJTJDZGF0YSUyMGxpdGVyYWN5" data-listing-date-sort="1747710000000" data-listing-file-modified-sort="1748713057651" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="795">
 <div class="thumbnail"><a href="./posts/afinal_como_se_calcula_os_quartis/index.html" class="no-external">
 
-<p class="card-img-top"><img src="posts\afinal_como_se_calcula_os_quartis\index_files\figure-html\unnamed-chunk-1-1.png"  class="thumbnail-image card-img"/></p>
+<p class="card-img-top"><img loading='lazy' src="posts\afinal_como_se_calcula_os_quartis\index_files\figure-html\unnamed-chunk-1-1.png"  class="thumbnail-image card-img"/></p>
 
 </a></div>
 <div class="body">
@@ -371,13 +459,14 @@ Jobenil Júnior
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
