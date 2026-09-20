@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jobenil Júnior">
+<meta name="dcterms.date" content="2026-09-20">
+
+<title>Vale a Pena Subir o Preço? A Simulação de Monte Carlo Aplicada Sobre a Elasticidade – Posts</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-21a3740376502132c29c43002ded69a4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/meunomeejog_logo.png" alt="" class="navbar-logo light-content">
+    <img src="../../images/meunomeejog_logo.png" alt="" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Posts</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">Educação</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://wa.me/5562992138972"> <i class="bi bi-whatsapp" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/jobeniljunior/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Vale a Pena Subir o Preço? A Simulação de Monte Carlo Aplicada Sobre a Elasticidade</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">python</div>
+                <div class="quarto-category">simulação de monte carlo</div>
+                <div class="quarto-category">marketing analytics</div>
+                <div class="quarto-category">pricing</div>
+                <div class="quarto-category">elasticidade de preço</div>
+                <div class="quarto-category">alfabetização de dados</div>
+                <div class="quarto-category">data literacy</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Jobenil Júnior </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">September 20, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>“Se eu subir o preço em 20%, quantos clientes eu perco?” Essa é, sem exagero, uma das perguntas mais caras que existem em marketing e a mais mal respondida. Quase sempre alguém responde com um número seco, tipo “a demanda cai uns 15%”, como se essa relação fosse uma lei física gravada em pedra. Na prática, ninguém conhece a <a href="https://en.wikipedia.org/wiki/Price_elasticity_of_demand">elasticidade-preço da demanda</a> exata do próprio produto, ela é estimada, tem incerteza, e um erro pequeno nessa estimativa pode transformar um aumento de preço promissor em um tiro no pé. É exatamente esse tipo de incerteza que a <strong>Simulação de Monte Carlo</strong> foi feita para tratar, e a ideia de usá-la em decisões de negócio tem uma origem histórica bem concreta.</p>
+<section id="o-problema-subir-o-preço-é-apostar-sem-saber-a-regra-do-jogo" class="level2">
+<h2 class="anchored" data-anchor-id="o-problema-subir-o-preço-é-apostar-sem-saber-a-regra-do-jogo">💸 O Problema: Subir o Preço é Apostar Sem Saber a Regra do Jogo</h2>
+<p>Toda decisão de precificação esconde uma equação de duas pontas: preço mais alto significa mais margem por unidade vendida, mas também significa menos unidades vendidas. O ponto de equilíbrio entre essas duas forças depende da elasticidade-preço da demanda, ou seja, o quanto a quantidade vendida reage a uma variação no preço.</p>
+<p>O problema é que essa elasticidade <strong>não é um número que se lê em algum lugar</strong>. Ela é estimada a partir de dados históricos, pesquisas de intenção de compra ou testes A/B, e todos esses métodos entregam uma faixa de valores plausíveis, não um valor único e definitivo. Um analista que assume “a elasticidade é -1,5” está, na verdade, escondendo um intervalo de incerteza real atrás de uma falsa precisão.</p>
+<blockquote class="blockquote">
+<p><strong>Tratar a elasticidade como um número fixo é a mesma ficção estatística de tratar o CPC de uma campanha como uma média imóvel: conveniente para a planilha, perigosa para a decisão.</strong></p>
+</blockquote>
+</section>
+<section id="um-pouco-de-história-de-los-alamos-às-planilhas-de-pricing" class="level2">
+<h2 class="anchored" data-anchor-id="um-pouco-de-história-de-los-alamos-às-planilhas-de-pricing">🏛️ Um Pouco de História: De Los Alamos às Planilhas de Pricing</h2>
+<p>O método de Monte Carlo nasceu na década de 1940, quando <a href="https://en.wikipedia.org/wiki/Stanislaw_Ulam">Stanislaw Ulam</a> e <a href="https://en.wikipedia.org/wiki/John_von_Neumann">John von Neumann</a> o desenvolveram no Laboratório de Los Alamos para simular a difusão de nêutrons em reações nucleares, um problema físico complexo demais para ser resolvido com equações fechadas. Mas quem trouxe essa lógica de simular milhares de cenários aleatórios para dentro das decisões de negócio, incluindo o preço de venda como uma variável incerta, foi o pesquisador em pesquisa operacional <a href="https://en.wikipedia.org/wiki/David_B._Hertz">David B. Hertz</a>.</p>
+<p>Em 1964, Hertz publicou na <em>Harvard Business Review</em> o artigo <a href="https://hbr.org/1979/09/risk-analysis-in-capital-investment">“Risk Analysis in Capital Investment”</a>, no qual propôs abandonar as projeções de investimento baseadas em um único cenário “mais provável” e, em vez disso, atribuir uma distribuição de probabilidade a cada variável incerta do negócio, entre elas o <strong>preço de venda</strong>, o tamanho do mercado e a taxa de crescimento da demanda, sorteando milhares de combinações para gerar uma distribuição completa de retornos possíveis. Foi o primeiro uso amplamente reconhecido do Monte Carlo fora dos laboratórios de física, aplicado diretamente a decisões corporativas, e é o ancestral direto de qualquer simulação de pricing que trata a reação do mercado a um preço como algo incerto, e não como um fato.</p>
+<blockquote class="blockquote">
+<p><strong>Hertz não inventou o Monte Carlo, mas foi um dos primeiros a perceber que toda decisão de negócio relevante já era, disfarçadamente, uma aposta sob incerteza.</strong></p>
+</blockquote>
+</section>
+<section id="modelando-a-elasticidade-como-o-que-ela-é-uma-faixa-não-um-número" class="level2">
+<h2 class="anchored" data-anchor-id="modelando-a-elasticidade-como-o-que-ela-é-uma-faixa-não-um-número">📉 Modelando a Elasticidade Como o Que Ela É: Uma Faixa, Não um Número</h2>
+<p>Para simular o efeito do preço sobre a demanda, usa-se a curva de demanda de elasticidade constante: <span class="math inline">\(Q = Q_0 \times (P / P_0)^{e}\)</span>, em que <span class="math inline">\(Q_0\)</span> é a quantidade vendida no preço de referência <span class="math inline">\(P_0\)</span>, e <span class="math inline">\(e\)</span> é a elasticidade-preço (sempre negativa, já que preço mais alto reduz a quantidade demandada). Em vez de fixar <span class="math inline">\(e\)</span> em um único valor, define-se um intervalo plausível, baseado no histórico de vendas ou em benchmarks da categoria, e sorteia-se um valor diferente a cada simulação.</p>
+</section>
+<section id="simulando-10.000-cenários-para-cada-preço-candidato" class="level2">
+<h2 class="anchored" data-anchor-id="simulando-10.000-cenários-para-cada-preço-candidato">🐍 Simulando 10.000 Cenários para Cada Preço Candidato</h2>
+<p>Vamos simular a precificação de um produto que hoje é vendido a <strong>R$ 100</strong>, com custo variável de <strong>R$ 45</strong> por unidade e demanda de referência em torno de <strong>500 unidades/mês</strong>. A elasticidade-preço é incerta, entre -2,5 (mercado muito sensível a preço) e -1,1 (mercado pouco sensível), e a demanda-base também varia de mês a mês entre 420 e 600 unidades, com 500 como valor mais provável.</p>
+<div id="22bbcd1c" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">2026</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>n_simulacoes <span class="op">=</span> <span class="dv">10_000</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>custo_unitario <span class="op">=</span> <span class="dv">45</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>preco_referencia <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>precos_testados <span class="op">=</span> np.arange(<span class="dv">70</span>, <span class="dv">151</span>, <span class="dv">5</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>linhas <span class="op">=</span> []</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> preco <span class="kw">in</span> precos_testados:</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># elasticidade-preço: incerta, entre -2,5 (muito sensível) e -1,1 (pouco sensível)</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    elasticidade <span class="op">=</span> np.random.uniform(<span class="op">-</span><span class="fl">2.5</span>, <span class="op">-</span><span class="fl">1.1</span>, n_simulacoes)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># demanda-base no preço de referência: também varia mês a mês</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    q0 <span class="op">=</span> np.random.triangular(<span class="dv">420</span>, <span class="dv">500</span>, <span class="dv">600</span>, n_simulacoes)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># curva de demanda de elasticidade constante</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    quantidade <span class="op">=</span> q0 <span class="op">*</span> (preco <span class="op">/</span> preco_referencia) <span class="op">**</span> elasticidade</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    lucro <span class="op">=</span> (preco <span class="op">-</span> custo_unitario) <span class="op">*</span> quantidade</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    linhas.append({</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>        <span class="st">"preco"</span>: preco,</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>        <span class="st">"lucro_p5"</span>: np.percentile(lucro, <span class="dv">5</span>),</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>        <span class="st">"lucro_mediana"</span>: np.percentile(lucro, <span class="dv">50</span>),</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>        <span class="st">"lucro_p95"</span>: np.percentile(lucro, <span class="dv">95</span>),</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>tabela_precos <span class="op">=</span> pd.DataFrame(linhas)</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>tabela_precos.<span class="bu">round</span>(<span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">preco</th>
+<th data-quarto-table-cell-role="th">lucro_p5</th>
+<th data-quarto-table-cell-role="th">lucro_mediana</th>
+<th data-quarto-table-cell-role="th">lucro_p95</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>70</td>
+<td>18481.0</td>
+<td>24020.0</td>
+<td>31133.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>75</td>
+<td>20364.0</td>
+<td>25452.0</td>
+<td>31855.0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>80</td>
+<td>21846.0</td>
+<td>26399.0</td>
+<td>31953.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>85</td>
+<td>23026.0</td>
+<td>27033.0</td>
+<td>31819.0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>90</td>
+<td>23877.0</td>
+<td>27507.0</td>
+<td>31621.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>95</td>
+<td>24394.0</td>
+<td>27705.0</td>
+<td>31331.0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">6</th>
+<td>100</td>
+<td>24542.0</td>
+<td>27781.0</td>
+<td>31340.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">7</th>
+<td>105</td>
+<td>24473.0</td>
+<td>27780.0</td>
+<td>31382.0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">8</th>
+<td>110</td>
+<td>24098.0</td>
+<td>27707.0</td>
+<td>31713.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">9</th>
+<td>115</td>
+<td>23523.0</td>
+<td>27476.0</td>
+<td>31911.0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">10</th>
+<td>120</td>
+<td>22985.0</td>
+<td>27310.0</td>
+<td>32447.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">11</th>
+<td>125</td>
+<td>22343.0</td>
+<td>27078.0</td>
+<td>32621.0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">12</th>
+<td>130</td>
+<td>21706.0</td>
+<td>26761.0</td>
+<td>33036.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">13</th>
+<td>135</td>
+<td>21071.0</td>
+<td>26524.0</td>
+<td>33400.0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">14</th>
+<td>140</td>
+<td>20453.0</td>
+<td>26227.0</td>
+<td>33545.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">15</th>
+<td>145</td>
+<td>19847.0</td>
+<td>25936.0</td>
+<td>33800.0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">16</th>
+<td>150</td>
+<td>19187.0</td>
+<td>25554.0</td>
+<td>33904.0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Cada linha representa um preço candidato e a distribuição completa de lucro mensal simulado para esse preço, considerando as 10 mil combinações possíveis de elasticidade e demanda-base.</p>
+</section>
+<section id="visualizando-o-leque-de-lucro-por-preço" class="level2">
+<h2 class="anchored" data-anchor-id="visualizando-o-leque-de-lucro-por-preço">📊 Visualizando o “Leque” de Lucro por Preço</h2>
+<div id="ca2da603" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="fl">5.5</span>))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>plt.plot(tabela_precos[<span class="st">"preco"</span>], tabela_precos[<span class="st">"lucro_mediana"</span>],</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>         color<span class="op">=</span><span class="st">"#4C6EF5"</span>, linewidth<span class="op">=</span><span class="fl">2.5</span>, label<span class="op">=</span><span class="st">"Lucro mediano"</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>plt.fill_between(tabela_precos[<span class="st">"preco"</span>], tabela_precos[<span class="st">"lucro_p5"</span>], tabela_precos[<span class="st">"lucro_p95"</span>],</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>                  color<span class="op">=</span><span class="st">"#4C6EF5"</span>, alpha<span class="op">=</span><span class="fl">0.2</span>, label<span class="op">=</span><span class="st">"Faixa P5–P95"</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>plt.axvline(preco_referencia, color<span class="op">=</span><span class="st">"#B5495B"</span>, linestyle<span class="op">=</span><span class="st">"--"</span>, linewidth<span class="op">=</span><span class="fl">1.5</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>            label<span class="op">=</span><span class="st">"Preço atual (R$ 100)"</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Preço de venda (R$)"</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Lucro mensal simulado (R$)"</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Lucro Esperado por Preço, sob Incerteza da Elasticidade"</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-3-output-1.png" width="856" height="518" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>O formato de leque é o ponto central do gráfico: perto do preço atual, a incerteza sobre a elasticidade importa pouco, porque a quantidade vendida muda pouco. Mas quanto mais o preço se afasta da referência, para cima ou para baixo, mais a faixa entre o cenário pessimista (P5) e o otimista (P95) se alarga, o resultado passa a depender cada vez mais de qual valor de elasticidade realmente se concretizar.</p>
+</section>
+<section id="vale-a-pena-subir-o-preço-de-r-100-para-r-120" class="level2">
+<h2 class="anchored" data-anchor-id="vale-a-pena-subir-o-preço-de-r-100-para-r-120">🔍 Vale a Pena Subir o Preço de R$ 100 para R$ 120?</h2>
+<p>Uma pergunta direta de negócio merece uma resposta direta. Em vez de comparar médias, comparamos os <strong>mesmos 10.000 cenários de elasticidade e demanda</strong> nos dois preços, simulação pareada, para isolar exatamente o efeito da mudança de preço.</p>
+<div id="f418a860" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>elasticidade <span class="op">=</span> np.random.uniform(<span class="op">-</span><span class="fl">2.5</span>, <span class="op">-</span><span class="fl">1.1</span>, n_simulacoes)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>q0 <span class="op">=</span> np.random.triangular(<span class="dv">420</span>, <span class="dv">500</span>, <span class="dv">600</span>, n_simulacoes)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> lucro_no_preco(preco):</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    quantidade <span class="op">=</span> q0 <span class="op">*</span> (preco <span class="op">/</span> preco_referencia) <span class="op">**</span> elasticidade</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (preco <span class="op">-</span> custo_unitario) <span class="op">*</span> quantidade</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>lucro_atual <span class="op">=</span> lucro_no_preco(<span class="dv">100</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>lucro_proposto <span class="op">=</span> lucro_no_preco(<span class="dv">120</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>diferenca <span class="op">=</span> lucro_proposto <span class="op">-</span> lucro_atual</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>prob_melhora <span class="op">=</span> (diferenca <span class="op">&gt;</span> <span class="dv">0</span>).mean()</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Probabilidade de o lucro aumentar ao subir o preço para R$ 120: </span><span class="sc">{</span>prob_melhora<span class="sc">:.1%}</span><span class="ss">"</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Variação mediana de lucro: R$ </span><span class="sc">{</span>np<span class="sc">.</span>median(diferenca)<span class="sc">:,.0f}</span><span class="ss">/mês"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Probabilidade de o lucro aumentar ao subir o preço para R$ 120: 43.9%
+Variação mediana de lucro: R$ -433/mês</code></pre>
+</div>
+</div>
+<p>O resultado é revelador: mesmo com uma margem por unidade bem maior a R$ 120, a chance de o lucro total realmente aumentar fica <strong>abaixo de 50%</strong>, porque, em boa parte dos cenários plausíveis de elasticidade, a queda no volume de vendas consome o ganho de margem. Um diretor de marketing que olhasse só para “margem maior = lucro maior” cairia numa armadilha que a simulação deixa exposta.</p>
+</section>
+<section id="da-estatística-à-estratégia-de-pricing" class="level2">
+<h2 class="anchored" data-anchor-id="da-estatística-à-estratégia-de-pricing">🚀 Da Estatística à Estratégia de Pricing</h2>
+<p>Esse é o valor prático da simulação para quem decide preço: ela não entrega uma resposta única e confiante demais, entrega a probabilidade real de cada decisão dar certo, dado que ninguém conhece a elasticidade com exatidão. O mesmo raciocínio serve para decidir entre dois planos de assinatura, testar um desconto promocional, ou avaliar se vale a pena reposicionar um produto para um público disposto a pagar mais. Em qualquer um desses casos, a pergunta certa não é “qual preço maximiza o lucro?”, é “qual preço maximiza o lucro <strong>considerando que não sabemos exatamente como o mercado vai reagir</strong>?”.</p>
+</section>
+<section id="em-resumo" class="level2">
+<h2 class="anchored" data-anchor-id="em-resumo">🎯 Em resumo:</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Etapa</th>
+<th style="text-align: left;">O que fizemos</th>
+<th style="text-align: left;">Por quê</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Curva de demanda</td>
+<td style="text-align: left;">Elasticidade constante, <span class="math inline">\(Q = Q_0(P/P_0)^e\)</span></td>
+<td style="text-align: left;">Ligar preço e quantidade vendida de forma realista</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Incerteza da elasticidade</td>
+<td style="text-align: left;">Intervalo de -2,5 a -1,1 sorteado a cada simulação</td>
+<td style="text-align: left;">Substituir um valor fixo (e falso) por uma faixa plausível</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Grade de preços</td>
+<td style="text-align: left;">17 preços candidatos, 10.000 cenários cada</td>
+<td style="text-align: left;">Comparar o “leque” de resultados possíveis, não só a média</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Comparação pareada</td>
+<td style="text-align: left;">Mesmos cenários testados em dois preços</td>
+<td style="text-align: left;">Isolar o efeito real de mudar o preço</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Interpretação</td>
+<td style="text-align: left;"><code>P(lucro aumenta)</code> e variação mediana</td>
+<td style="text-align: left;">Transformar a simulação em decisão de pricing</td>
+</tr>
+</tbody>
+</table>
+<blockquote class="blockquote">
+<p><strong>A melhor pergunta de pricing não é “qual é o preço ideal?”, é “qual é a chance de este preço ser melhor do que o que eu já pratico?”.</strong></p>
+</blockquote>
+<p>Da próxima vez que alguém propuser um novo preço com base numa elasticidade “de cabeça”, vale simular antes de decidir. Já testou algo parecido na precificação do seu produto ou serviço? Me chama no WhatsApp e me conta o resultado.</p>
+<p>EDA | TESTE T | ENQUETES | ANOVA | MODELOS DE REGRESSÃO | ANÁLISE FATORIAL | MODELAGEM DE EQUAÇÕES ESTRUTURAIS | TRI | RASCH MODELS | MACHINE LEARNING</p>
+<p><img src="images/whatsapp_logo.png" width="20" height="20"> <a href="https://wa.me/5562992138972"><strong>Prof.&nbsp;Jobenil Júnior</strong></a></p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
