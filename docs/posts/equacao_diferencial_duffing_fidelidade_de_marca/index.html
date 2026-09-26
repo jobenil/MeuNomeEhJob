@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jobenil Júnior">
+<meta name="dcterms.date" content="2026-09-26">
+
+<title>A Física da Fidelidade: O Que a Equação de Duffing Ensina Sobre Guerra de Marcas – Posts</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-21a3740376502132c29c43002ded69a4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/meunomeejog_logo.png" alt="" class="navbar-logo light-content">
+    <img src="../../images/meunomeejog_logo.png" alt="" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Posts</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">Educação</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://wa.me/5562992138972"> <i class="bi bi-whatsapp" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/jobeniljunior/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">A Física da Fidelidade: O Que a Equação de Duffing Ensina Sobre Guerra de Marcas</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">python</div>
+                <div class="quarto-category">equações diferenciais</div>
+                <div class="quarto-category">dinâmica não-linear</div>
+                <div class="quarto-category">marketing analytics</div>
+                <div class="quarto-category">alfabetização de dados</div>
+                <div class="quarto-category">data literacy</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Jobenil Júnior </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">September 26, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>Por que um cliente fiel à sua marca há anos, do nada, muda para a concorrente — e depois de um tempo, sem nenhum motivo aparente, volta atrás? Por que a mesma campanha de marketing, rodada duas vezes, às vezes “gruda” na cabeça do consumidor e às vezes passa batido? Boa parte do marketing trata esse tipo de comportamento como ruído aleatório. Mas existe um ramo da física e da matemática — a <strong>dinâmica não linear</strong> — que descreve exatamente esse tipo de padrão: sistemas que ficam “presos” entre dois estados estáveis, que reagem de forma desproporcional a estímulos repetidos e que, sob certas condições, viram completamente imprevisíveis. É a mesma matemática usada para modelar vigas e pontes sob vibração — e ela serve, com uma boa dose de analogia, para modelar a cabeça do seu consumidor.</p>
+<section id="de-pontes-a-consumidores-por-que-usar-física-em-marketing" class="level2">
+<h2 class="anchored" data-anchor-id="de-pontes-a-consumidores-por-que-usar-física-em-marketing">🌉 De Pontes a Consumidores: Por Que Usar Física em Marketing?</h2>
+<p>A <a href="https://en.wikipedia.org/wiki/Duffing_equation"><strong>Equação de Duffing</strong></a> é uma ferramenta clássica da engenharia para descrever osciladores não lineares — sistemas com massa, atrito e uma “força restauradora” que não é simplesmente proporcional ao desvio, como em uma mola comum. Em sua forma geral, ela é escrita como:</p>
+<p><span class="math display">\[\ddot{x} + c\dot{x} + ax + bx^3 = F(t)\]</span></p>
+<p>onde <span class="math inline">\(x\)</span> é a posição do sistema, <span class="math inline">\(\dot{x}\)</span> sua velocidade, <span class="math inline">\(\ddot{x}\)</span> sua aceleração, <span class="math inline">\(c\)</span> o amortecimento, <span class="math inline">\(a\)</span> e <span class="math inline">\(b\)</span> os coeficientes de rigidez linear e não linear, e <span class="math inline">\(F(t)\)</span> uma força externa aplicada ao longo do tempo. <a href="https://en.wikipedia.org/wiki/Steven_Strogatz">Strogatz</a>, em seu clássico <a href="https://www.amazon.com.br/Nonlinear-Dynamics-Chaos-Applications-Engineering/dp/0813349109/ref=sr_1_3?crid=1BUX7SDGXHWDE&amp;dib=eyJ2IjoiMSJ9.Kb4c5DItbXKG7t1ITrZOsoc-W6IO8KCyToNxJimu_ndaF0F1qqJA4bFGMmxlQFnQ2dNWfxTKp-jt3dq7U40xjqzC1k-cF90odEOWDSHeUpeisUgB3aex68ulWQV4DNn2B-NI-7GEaAJBjuXxMy7gCw.FJp2NZF_ME4KIk4evPq6AiTxReMUgNCDAbaZmGxHx5A&amp;dib_tag=se&amp;keywords=nonlinear+dynamics+and+chaos+steven+strogatz&amp;qid=1790436030&amp;sprefix=Nonlinear+Dynamics+and+Chaos%2Caps%2C201&amp;sr=8-3"><em>Nonlinear Dynamics and Chaos</em></a>, usa exatamente esse tipo de equação para mostrar como sistemas com “inércia + resistência a mudanças + efeito manada” podem produzir comportamentos ricos — poços de estabilidade, ressonância, histerese e até caos.</p>
+<p>Repare que essa combinação — inércia (você não muda de opinião instantaneamente), resistência a mudanças (custo emocional/financeiro de trocar de marca) e efeito manada (quanto mais extrema sua posição, mais ela se autorreforça ou perde força) — não é exclusiva de vigas e pontes. É também uma descrição razoável de como a preferência de um consumidor evolui no tempo. É essa analogia que vamos explorar no post de hoje.</p>
+</section>
+<section id="do-pêndulo-linear-ao-comportamento-não-linear" class="level2">
+<h2 class="anchored" data-anchor-id="do-pêndulo-linear-ao-comportamento-não-linear">🎢 Do Pêndulo Linear ao Comportamento Não Linear</h2>
+<p>Uma mola comum (linear) sempre puxa de volta para o mesmo ponto de equilíbrio, com força proporcional ao desvio: desviou o dobro, a força restauradora é o dobro. É um modelo elegante, mas pouco realista para comportamento humano.</p>
+<p>Pense em fidelidade de marca: uma pequena insatisfação (o produto atrasou um dia) raramente muda alguma coisa. Mas passado um certo limiar (o produto atrasou, veio errado <em>e</em> o atendimento foi ruim), a reação deixa de ser proporcional — o cliente vira detrator da noite para o dia. Ou o oposto: quanto mais fiel alguém já é a uma marca, mais forte fica o vínculo, e mais resistente ele se torna a qualquer estímulo da concorrência.</p>
+<p>É exatamente esse tipo de resposta desproporcional que o termo cúbico <span class="math inline">\(bx^3\)</span> da equação de Duffing captura. <span class="math inline">\(a\)</span> continua sendo a rigidez “linear” (a força de atração de curto prazo), mas <span class="math inline">\(b\)</span> modula como essa força se comporta longe do equilíbrio — reforçando-a (endurecendo) ou dissipando-a (amolecendo) à medida que o desvio cresce.</p>
+</section>
+<section id="os-quatro-perfis-de-mercado-caso-conservativo" class="level2">
+<h2 class="anchored" data-anchor-id="os-quatro-perfis-de-mercado-caso-conservativo">⚖️ Os Quatro Perfis de Mercado (Caso Conservativo)</h2>
+<p>Antes de adicionar atrito ou campanhas, vale entender a “geografia” do sistema no seu estado mais puro — sem amortecimento, sem forças externas. Nesse caso conservativo, a energia total do sistema é dada pela função Hamiltoniana:</p>
+<p><span class="math display">\[H(x, v) = \frac{v^2}{2} + \frac{ax^2}{2} + \frac{bx^4}{4}\]</span></p>
+<p>onde <span class="math inline">\(x\)</span> é a “posição de preferência” do consumidor (de <span class="math inline">\(-1\)</span>, fiel à Marca A, a <span class="math inline">\(+1\)</span>, fiel à Marca B, passando por <span class="math inline">\(0\)</span>, indeciso) e <span class="math inline">\(v\)</span> seu “momentum de opinião” — a velocidade com que essa preferência está mudando. Plotando as curvas de nível dessa energia para diferentes combinações de <span class="math inline">\(a\)</span> e <span class="math inline">\(b\)</span>, aparecem quatro topologias bem distintas:</p>
+<div id="b826e110" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> hamiltoniana(x, v, a, b):</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> v<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> <span class="dv">2</span> <span class="op">+</span> a <span class="op">*</span> x<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> <span class="dv">2</span> <span class="op">+</span> b <span class="op">*</span> x<span class="op">**</span><span class="dv">4</span> <span class="op">/</span> <span class="dv">4</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>x_grid <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">400</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>v_grid <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">400</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>X, V <span class="op">=</span> np.meshgrid(x_grid, v_grid)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>perfis <span class="op">=</span> [</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    (<span class="dv">1</span>, <span class="dv">1</span>, <span class="st">"Marca Dominante Resiliente"</span>),</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    (<span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>, <span class="st">"Fidelidade Frágil"</span>),</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    (<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="st">"Mercado Duopolista Polarizado"</span>),</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    (<span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>, <span class="st">"Mercado Sem Âncora"</span>),</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">8</span>))</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, (a, b, nome) <span class="kw">in</span> <span class="bu">zip</span>(axes.flat, perfis):</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    H <span class="op">=</span> hamiltoniana(X, V, a, b)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    ax.contour(X, V, H, levels<span class="op">=</span><span class="dv">20</span>, cmap<span class="op">=</span><span class="st">"viridis"</span>)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="ss">f"</span><span class="sc">{</span>nome<span class="sc">}</span><span class="ss"> (a=</span><span class="sc">{</span>a<span class="sc">}</span><span class="ss">, b=</span><span class="sc">{</span>b<span class="sc">}</span><span class="ss">)"</span>, fontsize<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">"x (preferência)"</span>)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">"v (momentum)"</span>)</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-2-output-1.png" width="863" height="758" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Cada um desses quatro painéis representa um “perfil de mercado” bem diferente:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Parâmetros (<span class="math inline">\(a\)</span>, <span class="math inline">\(b\)</span>)</th>
+<th style="text-align: left;">Nome físico</th>
+<th style="text-align: left;">Perfil de mercado</th>
+<th style="text-align: left;">O que significa</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(a=1, b=1\)</span></td>
+<td style="text-align: left;">Mola endurecedora</td>
+<td style="text-align: left;">Marca Dominante Resiliente</td>
+<td style="text-align: left;">Um único equilíbrio estável; a resistência à mudança cresce com o desvio</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(a=1, b=-1\)</span></td>
+<td style="text-align: left;">Mola amolecedora</td>
+<td style="text-align: left;">Fidelidade Frágil</td>
+<td style="text-align: left;">Estável só para pequenos desvios; a marca perde força após um limiar</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(a=-1, b=1\)</span></td>
+<td style="text-align: left;">Duplo poço</td>
+<td style="text-align: left;">Mercado Duopolista Polarizado</td>
+<td style="text-align: left;">Dois equilíbrios estáveis (Marca A / Marca B) separados por uma fronteira</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(a=-1, b=-1\)</span></td>
+<td style="text-align: left;">Ponto de sela</td>
+<td style="text-align: left;">Mercado Sem Âncora</td>
+<td style="text-align: left;">Nenhuma preferência é estável; qualquer estímulo pequeno diverge</td>
+</tr>
+</tbody>
+</table>
+<blockquote class="blockquote">
+<p><strong>Um mercado “sem âncora” (</strong><span class="math inline">\(a=-1, b=-1\)</span>) não é hipotético: é o retrato de um hype especulativo, sem propósito de marca nem comunidade por trás — qualquer notícia, boa ou ruim, já é suficiente para mandar a preferência do consumidor para um extremo.</p>
+</blockquote>
+</section>
+<section id="o-duopólio-em-foco-dois-poços-uma-fronteira" class="level2">
+<h2 class="anchored" data-anchor-id="o-duopólio-em-foco-dois-poços-uma-fronteira">🧲 O Duopólio em Foco: Dois Poços, Uma Fronteira</h2>
+<p>O terceiro painel acima — o duplo poço (<span class="math inline">\(a=-1, b=1\)</span>) — é o caso mais interessante para marketing, porque é o que melhor descreve uma disputa real entre duas marcas concorrentes. Repare na curva central em formato de “oito deitado” (uma <a href="https://en.wikipedia.org/wiki/Lemniscate">lemniscata</a>): ela funciona como uma <strong>separatriz</strong>, dividindo o espaço em dois territórios.</p>
+<p>Os dois equilíbrios estáveis ficam em <span class="math inline">\(x = \pm\sqrt{-a/b}\)</span> — com <span class="math inline">\(a=-1\)</span> e <span class="math inline">\(b=1\)</span>, isso dá exatamente <span class="math inline">\(x = \pm 1\)</span>: fidelidade plena à Marca A de um lado, à Marca B do outro. Dentro de cada “lóbulo” do oito, o consumidor oscila em torno de uma das marcas sem trocar de lado. Só quando ele cruza a linha central — a fronteira dos indecisos — é que a preferência efetivamente muda de campo. É a base matemática de qualquer mercado polarizado em torno de duas opções fortes (refrigerante, sistema operacional de celular, time de futebol).</p>
+</section>
+<section id="adicionando-atrito-clientes-não-mudam-de-ideia-instantaneamente" class="level2">
+<h2 class="anchored" data-anchor-id="adicionando-atrito-clientes-não-mudam-de-ideia-instantaneamente">🧠 Adicionando Atrito: Clientes Não Mudam de Ideia Instantaneamente</h2>
+<p>O caso conservativo é útil para entender a “geografia” do mercado, mas nenhum sistema real é livre de atrito. Vamos introduzir o amortecimento <span class="math inline">\(c &gt; 0\)</span> — que aqui representa o <strong>custo de troca</strong>: contrato, hábito, ponto de fidelidade, o simples trabalho de aprender a usar outro produto. Isso transforma a equação de 2ª ordem em um sistema de duas equações de 1ª ordem, que resolvemos numericamente com o método <a href="https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods">Runge-Kutta</a> do <code>scipy.integrate.solve_ivp</code>:</p>
+<div id="7dfa5c8a" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.integrate <span class="im">import</span> solve_ivp</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> duffing_amortecido(t, y, a, b, c):</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    x, v <span class="op">=</span> y</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [v, <span class="op">-</span>c <span class="op">*</span> v <span class="op">-</span> a <span class="op">*</span> x <span class="op">-</span> b <span class="op">*</span> x<span class="op">**</span><span class="dv">3</span>]</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>a, b, c <span class="op">=</span> <span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="fl">0.3</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>condicoes_iniciais <span class="op">=</span> [<span class="fl">0.05</span>, <span class="op">-</span><span class="fl">0.08</span>]  <span class="co"># dois clientes quase indecisos, com um empurrãozinho de diferença</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">11</span>, <span class="fl">4.5</span>))</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> x0 <span class="kw">in</span> condicoes_iniciais:</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    sol <span class="op">=</span> solve_ivp(duffing_amortecido, [<span class="dv">0</span>, <span class="dv">60</span>], y0<span class="op">=</span>[x0, <span class="fl">0.0</span>], args<span class="op">=</span>(a, b, c),</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                     max_step<span class="op">=</span><span class="fl">0.05</span>, dense_output<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    t_plot <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">60</span>, <span class="dv">2000</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    x_plot, v_plot <span class="op">=</span> sol.sol(t_plot)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    axes[<span class="dv">0</span>].plot(t_plot, x_plot, label<span class="op">=</span><span class="ss">f"cliente inicia em x₀=</span><span class="sc">{</span>x0<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    axes[<span class="dv">1</span>].plot(x_plot, v_plot, lw<span class="op">=</span><span class="fl">0.8</span>)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].axhline(<span class="dv">1</span>, color<span class="op">=</span><span class="st">"gray"</span>, ls<span class="op">=</span><span class="st">"--"</span>, lw<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].axhline(<span class="op">-</span><span class="dv">1</span>, color<span class="op">=</span><span class="st">"gray"</span>, ls<span class="op">=</span><span class="st">"--"</span>, lw<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_xlabel(<span class="st">"Tempo"</span>)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">"x(t) — preferência"</span>)</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_title(<span class="st">"Série temporal"</span>)</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].legend(fontsize<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">"x"</span>)</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="st">"v"</span>)</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_title(<span class="st">"Retrato de fase"</span>)</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-3-output-1.png" width="1048" height="422" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Os dois clientes começam praticamente no mesmo lugar — perto da indecisão total (<span class="math inline">\(x_0\)</span> próximo de zero) — mas de lados opostos da separatriz. O atrito (amortecimento) faz cada trajetória espiralar para dentro, convergindo suavemente para um dos dois focos estáveis: um cliente termina fiel à Marca B (<span class="math inline">\(x \approx +1\)</span>), o outro à Marca A (<span class="math inline">\(x \approx -1\)</span>). No retrato de fase, essas espirais são separadas justamente pelo ponto de sela na origem — a mesma fronteira que vimos como uma lemniscata no caso conservativo.</p>
+<blockquote class="blockquote">
+<p><strong>A diferença entre “cliente fiel” e “cliente perdido” às vezes não está em nenhuma grande decisão consciente — está de que lado da fronteira ele começou, por um triz.</strong></p>
+</blockquote>
+</section>
+<section id="o-efeito-das-campanhas-ressonância-e-o-fenômeno-do-salto" class="level2">
+<h2 class="anchored" data-anchor-id="o-efeito-das-campanhas-ressonância-e-o-fenômeno-do-salto">📣 O Efeito das Campanhas: Ressonância e o Fenômeno do Salto</h2>
+<p>Até aqui, nada empurra o sistema de fora — ele só reage às próprias condições iniciais. Campanhas de marketing são justamente esse empurrão externo: um forçamento periódico <span class="math inline">\(F_t = \lambda\cos(\Omega t)\)</span>, onde <span class="math inline">\(\lambda\)</span> é a <strong>intensidade</strong> do investimento e <span class="math inline">\(\Omega\)</span> a <strong>frequência</strong> com que a campanha se repete.</p>
+<p>Vamos simular uma “varredura de frequência”: aumentar <span class="math inline">\(\Omega\)</span> gradualmente (<em>forward sweep</em>) e, separadamente, diminuir <span class="math inline">\(\Omega\)</span> a partir do valor mais alto (<em>backward sweep</em>), medindo a amplitude de resposta do mercado em regime permanente em cada frequência:</p>
+<div id="113f0e74" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> duffing_forcado(t, y, a, b, c, lam, Omega):</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    x, v <span class="op">=</span> y</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [v, <span class="op">-</span>c <span class="op">*</span> v <span class="op">-</span> a <span class="op">*</span> x <span class="op">-</span> b <span class="op">*</span> x<span class="op">**</span><span class="dv">3</span> <span class="op">+</span> lam <span class="op">*</span> np.cos(Omega <span class="op">*</span> t)]</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> amplitude_regime_permanente(x0, v0, Omega, a, b, c, lam, T_total<span class="op">=</span><span class="dv">180</span>, janela<span class="op">=</span><span class="dv">30</span>):</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    sol <span class="op">=</span> solve_ivp(duffing_forcado, [<span class="dv">0</span>, T_total], [x0, v0], args<span class="op">=</span>(a, b, c, lam, Omega),</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>                     max_step<span class="op">=</span><span class="fl">0.1</span>, t_eval<span class="op">=</span>np.linspace(T_total <span class="op">-</span> janela, T_total, <span class="dv">800</span>))</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    x_final <span class="op">=</span> sol.y[<span class="dv">0</span>]</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.<span class="bu">max</span>(np.<span class="bu">abs</span>(x_final)), sol.y[<span class="dv">0</span>][<span class="op">-</span><span class="dv">1</span>], sol.y[<span class="dv">1</span>][<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>a, b, c, lam <span class="op">=</span> <span class="dv">1</span>, <span class="dv">1</span>, <span class="fl">0.05</span>, <span class="fl">0.3</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>omega_range <span class="op">=</span> np.linspace(<span class="fl">0.8</span>, <span class="fl">1.8</span>, <span class="dv">20</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>amp_forward <span class="op">=</span> []</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>x_val, v_val <span class="op">=</span> <span class="fl">0.05</span>, <span class="fl">0.0</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> Omega <span class="kw">in</span> omega_range:</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    amp, x_val, v_val <span class="op">=</span> amplitude_regime_permanente(x_val, v_val, Omega, a, b, c, lam)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    amp_forward.append(amp)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>amp_backward <span class="op">=</span> []</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>x_val, v_val <span class="op">=</span> <span class="fl">0.05</span>, <span class="fl">0.0</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> Omega <span class="kw">in</span> <span class="bu">reversed</span>(omega_range):</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    amp, x_val, v_val <span class="op">=</span> amplitude_regime_permanente(x_val, v_val, Omega, a, b, c, lam)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    amp_backward.append(amp)</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>amp_backward.reverse()</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="fl">4.5</span>))</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>ax.plot(omega_range, amp_forward, <span class="st">"b-o"</span>, markersize<span class="op">=</span><span class="dv">4</span>, label<span class="op">=</span><span class="st">"Aumentando a frequência de campanha"</span>)</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>ax.plot(omega_range, amp_backward, <span class="st">"r--s"</span>, markersize<span class="op">=</span><span class="dv">4</span>, label<span class="op">=</span><span class="st">"Diminuindo a frequência de campanha"</span>)</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Frequência de campanha (Ω)"</span>)</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"Amplitude máxima de resposta"</span>)</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>ax.legend(fontsize<span class="op">=</span><span class="dv">9</span>)</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-4-output-1.png" width="664" height="422" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Repare em duas coisas importantes. Primeiro, a curva não é uma reta nem uma curva simétrica: ela se inclina — a resposta cresce de forma cada vez mais acentuada até certo ponto e então <strong>despenca abruptamente</strong> (o chamado <em>jump phenomenon</em>). Segundo, e mais revelador: as curvas azul (aumentando <span class="math inline">\(\Omega\)</span>) e vermelha (diminuindo <span class="math inline">\(\Omega\)</span>) <strong>não se sobrepõem</strong> na faixa intermediária de frequências — elas caem em pontos diferentes. Esse fenômeno se chama <strong>histerese</strong>: a mesma frequência de campanha pode gerar respostas completamente diferentes dependendo de como você chegou até ali (se estava aumentando ou diminuindo o ritmo de investimento).</p>
+<blockquote class="blockquote">
+<p><strong>Dobrar o investimento em mídia não dobra o resultado de forma linear. Existe uma faixa de frequência de campanha onde o retorno é desproporcional — e o histórico recente de investimento (não só o valor atual) também influencia a resposta do mercado.</strong></p>
+</blockquote>
+</section>
+<section id="o-fator-imprevisível-boca-a-boca-e-ruído-social" class="level2">
+<h2 class="anchored" data-anchor-id="o-fator-imprevisível-boca-a-boca-e-ruído-social">🎲 O Fator Imprevisível: Boca a Boca e Ruído Social</h2>
+<p>Nenhuma empresa controla 100% do que acontece com sua marca — boca a boca, avaliações espontâneas e picos de atenção nas redes sociais funcionam como um ruído aleatório constante. Incorporamos isso como um termo estocástico <span class="math inline">\(\sigma\, dW_t\)</span>, integrado numericamente pelo método de <a href="https://en.wikipedia.org/wiki/Euler%E2%80%93Maruyama_method"><strong>Euler-Maruyama</strong></a> — e, como esse método pode divergir numericamente se o sistema “explodir”, adicionamos desde já uma trava de segurança:</p>
+<div id="28ec2244" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">2026</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>limite_seguranca <span class="op">=</span> <span class="fl">10.0</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> passo_euler_maruyama(x, v, t, a, b, c, lam, Omega, sigma, dt):</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    Ft <span class="op">=</span> lam <span class="op">*</span> np.cos(Omega <span class="op">*</span> t)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    dx <span class="op">=</span> v <span class="op">*</span> dt</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    dv <span class="op">=</span> (<span class="op">-</span>c <span class="op">*</span> v <span class="op">-</span> a <span class="op">*</span> x <span class="op">-</span> b <span class="op">*</span> x<span class="op">**</span><span class="dv">3</span> <span class="op">+</span> Ft) <span class="op">*</span> dt <span class="op">+</span> sigma <span class="op">*</span> np.sqrt(dt) <span class="op">*</span> np.random.normal()</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    x_novo, v_novo <span class="op">=</span> x <span class="op">+</span> dx, v <span class="op">+</span> dv</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> np.isnan(x_novo) <span class="kw">or</span> <span class="bu">abs</span>(x_novo) <span class="op">&gt;</span> limite_seguranca:</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> x, <span class="fl">0.0</span>  <span class="co"># trava de segurança: ignora o passo divergente</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x_novo, v_novo</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>a, b, c <span class="op">=</span> <span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="fl">0.3</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>lam, Omega, sigma <span class="op">=</span> <span class="fl">0.05</span>, <span class="fl">1.0</span>, <span class="fl">0.2</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>dt <span class="op">=</span> <span class="fl">0.01</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>n_passos <span class="op">=</span> <span class="dv">20000</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>x_hist, v_hist, t_hist <span class="op">=</span> [<span class="fl">0.1</span>], [<span class="fl">0.0</span>], [<span class="fl">0.0</span>]</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(n_passos):</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    x_novo, v_novo <span class="op">=</span> passo_euler_maruyama(x_hist[<span class="op">-</span><span class="dv">1</span>], v_hist[<span class="op">-</span><span class="dv">1</span>], t_hist[<span class="op">-</span><span class="dv">1</span>], a, b, c, lam, Omega, sigma, dt)</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    x_hist.append(x_novo)</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    v_hist.append(v_novo)</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    t_hist.append(t_hist[<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span> dt)</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">4</span>))</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>ax.plot(t_hist, x_hist, lw<span class="op">=</span><span class="fl">0.6</span>, color<span class="op">=</span><span class="st">"#4c8bf5"</span>)</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>ax.axhline(<span class="dv">1</span>, color<span class="op">=</span><span class="st">"gray"</span>, ls<span class="op">=</span><span class="st">"--"</span>, lw<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>ax.axhline(<span class="op">-</span><span class="dv">1</span>, color<span class="op">=</span><span class="st">"gray"</span>, ls<span class="op">=</span><span class="st">"--"</span>, lw<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>ax.axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">"black"</span>, ls<span class="op">=</span><span class="st">":"</span>, lw<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Tempo"</span>)</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"x(t) — preferência"</span>)</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-5-output-1.png" width="856" height="374" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>O cliente começa fiel à Marca B (<span class="math inline">\(x_0 = 0.1\)</span>, dentro do poço positivo) e, na maior parte do tempo, permanece ali — a curva oscila em torno de <span class="math inline">\(x \approx 1\)</span>. Mas repare que, em alguns momentos, o ruído acumulado é forte o suficiente para empurrar a curva para além da fronteira em <span class="math inline">\(x=0\)</span>, fazendo a preferência “tombar” inteira para o poço oposto por um tempo, antes de eventualmente voltar. Nenhuma campanha causou isso — foi o acúmulo de flutuações aleatórias, o equivalente estatístico do boca a boca.</p>
+</section>
+<section id="quando-o-marketing-agressivo-vira-caos-rota-para-a-imprevisibilidade" class="level2">
+<h2 class="anchored" data-anchor-id="quando-o-marketing-agressivo-vira-caos-rota-para-a-imprevisibilidade">🌀 Quando o Marketing Agressivo Vira Caos: Rota para a Imprevisibilidade</h2>
+<p>Por fim, o experimento mais contraintuitivo: o que acontece se aumentarmos gradualmente só a <strong>intensidade</strong> <span class="math inline">\(\lambda\)</span> das campanhas, mantendo a frequência <span class="math inline">\(\Omega\)</span> fixa? Para visualizar isso, usamos uma <strong>seção de Poincaré</strong> — em vez de olhar a trajetória inteira, coletamos a posição <span class="math inline">\(x\)</span> apenas uma vez por ciclo de campanha, depois de descartar o transiente inicial:</p>
+<div id="99b742ed" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>a, b, c <span class="op">=</span> <span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="fl">0.3</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>Omega_fixo <span class="op">=</span> <span class="fl">1.2</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>T_periodo <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">/</span> Omega_fixo</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>dt <span class="op">=</span> <span class="fl">0.02</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>passos_por_periodo <span class="op">=</span> <span class="bu">int</span>(T_periodo <span class="op">/</span> dt)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>lambda_range <span class="op">=</span> np.linspace(<span class="fl">0.05</span>, <span class="fl">0.5</span>, <span class="dv">18</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>limite_seguranca <span class="op">=</span> <span class="fl">10.0</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="fl">4.5</span>))</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> lam <span class="kw">in</span> lambda_range:</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    x_val, v_val, t_val <span class="op">=</span> <span class="fl">0.1</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    divergiu <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Descarta o transiente (60 ciclos de campanha)</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">60</span> <span class="op">*</span> passos_por_periodo):</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>        Ft <span class="op">=</span> lam <span class="op">*</span> np.cos(Omega_fixo <span class="op">*</span> t_val)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>        dv <span class="op">=</span> (<span class="op">-</span>c <span class="op">*</span> v_val <span class="op">-</span> a <span class="op">*</span> x_val <span class="op">-</span> b <span class="op">*</span> x_val<span class="op">**</span><span class="dv">3</span> <span class="op">+</span> Ft) <span class="op">*</span> dt</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>        dx <span class="op">=</span> v_val <span class="op">*</span> dt</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>        x_val, v_val <span class="op">=</span> x_val <span class="op">+</span> dx, v_val <span class="op">+</span> dv</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>        t_val <span class="op">+=</span> dt</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> np.isnan(x_val) <span class="kw">or</span> <span class="bu">abs</span>(x_val) <span class="op">&gt;</span> limite_seguranca:</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>            divergiu <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> divergiu:</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>        <span class="cf">continue</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Coleta um ponto por ciclo de campanha (seção de Poincaré)</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>    pontos <span class="op">=</span> []</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">30</span>):</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(passos_por_periodo):</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>            Ft <span class="op">=</span> lam <span class="op">*</span> np.cos(Omega_fixo <span class="op">*</span> t_val)</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>            dv <span class="op">=</span> (<span class="op">-</span>c <span class="op">*</span> v_val <span class="op">-</span> a <span class="op">*</span> x_val <span class="op">-</span> b <span class="op">*</span> x_val<span class="op">**</span><span class="dv">3</span> <span class="op">+</span> Ft) <span class="op">*</span> dt</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>            dx <span class="op">=</span> v_val <span class="op">*</span> dt</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>            x_val, v_val <span class="op">=</span> x_val <span class="op">+</span> dx, v_val <span class="op">+</span> dv</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>            t_val <span class="op">+=</span> dt</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>        pontos.append(x_val)</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>    ax.plot([lam] <span class="op">*</span> <span class="bu">len</span>(pontos), pontos, <span class="st">"k."</span>, markersize<span class="op">=</span><span class="fl">1.5</span>, alpha<span class="op">=</span><span class="fl">0.6</span>)</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Intensidade de campanha (λ)"</span>)</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"x (seção de Poincaré)"</span>)</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-6-output-1.png" width="760" height="422" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Para valores baixos de <span class="math inline">\(\lambda\)</span>, os pontos coletados a cada ciclo formam uma faixa estreitíssima — o mercado responde de forma quase idêntica campanha após campanha (o regime “período-1”). Conforme <span class="math inline">\(\lambda\)</span> cresce, essa faixa vai se alargando gradualmente, sinal de que a resposta começa a variar de um ciclo de campanha para o outro. Só que, a partir de um valor crítico de <span class="math inline">\(\lambda\)</span> (por volta de <span class="math inline">\(0{,}26\)</span> neste cenário), o comportamento muda de forma abrupta: os pontos deixam de ficar confinados a um único poço e passam a se espalhar entre os dois lados do mercado — a marca registrada de um regime <strong>caótico</strong>.</p>
+<blockquote class="blockquote">
+<p><strong>Existe uma diferença entre “campanha forte” e “campanha forte demais”. Passado certo ponto, aumentar ainda mais a intensidade de marketing não aumenta o controle sobre o resultado — destrói a previsibilidade da resposta do consumidor.</strong></p>
+</blockquote>
+</section>
+<section id="cuidado-com-o-overflow-uma-nota-de-bom-código-não-só-de-estatística" class="level2">
+<h2 class="anchored" data-anchor-id="cuidado-com-o-overflow-uma-nota-de-bom-código-não-só-de-estatística">⚠️ Cuidado com o Overflow (uma nota de bom código, não só de estatística)</h2>
+<p>Um detalhe técnico que vale a pena destacar: em todos os blocos de código acima que simulam o sistema forçado ou estocástico, existe um <code>limite_seguranca</code> — um teste simples que interrompe a simulação se o valor de <span class="math inline">\(x\)</span> sair de qualquer faixa fisicamente/comercialmente plausível. Sem essa trava, sistemas não lineares próximos de uma divergência podem gerar números que crescem sem controle a cada passo, até estourar a escala numérica do computador (na prática, valores como <span class="math inline">\(10^{200}\)</span> — sem nenhum significado real, seja físico ou de negócio).</p>
+<p>Isso não é só um detalhe de estilo: é o tipo de erro silencioso que pode arruinar um gráfico ou uma tabela de resultados sem gerar nenhum erro explícito no código. A mesma disciplina que aplicamos para validar um modelo estatístico — checar se os números fazem sentido — vale para o código que gera esses números.</p>
+</section>
+<section id="em-resumo" class="level2">
+<h2 class="anchored" data-anchor-id="em-resumo">🎯 Em resumo:</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Conceito físico (Duffing)</th>
+<th style="text-align: left;">Tradução em marketing</th>
+<th style="text-align: left;">O que revela</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Rigidez linear/não linear (<span class="math inline">\(a\)</span>, <span class="math inline">\(b\)</span>)</td>
+<td style="text-align: left;">Força de atração da marca + efeito manada</td>
+<td style="text-align: left;">Se existe 1, 2 ou nenhum “porto seguro” de preferência</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Amortecimento (<span class="math inline">\(c\)</span>)</td>
+<td style="text-align: left;">Custo de troca / inércia comportamental</td>
+<td style="text-align: left;">Quão rápido o cliente reage antes de “assentar” numa marca</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Forçamento periódico (<span class="math inline">\(\lambda\cos\Omega t\)</span>)</td>
+<td style="text-align: left;">Campanhas de marketing recorrentes</td>
+<td style="text-align: left;">Existe uma frequência/intensidade de campanha com resposta desproporcional (ressonância)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Histerese / salto</td>
+<td style="text-align: left;">Efeito da ordem/histórico das campanhas</td>
+<td style="text-align: left;">A mesma verba pode ter resultado diferente dependendo do caminho percorrido</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ruído estocástico (<span class="math inline">\(\sigma\,dW_t\)</span>)</td>
+<td style="text-align: left;">Boca a boca / redes sociais</td>
+<td style="text-align: left;">Fator fora do controle da empresa que pode empurrar o cliente entre marcas</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Bifurcação / caos</td>
+<td style="text-align: left;">Excesso de estímulo de marketing</td>
+<td style="text-align: left;">Ponto em que o comportamento do consumidor deixa de ser previsível</td>
+</tr>
+</tbody>
+</table>
+<p>Modelos lineares — a régua e o compasso de boa parte da estatística aplicada a negócios — são ótimos para descrever tendências suaves e respostas proporcionais. Mas fidelidade súbita, viralização inesperada e guerras de marca que “empacam” por anos são, por natureza, fenômenos <strong>não lineares</strong>. A equação de Duffing não vai substituir sua <a href="../../posts/anova_na_pratica_campanhas_marketing/index.html">ANOVA</a> ou sua <a href="../../posts/simulacao_monte_carlo_roi_campanhas/index.html">simulação de Monte Carlo</a> no dia a dia, mas ela oferece um vocabulário matemático preciso para um tipo de comportamento que todo profissional de marketing já viu na prática, mesmo sem saber como nomeá-lo.</p>
+<blockquote class="blockquote">
+<p>Curioso para rodar você mesmo? Altere o <code>np.random.seed</code>, a intensidade <code>lam</code> ou a frequência <code>Omega</code> dos blocos acima e veja como o comportamento do “consumidor simulado” muda. Manda pra gente no WhatsApp o que você encontrou. Obrigado pela leitura!</p>
+</blockquote>
+<p>EDA | TESTE T | ENQUETES | ANOVA | MODELOS DE REGRESSÃO | ANÁLISE FATORIAL | MODELAGEM DE EQUAÇÕES ESTRUTURAIS | TRI | RASCH MODELS | MACHINE LEARNING</p>
+<p><img src="images/whatsapp_logo.png" width="20" height="20"> <a href="https://wa.me/5562992138972"><strong>Prof.&nbsp;Jobenil Júnior</strong></a></p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

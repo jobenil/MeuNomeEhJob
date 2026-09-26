@@ -331,7 +331,7 @@ window.Quarto = {
 <section id="hoje-iremos-implementar-tudo-em-python" class="level2">
 <h2 class="anchored" data-anchor-id="hoje-iremos-implementar-tudo-em-python">🐍 Hoje iremos implementar tudo em Python</h2>
 <p>Vamos começar simulando os dados e explorando a distribuição do ticket médio com <code>pandas</code> e <code>seaborn</code>.</p>
-<div id="43eb50bd" class="cell" data-execution_count="1">
+<div id="6ffbeddc" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -406,7 +406,7 @@ window.Quarto = {
 </div>
 <section id="visualizando-as-distribuições" class="level3">
 <h3 class="anchored" data-anchor-id="visualizando-as-distribuições">📦 Visualizando as distribuições</h3>
-<div id="39e75d79" class="cell" data-execution_count="2">
+<div id="68099c22" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -432,7 +432,7 @@ window.Quarto = {
 </section>
 <section id="rodando-a-anova-com-scipy.stats" class="level3">
 <h3 class="anchored" data-anchor-id="rodando-a-anova-com-scipy.stats">🔬 Rodando a ANOVA com <code>scipy.stats</code></h3>
-<div id="db6f15a6" class="cell" data-execution_count="3">
+<div id="e2d05012" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>grupo_preco <span class="op">=</span> df.loc[df[<span class="st">"Campanha"</span>] <span class="op">==</span> <span class="st">"Foco em Preço"</span>, <span class="st">"Ticket_Medio"</span>]</span>
@@ -456,7 +456,7 @@ Valor-p: 0.00000</code></pre>
 <p>A ANOVA responde só uma pergunta: <strong>existe alguma diferença entre os grupos?</strong> Ela não diz <em>qual</em> campanha é melhor, nem <em>quais pares</em> diferem entre si. Para isso, entram os <strong>Teste Post-Hoc</strong>, neste caso iremos focar no <a href="https://en.wikipedia.org/wiki/Tukey%27s_range_test"><strong>Teste de Tukey (Tukey’s HSD)</strong></a> — um teste post-hoc que compara todos os pares de grupos, dois a dois, já ajustando o erro Tipo I para o número de comparações feitas (a mesma armadilha que discutimos lá no início, mas agora sob controle).</p>
 <section id="empregando-pairwise_tukeyhsd-da-biblioteca-statsmodels.stats.multicomp" class="level3">
 <h3 class="anchored" data-anchor-id="empregando-pairwise_tukeyhsd-da-biblioteca-statsmodels.stats.multicomp">Empregando <code>pairwise_tukeyhsd</code> da biblioteca <code>statsmodels.stats.multicomp</code></h3>
-<div id="b6e868a7" class="cell" data-execution_count="4">
+<div id="50048c02" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.stats.multicomp <span class="im">import</span> pairwise_tukeyhsd</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>resultado_tukey <span class="op">=</span> pairwise_tukeyhsd(</span>

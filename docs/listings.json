@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/equacao_diferencial_duffing_fidelidade_de_marca/index.html",
       "/posts/simulacao_monte_carlo_elasticidade_preco/index.html",
       "/posts/simulacao_monte_carlo_roi_campanhas/index.html",
       "/posts/reducao_dimensionalidade_pca_consumo_beleza/index.html",
