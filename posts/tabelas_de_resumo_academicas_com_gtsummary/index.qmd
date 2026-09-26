@@ -1,0 +1,168 @@
+---
+title: "Chega de Formatar Tabela no Word: Automatizando Resultados com gtsummary"
+author: "Jobenil Júnior"
+date: "2026-08-23"
+execute:
+  warning: false
+  message: false
+categories: [r-code, gtsummary, tabelas, publicação científica, alfabetização de dados, data literacy]
+image: "images/tabela_gtsummary_destaque.png"
+---
+
+Quantas horas você já perdeu copiando o `summary()` do R para o Word e ajustando casas decimais uma por uma, célula por célula, até a "Tabela 1" do seu artigo ficar apresentável? Se a resposta for "mais do que eu gostaria de admitir", então neste post vou lhe apresentar algumas novas idéias.
+
+## 😩 O Problema da "Tabela 1"
+
+Quem já publicou um artigo científico, uma dissertação ou um relatório técnico conhece bem a famosa **Tabela 1**: aquela tabela descritiva logo no início dos resultados, mostrando idade, sexo, escolaridade e outras características da amostra, geralmente separadas por grupo (controle vs. intervenção, por exemplo). Parece simples, mas montá-la manualmente envolve calcular médias, desvios-padrão, frequências e valores-p de vários testes, colar tudo no Word e ainda formatar para não sair do padrão exigido pela revista.
+
+> **O tempo que se perde formatando resultados é tempo que não sobra para interpretar os resultados — e é exatamente essa conta que o pacote `{gtsummary}` vem resolver.**
+
+## 📦 Conhecendo o `{gtsummary}`
+
+O [`{gtsummary}`](https://www.danieldsjoberg.com/gtsummary/) é um pacote do R construído sobre o `{gt}`, pensado especificamente para gerar tabelas de qualidade de publicação de forma automática, direto a partir dos seus dados ou dos seus modelos ajustados. As duas funções que vamos explorar hoje são:
+
+- `tbl_summary()`: gera tabelas descritivas (a "Tabela 1") a partir de um `data.frame`.
+- `tbl_regression()`: transforma a saída de um modelo (`lm`, `glm`, entre outros) em uma tabela de coeficientes já formatada, com intervalo de confiança e valor-p.
+
+Para instalar, basta rodar `install.packages("gtsummary")` — o pacote já traz o `{gt}` e se integra bem com o `{dplyr}` para eventuais ajustes antes de tabular.
+
+## 🧪 Simulando uma Base de Pesquisa
+
+Para deixar tudo reprodutível, vamos simular uma base típica de ciência social/psicometria: 200 respondentes, divididos entre um grupo **Controle** e um grupo **Intervenção**, com idade, sexo, escolaridade e o escore em uma escala psicométrica arbitrária (de 0 a 100).
+
+```{r warning=FALSE, message=FALSE}
+# Carregando pacotes
+library(dplyr)
+library(gtsummary)
+library(gt)
+
+# Simulando os dados
+set.seed(2026)
+n <- 200
+
+dados <- data.frame(
+  grupo = sample(c("Controle", "Intervenção"), n, replace = TRUE),
+  idade = round(rnorm(n, mean = 34, sd = 8)),
+  sexo = sample(c("Feminino", "Masculino"), n, replace = TRUE, prob = c(0.55, 0.45)),
+  escolaridade = factor(
+    sample(c("Fundamental", "Médio", "Superior"), n, replace = TRUE, prob = c(0.2, 0.45, 0.35)),
+    levels = c("Fundamental", "Médio", "Superior")
+  )
+)
+
+dados$escore_escala <- round(
+  rnorm(n, mean = 50, sd = 10) + ifelse(dados$grupo == "Intervenção", 8, 0)
+)
+
+head(dados)
+```
+
+Note que desenhamos a simulação de propósito com o grupo **Intervenção** tendo, em média, um escore 8 pontos mais alto — um cenário didático para deixar claro o que o `{gtsummary}` deve nos revelar logo a seguir.
+
+## 📊 Criando a Tabela Descritiva com `tbl_summary()`
+
+Com uma única linha de código, conseguimos uma tabela descritiva completa da amostra:
+
+```{r warning=FALSE, message=FALSE}
+dados |>
+  select(grupo, idade, sexo, escolaridade, escore_escala) |>
+  tbl_summary(by = grupo) |>
+  add_p() |>
+  add_overall() |>
+  bold_labels()
+```
+
+Em uma única chamada, o `tbl_summary(by = grupo)` já calcula médias e desvios-padrão (ou medianas e IQR, dependendo do tipo de variável) para cada grupo, o `add_overall()` acrescenta uma coluna com o total da amostra, e o `add_p()` roda automaticamente o teste estatístico apropriado para cada linha — teste t ou Wilcoxon para variáveis contínuas, Qui-Quadrado ou Fisher para categóricas — devolvendo o valor-p já formatado. Repare que o grupo **Intervenção** aparece com escore médio visivelmente maior, e o valor-p da linha `escore_escala` deve confirmar que essa diferença não é fruto do acaso.
+
+## 🧩 Customizando a Tabela
+
+Na prática, cada revista ou orientador pede um padrão diferente de formatação. O `{gtsummary}` permite ajustar isso sem sair do R:
+
+```{r warning=FALSE, message=FALSE}
+dados |>
+  select(grupo, idade, sexo, escolaridade, escore_escala) |>
+  tbl_summary(
+    by = grupo,
+    label = list(
+      idade ~ "Idade (anos)",
+      sexo ~ "Sexo",
+      escolaridade ~ "Escolaridade",
+      escore_escala ~ "Escore na Escala"
+    ),
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd})",
+      all_categorical() ~ "{n} ({p}%)"
+    ),
+    digits = all_continuous() ~ 1
+  ) |>
+  add_p() |>
+  bold_labels() |>
+  bold_p(t = 0.05)
+```
+
+Com `label =` trocamos os nomes técnicos das variáveis por rótulos legíveis, com `statistic =` fixamos que variáveis contínuas sempre aparecerão como "média (desvio-padrão)", e o `bold_p(t = 0.05)` deixa em **negrito automaticamente** qualquer linha cujo valor-p seja menor que 0,05 — nenhuma formatação manual necessária.
+
+## 📈 Indo Além: Tabela de Regressão com `tbl_regression()`
+
+A mesma lógica se aplica a modelos estatísticos. Vamos ajustar uma regressão linear simples explicando o escore pela condição experimental, controlando por idade e sexo:
+
+```{r warning=FALSE, message=FALSE}
+modelo <- lm(escore_escala ~ grupo + idade + sexo, data = dados)
+
+modelo |>
+  tbl_regression(
+    label = list(
+      grupo ~ "Grupo (ref.: Controle)",
+      idade ~ "Idade (anos)",
+      sexo ~ "Sexo (ref.: Feminino)"
+    )
+  ) |>
+  bold_p(t = 0.05) |>
+  bold_labels()
+```
+
+Em vez de copiar os coeficientes do `summary(modelo)` um a um, o `tbl_regression()` já entrega a tabela pronta com o coeficiente estimado, o intervalo de confiança de 95% e o valor-p — no formato que qualquer revisor de revista está acostumado a ver.
+
+## 💾 Exportando para Word
+
+Fechando o ciclo da dor que começou este post: depois de pronta, a tabela pode ir direto para um arquivo `.docx`, sem precisar copiar e colar nada.
+
+``` r
+# tabela_final <- modelo |> tbl_regression()
+
+# tabela_final |>
+#   as_gt() |>
+#   gt::gtsave("tabela_regressao.docx")
+```
+
+O `as_gt()` converte o objeto do `{gtsummary}` para um objeto `{gt}`, e o `gtsave()` cuida da exportação — funciona também para `.png`, `.html` e `.rtf`, dependendo do que a sua revista ou banca pedir.
+
+```{r warning=FALSE, message=FALSE, echo=FALSE}
+tabela_destaque <- dados |>
+  select(grupo, idade, sexo, escolaridade, escore_escala) |>
+  tbl_summary(by = grupo) |>
+  add_p() |>
+  bold_labels() |>
+  bold_p(t = 0.05) |>
+  as_gt()
+
+gt::gtsave(tabela_destaque, filename = "images/tabela_gtsummary_destaque.png")
+```
+
+## 🎯 Em resumo:
+
+| Etapa | O que fizemos | Por quê |
+|:-----------------------|:-----------------------|:-----------------------|
+| 1️⃣ | Simulamos 200 respondentes em 2 grupos | Para ter um cenário reprodutível de pesquisa social |
+| 2️⃣ | Geramos a "Tabela 1" com `tbl_summary()` + `add_p()` | Para descrever a amostra e comparar grupos automaticamente |
+| 3️⃣ | Customizamos rótulos, estatísticas e negrito com `bold_p()` | Para adequar ao padrão exigido por revistas/bancas |
+| 4️⃣ | Geramos a tabela de regressão com `tbl_regression()` | Para formatar coeficientes, IC e valor-p sem copiar à mão |
+| 5️⃣ | Exportamos com `gtsave()` | Para fechar o fluxo direto do R até o Word |
+
+> **A régua, a calculadora de casas decimais e o copiar-e-colar podem ficar de lado: com `{gtsummary}`, a tabela nasce pronta para publicação junto com a sua análise — e continua reprodutível se os dados mudarem amanhã.**
+
+Da próxima vez que você (ou seu orientando) estiver prestes a formatar uma tabela de resultados na mão, lembre-se de que uma única chamada de `tbl_summary()` ou `tbl_regression()` pode economizar horas de trabalho repetitivo. Testem com os dados de vocês e mandem os resultados no nosso WhatsApp. Obrigado pela leitura!
+
+EDA \| TESTE T \| ENQUETES \| ANOVA \| MODELOS DE REGRESSÃO \| ANÁLISE FATORIAL \| MODELAGEM DE EQUAÇÕES ESTRUTURAIS \| TRI \| RASCH MODELS \| MACHINE LEARNING
+
+![](images/whatsapp_logo.png){width="20" height="20"} [**Prof. Jobenil Júnior**](https://wa.me/5562992138972)

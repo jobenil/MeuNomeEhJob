@@ -1,0 +1,149 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#eef2f7"/>
+      <stop offset="100%" stop-color="#dbe4ee"/>
+    </linearGradient>
+    <linearGradient id="floorGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e7ded0"/>
+      <stop offset="100%" stop-color="#d8cdb8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Fundo -->
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+  <rect x="0" y="520" width="1200" height="110" fill="url(#floorGrad)"/>
+
+  <!-- Brilho suave atrás da prateleira -->
+  <ellipse cx="930" cy="330" rx="270" ry="230" fill="#ffffff" opacity="0.35"/>
+
+  <!-- Estrutura da prateleira -->
+  <rect x="700" y="140" width="460" height="400" rx="10" fill="#f7f3ec" stroke="#e1d8c4" stroke-width="2"/>
+  <rect x="700" y="140" width="14" height="400" fill="#c9a06a"/>
+  <rect x="1146" y="140" width="14" height="400" fill="#c9a06a"/>
+  <rect x="700" y="230" width="460" height="14" rx="3" fill="#c9a06a"/>
+  <rect x="700" y="350" width="460" height="14" rx="3" fill="#c9a06a"/>
+  <rect x="700" y="470" width="460" height="14" rx="3" fill="#c9a06a"/>
+
+  <!-- Fileira 1: iogurte Natural (cinza) -->
+  <g>
+    <rect x="775" y="166" width="46" height="64" rx="8" fill="#8c8c8c"/>
+    <rect x="775" y="166" width="46" height="10" rx="4" fill="#6e6e6e"/>
+    <ellipse cx="798" cy="168" rx="21" ry="6" fill="#ffffff" opacity="0.85"/>
+
+    <rect x="841" y="166" width="46" height="64" rx="8" fill="#8c8c8c"/>
+    <rect x="841" y="166" width="46" height="10" rx="4" fill="#6e6e6e"/>
+    <ellipse cx="864" cy="168" rx="21" ry="6" fill="#ffffff" opacity="0.85"/>
+
+    <rect x="907" y="166" width="46" height="64" rx="8" fill="#8c8c8c"/>
+    <rect x="907" y="166" width="46" height="10" rx="4" fill="#6e6e6e"/>
+    <ellipse cx="930" cy="168" rx="21" ry="6" fill="#ffffff" opacity="0.85"/>
+
+    <rect x="973" y="166" width="46" height="64" rx="8" fill="#8c8c8c"/>
+    <rect x="973" y="166" width="46" height="10" rx="4" fill="#6e6e6e"/>
+    <ellipse cx="996" cy="168" rx="21" ry="6" fill="#ffffff" opacity="0.85"/>
+
+    <rect x="1039" y="166" width="46" height="64" rx="8" fill="#8c8c8c"/>
+    <rect x="1039" y="166" width="46" height="10" rx="4" fill="#6e6e6e"/>
+    <ellipse cx="1062" cy="168" rx="21" ry="6" fill="#ffffff" opacity="0.85"/>
+  </g>
+
+  <!-- Fileira 2: iogurte Grego (azul) -->
+  <g>
+    <rect x="775" y="286" width="46" height="64" rx="8" fill="#4c8bf5"/>
+    <rect x="775" y="286" width="46" height="10" rx="4" fill="#2f6bd1"/>
+    <ellipse cx="798" cy="288" rx="21" ry="6" fill="#ffffff" opacity="0.85"/>
+
+    <rect x="841" y="286" width="46" height="64" rx="8" fill="#4c8bf5"/>
+    <rect x="841" y="286" width="46" height="10" rx="4" fill="#2f6bd1"/>
+    <ellipse cx="864" cy="288" rx="21" ry="6" fill="#ffffff" opacity="0.85"/>
+
+    <rect x="907" y="286" width="46" height="64" rx="8" fill="#4c8bf5"/>
+    <rect x="907" y="286" width="46" height="10" rx="4" fill="#2f6bd1"/>
+    <ellipse cx="930" cy="288" rx="21" ry="6" fill="#ffffff" opacity="0.85"/>
+
+    <rect x="973" y="286" width="46" height="64" rx="8" fill="#4c8bf5"/>
+    <rect x="973" y="286" width="46" height="10" rx="4" fill="#2f6bd1"/>
+    <ellipse cx="996" cy="288" rx="21" ry="6" fill="#ffffff" opacity="0.85"/>
+
+    <rect x="1039" y="286" width="46" height="64" rx="8" fill="#4c8bf5"/>
+    <rect x="1039" y="286" width="46" height="10" rx="4" fill="#2f6bd1"/>
+    <ellipse cx="1062" cy="288" rx="21" ry="6" fill="#ffffff" opacity="0.85"/>
+  </g>
+
+  <!-- Fileira 3: iogurte Zero/Light (vermelho) -->
+  <g>
+    <rect x="775" y="406" width="46" height="64" rx="8" fill="#e0575b"/>
+    <rect x="775" y="406" width="46" height="10" rx="4" fill="#b83f43"/>
+    <ellipse cx="798" cy="408" rx="21" ry="6" fill="#ffffff" opacity="0.85"/>
+
+    <rect x="841" y="406" width="46" height="64" rx="8" fill="#e0575b"/>
+    <rect x="841" y="406" width="46" height="10" rx="4" fill="#b83f43"/>
+    <ellipse cx="864" cy="408" rx="21" ry="6" fill="#ffffff" opacity="0.85"/>
+
+    <rect x="907" y="406" width="46" height="64" rx="8" fill="#e0575b"/>
+    <rect x="907" y="406" width="46" height="10" rx="4" fill="#b83f43"/>
+    <ellipse cx="930" cy="408" rx="21" ry="6" fill="#ffffff" opacity="0.85"/>
+
+    <rect x="973" y="406" width="46" height="64" rx="8" fill="#e0575b"/>
+    <rect x="973" y="406" width="46" height="10" rx="4" fill="#b83f43"/>
+    <ellipse cx="996" cy="408" rx="21" ry="6" fill="#ffffff" opacity="0.85"/>
+
+    <rect x="1039" y="406" width="46" height="64" rx="8" fill="#e0575b"/>
+    <rect x="1039" y="406" width="46" height="10" rx="4" fill="#b83f43"/>
+    <ellipse cx="1062" cy="408" rx="21" ry="6" fill="#ffffff" opacity="0.85"/>
+  </g>
+
+  <!-- Sombras no chão -->
+  <ellipse cx="235" cy="524" rx="58" ry="10" fill="#000000" opacity="0.08"/>
+  <ellipse cx="460" cy="524" rx="95" ry="10" fill="#000000" opacity="0.08"/>
+
+  <!-- Cliente (silhueta estilizada, empurrando o carrinho) -->
+  <g transform="rotate(8 235 340)">
+    <circle cx="235" cy="310" r="26" fill="#2d3a4a"/>
+    <rect x="205" y="340" width="60" height="100" rx="26" fill="#2d3a4a"/>
+    <line x1="255" y1="365" x2="350" y2="380" stroke="#2d3a4a" stroke-width="16" stroke-linecap="round"/>
+    <line x1="255" y1="382" x2="345" y2="397" stroke="#2d3a4a" stroke-width="16" stroke-linecap="round" opacity="0.85"/>
+  </g>
+
+  <!-- Pernas (fora da rotação, presas ao chão) -->
+  <line x1="235" y1="430" x2="198" y2="520" stroke="#2d3a4a" stroke-width="22" stroke-linecap="round"/>
+  <line x1="235" y1="430" x2="272" y2="520" stroke="#2d3a4a" stroke-width="22" stroke-linecap="round"/>
+
+  <!-- Carrinho de supermercado -->
+  <rect x="345" y="372" width="90" height="14" rx="7" fill="#4a4f57"/>
+  <line x1="390" y1="386" x2="400" y2="420" stroke="#4a4f57" stroke-width="10" stroke-linecap="round"/>
+
+  <polygon points="350,420 560,420 520,500 400,500" fill="#dfe4ea" stroke="#9aa0a6" stroke-width="3" opacity="0.95"/>
+  <g stroke="#9aa0a6" stroke-width="2" opacity="0.6">
+    <line x1="390" y1="420" x2="405" y2="500"/>
+    <line x1="430" y1="420" x2="437" y2="500"/>
+    <line x1="470" y1="420" x2="470" y2="500"/>
+    <line x1="510" y1="420" x2="503" y2="500"/>
+    <line x1="360" y1="442" x2="548" y2="442"/>
+    <line x1="368" y1="464" x2="540" y2="464"/>
+    <line x1="378" y1="486" x2="530" y2="486"/>
+  </g>
+
+  <!-- Rodas do carrinho -->
+  <line x1="400" y1="500" x2="410" y2="497" stroke="#4a4f57" stroke-width="6"/>
+  <line x1="520" y1="500" x2="505" y2="497" stroke="#4a4f57" stroke-width="6"/>
+  <circle cx="410" cy="515" r="18" fill="#4a4f57"/>
+  <circle cx="505" cy="515" r="18" fill="#4a4f57"/>
+  <circle cx="410" cy="515" r="6" fill="#8c939c"/>
+  <circle cx="505" cy="515" r="6" fill="#8c939c"/>
+
+  <!-- Compras no carrinho -->
+  <rect x="365" y="380" width="70" height="16" rx="8" fill="#d8a35f" transform="rotate(-18 400 388)"/>
+  <circle cx="445" cy="392" r="14" fill="#6fae4e"/>
+  <circle cx="460" cy="388" r="12" fill="#6fae4e"/>
+  <circle cx="455" cy="402" r="13" fill="#6fae4e"/>
+  <rect x="480" y="372" width="28" height="48" rx="3" fill="#f6efe2" stroke="#d8cdb8" stroke-width="1.5"/>
+  <rect x="480" y="372" width="28" height="10" rx="2" fill="#e0575b"/>
+  <circle cx="527" cy="398" r="13" fill="#f2994a"/>
+  <circle cx="542" cy="390" r="11" fill="#f2994a"/>
+
+  <!-- Potinho de iogurte no carrinho, ligando a cena ao tema -->
+  <rect x="505" y="378" width="20" height="26" rx="4" fill="#4c8bf5"/>
+  <ellipse cx="515" cy="380" rx="10" ry="4" fill="#ffffff" opacity="0.85"/>
+</svg>
