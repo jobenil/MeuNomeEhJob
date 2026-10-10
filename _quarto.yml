@@ -1,6 +1,11 @@
 project:
   type: website
   output-dir: docs
+  render:
+    - "*.qmd"
+    - "*.md"
+    - "!ideias_de_posts/"
+    - "!CLAUDE.md"
 
 website:
   title: "Posts"
