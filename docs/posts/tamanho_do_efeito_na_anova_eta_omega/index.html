@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jobenil Júnior">
+<meta name="dcterms.date" content="2026-10-10">
+
+<title>Eta, Ômega ou Épsilon? O Tamanho do Efeito Que Sua ANOVA Está Escondendo – Posts</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-a5a41e6a67f4ce0b8799e496220e48a6.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/meunomeejog_logo.png" alt="" class="navbar-logo light-content">
+    <img src="../../images/meunomeejog_logo.png" alt="" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Posts</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">Educação</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://wa.me/5562992138972"> <i class="bi bi-whatsapp" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/jobeniljunior/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Eta, Ômega ou Épsilon? O Tamanho do Efeito Que Sua ANOVA Está Escondendo</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">r-code</div>
+                <div class="quarto-category">tamanho do efeito</div>
+                <div class="quarto-category">anova</div>
+                <div class="quarto-category">eta-quadrado</div>
+                <div class="quarto-category">marketing analytics</div>
+                <div class="quarto-category">alfabetização de dados</div>
+                <div class="quarto-category">data literacy</div>
+                <div class="quarto-category">estatística</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Jobenil Júnior </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">October 10, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>Você rodou a ANOVA, o software devolveu <strong>F = 44,7</strong> e <strong>p &lt; 0,001</strong>, e o revisor da revista escreveu na margem do seu artigo: <em>“Report effect sizes.”</em> Você volta para a saída e encontra lá um <strong>eta-quadrado parcial = 0,20</strong>. Aí vem a dúvida: isso quer dizer que o fator explica 20% da variação dos dados? (Spoiler: não necessariamente.) E por que o colega do laboratório ao lado reportou <strong>ômega-quadrado</strong>? E que história é essa de eta-quadrado <strong>generalizado</strong>? Hoje vamos abrir essa caixa-preta com fórmula, código em R e, no final, uma decisão de marketing de verdade, daquelas que valem dinheiro.</p>
+<section id="recapitulando-em-30-segundos-p-não-é-tamanho" class="level2">
+<h2 class="anchored" data-anchor-id="recapitulando-em-30-segundos-p-não-é-tamanho">🔁 Recapitulando em 30 segundos: p não é tamanho</h2>
+<p>No <a href="../../posts/teste_ab_significancia_e_tamanho_do_efeito/index.html">post sobre Testes A/B</a> vimos que o valor de p responde <em>“foi sorte?”</em>, enquanto o tamanho do efeito responde <em>“quão grande?”</em>. Dois grandes nomes da estatística resumiram isso em frases que gosto de mostrar em sala (<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3444174/">Sullivan &amp; Feinn, 2012</a>):</p>
+<ul>
+<li><em>“A significância estatística é a coisa menos interessante dos resultados.”</em> (Gene V. Glass)</li>
+<li><em>“O produto principal de uma pesquisa é uma ou mais medidas de tamanho do efeito, não valores de p.”</em> (Jacob Cohen)</li>
+</ul>
+<blockquote class="blockquote">
+<p><strong>O valor de p depende do efeito <em>e</em> do tamanho da amostra. O tamanho do efeito não depende do N. Por isso ele é o resultado principal de um estudo.</strong></p>
+</blockquote>
+<p>Naquele post trabalhamos com <strong>dois grupos</strong> (versão A × versão B) e com o <em>d</em> de Cohen. Só que, na vida real, raramente temos só dois grupos. E quando entram em cena três campanhas, dois canais e dois perfis de cliente, a pergunta <em>“quão grande?”</em> muda de figura.</p>
+</section>
+<section id="as-duas-famílias-de-tamanho-do-efeito" class="level2">
+<h2 class="anchored" data-anchor-id="as-duas-famílias-de-tamanho-do-efeito">👨‍👩‍👧 As duas famílias de tamanho do efeito</h2>
+<p>Uma forma muito útil de organizar a bagunça vem do excelente artigo de <a href="https://rpics.ismt.pt/index.php/ISMT/article/view/72">Espírito-Santo &amp; Daniel (2018)</a>, escrito em português e que recomendo a todos os meus leitores. Os tamanhos do efeito se dividem em <strong>duas famílias</strong>:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Família</th>
+<th style="text-align: left;">Pergunta que responde</th>
+<th style="text-align: left;">Exemplos</th>
+<th style="text-align: left;">Onde aparece</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong><em>d</em></strong> (diferença)</td>
+<td style="text-align: left;">“Quantos desvios-padrão separam os grupos?”</td>
+<td style="text-align: left;"><em>d</em> de Cohen, <em>g</em> de Hedges, Δ de Glass</td>
+<td style="text-align: left;">Teste t, comparações par a par</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong><em>r</em></strong> (variância explicada)</td>
+<td style="text-align: left;">“Que fração da variação de Y é explicada por X?”</td>
+<td style="text-align: left;"><em>r</em>, R², η², η²p, η²G, ω², ε², <em>f</em></td>
+<td style="text-align: left;">Correlação, regressão, ANOVA</td>
+</tr>
+</tbody>
+</table>
+<p>A ANOVA fica num lugar curioso: ela pode ser lida como uma <strong>extensão da família <em>d</em></strong> para mais de dois grupos (é o espírito do <em>f</em> de Cohen) ou como um membro da <strong>família <em>r</em></strong>, em que medimos a <strong>proporção da variabilidade</strong> de Y atribuível a cada fator. Hoje vamos morar principalmente na família <em>r</em>.</p>
+</section>
+<section id="imagine-assim-a-pizza-da-variabilidade" class="level2">
+<h2 class="anchored" data-anchor-id="imagine-assim-a-pizza-da-variabilidade">🍕 Imagine assim: a pizza da variabilidade</h2>
+<p>Pense em toda a variação dos seus dados como <strong>uma pizza inteira</strong>. Essa pizza é a <strong>soma dos quadrados total</strong> (<span class="math inline">\(SQ_{total}\)</span>): o quanto cada observação se afasta da média geral.</p>
+<p>Na ANOVA de um fator, a pizza é dividida em duas partes:</p>
+<p><span class="math display">\[SQ_{total} = SQ_{fator} + SQ_{erro}\]</span></p>
+<ul>
+<li><span class="math inline">\(SQ_{fator}\)</span> (entre grupos): a fatia que o fator “comeu”, ou seja, a variação explicada pelas diferenças entre as médias dos grupos.</li>
+<li><span class="math inline">\(SQ_{erro}\)</span> (dentro dos grupos): a sobra, a variação que o fator não explica.</li>
+</ul>
+<p>Com dois fatores (A e B), a pizza ganha mais fatias:</p>
+<p><span class="math display">\[SQ_{total} = SQ_A + SQ_B + SQ_{A \times B} + SQ_{erro}\]</span></p>
+<p>E a estatística F, que você já conhece do <a href="../../posts/anova_na_pratica_campanhas_marketing/index.html">post de ANOVA</a>, é só a razão entre a variação média de cada fatia e a variação média da sobra: <span class="math inline">\(F = QM_{fator} / QM_{erro}\)</span>.</p>
+<p>Vamos visualizar a pizza do exemplo do artigo de Espírito-Santo &amp; Daniel (2018): o efeito da <strong>faixa etária</strong> (14–24, 25–64 e 65+ anos) sobre a pontuação no teste das Matrizes Progressivas de Raven, com <strong>N = 752</strong> pessoas. Os autores publicaram a tabela da ANOVA, e é tudo de que precisamos:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(effectsize)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(emmeans)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pwr)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Função auxiliar para exibir números no padrão brasileiro (vírgula decimal)</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>br <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">digitos =</span> <span class="dv">2</span>) {</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">format</span>(<span class="fu">round</span>(x, digitos), <span class="at">nsmall =</span> digitos, <span class="at">decimal.mark =</span> <span class="st">","</span>, <span class="at">big.mark =</span> <span class="st">"."</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Tabela 1 de Espírito-Santo &amp; Daniel (2018): Raven ~ faixa etária</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>sq_fator <span class="ot">&lt;-</span> <span class="fl">18664.96</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>sq_erro  <span class="ot">&lt;-</span> <span class="fl">65867.25</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>sq_total <span class="ot">&lt;-</span> sq_fator <span class="sc">+</span> sq_erro</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="dv">3</span>      <span class="co"># número de grupos</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">752</span>    <span class="co"># tamanho da amostra</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>pizza_raven <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">fatia =</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="st">"Faixa etária (SQ fator)"</span>, <span class="st">"Erro (SQ erro)"</span>),</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>                 <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Erro (SQ erro)"</span>, <span class="st">"Faixa etária (SQ fator)"</span>)),</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">sq =</span> <span class="fu">c</span>(sq_fator, sq_erro)</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prop =</span> sq <span class="sc">/</span> <span class="fu">sum</span>(sq))</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pizza_raven, <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">"Raven"</span>, <span class="at">y =</span> prop, <span class="at">fill =</span> fatia)) <span class="sc">+</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">paste0</span>(<span class="fu">br</span>(<span class="dv">100</span> <span class="sc">*</span> prop, <span class="dv">1</span>), <span class="st">"%"</span>)),</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>            <span class="at">position =</span> <span class="fu">position_stack</span>(<span class="at">vjust =</span> <span class="fl">0.5</span>), <span class="at">color =</span> <span class="st">"white"</span>, <span class="at">size =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"grey60"</span>, <span class="st">"#2C7FB8"</span>)) <span class="sc">+</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"Proporção da soma dos quadrados total"</span>, <span class="at">fill =</span> <span class="cn">NULL</span>,</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"A 'pizza' da variabilidade no exemplo do teste de Raven"</span>) <span class="sc">+</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>A faixa etária “come” cerca de <strong>22,1%</strong> da pizza. Guarde esse número: ele é o nosso primeiro tamanho do efeito.</p>
+</section>
+<section id="o-cardápio-dos-tamanhos-do-efeito-na-anova" class="level2">
+<h2 class="anchored" data-anchor-id="o-cardápio-dos-tamanhos-do-efeito-na-anova">📏 O cardápio dos tamanhos do efeito na ANOVA</h2>
+<p>Aqui está o coração técnico do post. Cada medida responde a uma pergunta ligeiramente diferente sobre a mesma pizza.</p>
+<section id="η²-eta-quadrado" class="level3">
+<h3 class="anchored" data-anchor-id="η²-eta-quadrado">η²: eta-quadrado</h3>
+<p><span class="math display">\[\eta^2 = \frac{SQ_{fator}}{SQ_{total}}\]</span></p>
+<p>É a fração da pizza <strong>inteira</strong> que o fator explica. Na ANOVA de um fator, é exatamente o R² de uma regressão com o fator como preditor (Pearson o chamava de <em>razão de correlação</em>). Problema: o η² descreve a <strong>amostra</strong>, não a população, e por isso é <strong>enviesado para cima</strong>. Ele tende a “enxergar” efeito mesmo quando não há nenhum, como vamos provar daqui a pouco.</p>
+<p>Uma versão muito útil para quem lê artigos que só reportam o F (o que é a regra, não a exceção):</p>
+<p><span class="math display">\[\eta^2 = \frac{gl_{fator} \cdot F}{gl_{fator} \cdot F + gl_{erro}}\]</span></p>
+</section>
+<section id="ω²-ômega-quadrado" class="level3">
+<h3 class="anchored" data-anchor-id="ω²-ômega-quadrado">ω²: ômega-quadrado</h3>
+<p><span class="math display">\[\omega^2 = \frac{SQ_{fator} - gl_{fator} \cdot QM_{erro}}{SQ_{total} + QM_{erro}}\]</span></p>
+<p>Proposto por Hays (1963), corrige o viés do η² e estima o efeito <strong>na população</strong>. Repare no termo <span class="math inline">\(gl_{fator} \cdot QM_{erro}\)</span>: é a parcela da fatia do fator que esperaríamos ver só por acaso, e que é descontada.</p>
+</section>
+<section id="ε²-épsilon-quadrado" class="level3">
+<h3 class="anchored" data-anchor-id="ε²-épsilon-quadrado">ε²: épsilon-quadrado</h3>
+<p><span class="math display">\[\varepsilon^2 = \frac{SQ_{fator} - gl_{fator} \cdot QM_{erro}}{SQ_{total}}\]</span></p>
+<p>Primo do ω² (Kelley, 1935), é o “R² ajustado” da ANOVA. Fica sempre um pouquinho acima do ω², e estudos de simulação (<a href="https://doi.org/10.2333/bhmk.40.129">Okada, 2013</a>) mostram que ele é ainda menos enviesado. Detalhe: ω² e ε² <strong>podem dar negativos</strong> quando o efeito é praticamente nulo; nesse caso, reporta-se 0.</p>
+</section>
+<section id="η²p-eta-quadrado-parcial" class="level3">
+<h3 class="anchored" data-anchor-id="η²p-eta-quadrado-parcial">η²p: eta-quadrado parcial</h3>
+<p><span class="math display">\[\eta^2_p = \frac{SQ_{fator}}{SQ_{fator} + SQ_{erro}}\]</span></p>
+<p>É o padrão do SPSS em ANOVAs fatoriais. Em vez de dividir pela pizza inteira, ele divide <strong>só pela fatia do fator mais a sobra</strong>, ignorando as fatias dos outros fatores. Na ANOVA de um fator, η²p = η². Com dois ou mais fatores, η²p ≥ η², sempre. Existe também a versão corrigida, o ω²p.</p>
+</section>
+<section id="η²g-eta-quadrado-generalizado" class="level3">
+<h3 class="anchored" data-anchor-id="η²g-eta-quadrado-generalizado">η²G: eta-quadrado generalizado</h3>
+<p>Proposto por <a href="https://doi.org/10.1037/1082-989X.8.4.434">Olejnik &amp; Algina (2003)</a>, ele resolve o problema de comparabilidade do η²p. A ideia: no denominador, retira-se a variância dos fatores <strong>manipulados</strong> pelo pesquisador (campanha, tratamento, versão do site), mas <strong>mantém-se</strong> a variância dos fatores apenas <strong>medidos</strong> (perfil do cliente, sexo, região, faixa etária), porque essa variação “natural” existiria em qualquer estudo. Para um fator manipulado A num modelo com um fator medido O:</p>
+<p><span class="math display">\[\eta^2_G = \frac{SQ_A}{SQ_A + SQ_O + SQ_{erro}}\]</span></p>
+<p>Se todos os fatores forem manipulados (e entre sujeitos), η²G = η²p.</p>
+</section>
+<section id="f-de-cohen" class="level3">
+<h3 class="anchored" data-anchor-id="f-de-cohen"><em>f</em> de Cohen</h3>
+<p><span class="math display">\[f = \sqrt{\frac{\eta^2}{1 - \eta^2}}\]</span></p>
+<p>É a “moeda” do cálculo de poder e tamanho amostral para ANOVA. Também aparece como <span class="math inline">\(f^2 = \eta^2/(1-\eta^2)\)</span>, a mesma métrica usada na regressão múltipla.</p>
+</section>
+<section id="a-régua-de-cohen" class="level3">
+<h3 class="anchored" data-anchor-id="a-régua-de-cohen">A régua de Cohen</h3>
+<p>Os pontos de corte clássicos de Cohen (1988), que devem ser usados como <strong>guia</strong> e nunca como dogma:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Medida</th>
+<th style="text-align: center;">Pequeno</th>
+<th style="text-align: center;">Médio</th>
+<th style="text-align: center;">Grande</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">η², η²p, ω², ε²</td>
+<td style="text-align: center;">0,01</td>
+<td style="text-align: center;">0,06</td>
+<td style="text-align: center;">0,14</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><em>f</em></td>
+<td style="text-align: center;">0,10</td>
+<td style="text-align: center;">0,25</td>
+<td style="text-align: center;">0,40</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><em>f</em>²</td>
+<td style="text-align: center;">0,02</td>
+<td style="text-align: center;">0,15</td>
+<td style="text-align: center;">0,35</td>
+</tr>
+</tbody>
+</table>
+<blockquote class="blockquote">
+<p><strong>Diga sempre qual eta você está reportando. “Eta-quadrado” sem sobrenome é uma pegadinha esperando para acontecer.</strong></p>
+</blockquote>
+</section>
+</section>
+<section id="reproduzindo-o-exemplo-do-artigo" class="level2">
+<h2 class="anchored" data-anchor-id="reproduzindo-o-exemplo-do-artigo">🧪 Reproduzindo o exemplo do artigo</h2>
+<p>Prova de fogo: será que conseguimos recalcular os números de Espírito-Santo &amp; Daniel (2018) só com a tabela publicada?</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>gl_fator <span class="ot">&lt;-</span> k <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>gl_erro  <span class="ot">&lt;-</span> N <span class="sc">-</span> k</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>qm_erro  <span class="ot">&lt;-</span> sq_erro <span class="sc">/</span> gl_erro</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>F_raven  <span class="ot">&lt;-</span> (sq_fator <span class="sc">/</span> gl_fator) <span class="sc">/</span> qm_erro</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>eta2_raven   <span class="ot">&lt;-</span> sq_fator <span class="sc">/</span> sq_total</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>omega2_raven <span class="ot">&lt;-</span> (sq_fator <span class="sc">-</span> gl_fator <span class="sc">*</span> qm_erro) <span class="sc">/</span> (sq_total <span class="sc">+</span> qm_erro)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>eps2_raven   <span class="ot">&lt;-</span> (sq_fator <span class="sc">-</span> gl_fator <span class="sc">*</span> qm_erro) <span class="sc">/</span> sq_total</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>f_raven      <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(eta2_raven <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> eta2_raven))</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">medida =</span> <span class="fu">c</span>(<span class="st">"F"</span>, <span class="st">"η²"</span>, <span class="st">"ω²"</span>, <span class="st">"ε²"</span>, <span class="st">"f de Cohen"</span>),</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">valor  =</span> <span class="fu">round</span>(<span class="fu">c</span>(F_raven, eta2_raven, omega2_raven, eps2_raven, f_raven), <span class="dv">4</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+  medida       valor
+  &lt;chr&gt;        &lt;dbl&gt;
+1 F          106.   
+2 η²           0.221
+3 ω²           0.218
+4 ε²           0.219
+5 f de Cohen   0.532</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Conferindo com o pacote effectsize, só a partir do F e dos graus de liberdade</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">F_to_eta2</span>(F_raven, <span class="at">df =</span> gl_fator, <span class="at">df_error =</span> gl_erro, <span class="at">ci =</span> <span class="cn">NULL</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Eta2 (partial)
+--------------
+0.22          </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">F_to_omega2</span>(F_raven, <span class="at">df =</span> gl_fator, <span class="at">df_error =</span> gl_erro, <span class="at">ci =</span> <span class="cn">NULL</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Omega2 (partial)
+----------------
+0.22            </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">F_to_epsilon2</span>(F_raven, <span class="at">df =</span> gl_fator, <span class="at">df_error =</span> gl_erro, <span class="at">ci =</span> <span class="cn">NULL</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Epsilon2 (partial)
+------------------
+0.22              </code></pre>
+</div>
+</div>
+<p>Batem com o artigo: <strong>η² = 0,2208</strong>, <strong>ω² = 0,2185</strong> e <strong>ε² = 0,2187</strong>. Pela régua de Cohen, um efeito <strong>grande</strong> (acima de 0,14), confirmado pelo <em>f</em> de <strong>0,53</strong> (acima de 0,40). Os idosos realmente pontuam bem abaixo dos mais jovens nesse teste.</p>
+<p>Repare também que, com N = 752, a diferença entre η², ω² e ε² aparece só na <strong>terceira casa decimal</strong>. Será que a correção então é perfumaria? Vamos ver o que acontece com amostras pequenas.</p>
+</section>
+<section id="por-que-corrigir-simulando-o-viés-do-eta-quadrado" class="level2">
+<h2 class="anchored" data-anchor-id="por-que-corrigir-simulando-o-viés-do-eta-quadrado">🎲 Por que corrigir? Simulando o viés do eta-quadrado</h2>
+<p>Vamos fazer um experimento de Monte Carlo. Criamos três grupos com um <strong>efeito verdadeiro conhecido</strong> (η² populacional = 0, ou seja, nenhum efeito, e η² populacional = 0,06, um efeito médio), variamos o tamanho de cada grupo (10, 20, 50 e 200) e repetimos cada cenário <strong>2.000 vezes</strong>, calculando os três estimadores em cada repetição.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2026</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>simula_vies <span class="ot">&lt;-</span> <span class="cf">function</span>(n, eta2_pop, <span class="at">k =</span> <span class="dv">3</span>, <span class="at">reps =</span> <span class="dv">2000</span>) {</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Médias dos grupos que geram o eta2 populacional desejado (DP dentro = 1)</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  f   <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(eta2_pop <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> eta2_pop))</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  mus <span class="ot">&lt;-</span> f <span class="sc">*</span> <span class="fu">sqrt</span>(k <span class="sc">/</span> <span class="dv">2</span>) <span class="sc">*</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  g   <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>k, <span class="at">each =</span> n))</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map_dfr</span>(<span class="fu">seq_len</span>(reps), <span class="cf">function</span>(i) {</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    y        <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n <span class="sc">*</span> k, <span class="at">mean =</span> <span class="fu">rep</span>(mus, <span class="at">each =</span> n))</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    medias   <span class="ot">&lt;-</span> <span class="fu">tapply</span>(y, g, mean)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    sq_tot   <span class="ot">&lt;-</span> <span class="fu">sum</span>((y <span class="sc">-</span> <span class="fu">mean</span>(y))<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    sq_fat   <span class="ot">&lt;-</span> n <span class="sc">*</span> <span class="fu">sum</span>((medias <span class="sc">-</span> <span class="fu">mean</span>(y))<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    qm_err   <span class="ot">&lt;-</span> (sq_tot <span class="sc">-</span> sq_fat) <span class="sc">/</span> (n <span class="sc">*</span> k <span class="sc">-</span> k)</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tibble</span>(</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">η²</span><span class="st">`</span> <span class="ot">=</span> sq_fat <span class="sc">/</span> sq_tot,</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">ω²</span><span class="st">`</span> <span class="ot">=</span> (sq_fat <span class="sc">-</span> (k <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> qm_err) <span class="sc">/</span> (sq_tot <span class="sc">+</span> qm_err),</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">ε²</span><span class="st">`</span> <span class="ot">=</span> (sq_fat <span class="sc">-</span> (k <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> qm_err) <span class="sc">/</span> sq_tot</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>  }) <span class="sc">|&gt;</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">n =</span> n, <span class="at">eta2_pop =</span> eta2_pop)</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>vies <span class="ot">&lt;-</span> <span class="fu">expand_grid</span>(<span class="at">n =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">50</span>, <span class="dv">200</span>), <span class="at">eta2_pop =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.06</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pmap_dfr</span>(simula_vies)</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>resumo_vies <span class="ot">&lt;-</span> vies <span class="sc">|&gt;</span></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">c</span>(<span class="st">`</span><span class="at">η²</span><span class="st">`</span>, <span class="st">`</span><span class="at">ω²</span><span class="st">`</span>, <span class="st">`</span><span class="at">ε²</span><span class="st">`</span>), <span class="at">names_to =</span> <span class="st">"estimador"</span>, <span class="at">values_to =</span> <span class="st">"valor"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(eta2_pop, n, estimador) <span class="sc">|&gt;</span></span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">media =</span> <span class="fu">mean</span>(valor), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cenario =</span> <span class="fu">ifelse</span>(eta2_pop <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>                          <span class="st">"Efeito verdadeiro: η² = 0 (nenhum)"</span>,</span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>                          <span class="st">"Efeito verdadeiro: η² = 0,06 (médio)"</span>))</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(resumo_vies, <span class="fu">aes</span>(<span class="at">x =</span> n, <span class="at">y =</span> media, <span class="at">color =</span> estimador)) <span class="sc">+</span></span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept =</span> eta2_pop), <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">2.5</span>) <span class="sc">+</span></span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> cenario, <span class="at">scales =</span> <span class="st">"free_y"</span>) <span class="sc">+</span></span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">50</span>, <span class="dv">200</span>)) <span class="sc">+</span></span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"η²"</span> <span class="ot">=</span> <span class="st">"#D95F02"</span>, <span class="st">"ω²"</span> <span class="ot">=</span> <span class="st">"#1B9E77"</span>, <span class="st">"ε²"</span> <span class="ot">=</span> <span class="st">"#7570B3"</span>)) <span class="sc">+</span></span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Tamanho de cada grupo (escala log)"</span>,</span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Média das 2.000 estimativas"</span>,</span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">"Estimador"</span>,</span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"O η² superestima o efeito em amostras pequenas"</span>,</span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Linha tracejada = valor verdadeiro na população"</span>) <span class="sc">+</span></span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>eta2_fantasma <span class="ot">&lt;-</span> resumo_vies <span class="sc">|&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(eta2_pop <span class="sc">==</span> <span class="dv">0</span>, n <span class="sc">==</span> <span class="dv">10</span>, estimador <span class="sc">==</span> <span class="st">"η²"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(media)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Olha que impressionante: com <strong>10 pessoas por grupo</strong> e <strong>nenhum efeito real</strong>, o η² médio foi de <strong>0,071</strong>. Pela régua de Cohen, isso é um efeito <strong>médio</strong>, um efeito fantasma! Não por acaso, esse valor é praticamente o que a teoria prevê para o viés do η² sob a hipótese nula, <span class="math inline">\((k-1)/(N-1) = 2/29 \approx 0{,}069\)</span>. Já o ω² e o ε² ficam colados no zero. À medida que a amostra cresce, os três convergem para o valor verdadeiro.</p>
+<blockquote class="blockquote">
+<p><strong>Com amostra pequena, o eta-quadrado enxerga efeito onde não existe. O ômega e o épsilon são os óculos de correção.</strong></p>
+</blockquote>
+</section>
+<section id="a-pegadinha-do-eta-quadrado-parcial" class="level2">
+<h2 class="anchored" data-anchor-id="a-pegadinha-do-eta-quadrado-parcial">🧩 A pegadinha do eta-quadrado parcial</h2>
+<p>Três avisos que deveriam vir impressos na saída de todo software estatístico:</p>
+<ol type="1">
+<li><strong>η²p não é “% da variância total explicada”.</strong> Cada η²p tem um denominador diferente (a fatia do <em>seu</em> fator mais a sobra). Por isso, se você somar os η²p de todos os efeitos de um modelo, o total pode passar até de 100%, o que não faz sentido como “fração da pizza”.</li>
+<li><strong>Não compare η²p de estudos com desenhos diferentes.</strong> Se um estudo incluiu um fator extra que “limpa” o erro (por exemplo, o perfil do cliente), o η²p dos demais fatores <strong>infla</strong>, mesmo que o efeito real seja idêntico. É aqui que entra o η²G.</li>
+<li><strong>Muita gente reporta “eta-quadrado” quando o software calculou o parcial.</strong> Confira sempre o rótulo da saída.</li>
+</ol>
+<p>Vamos ver os itens 1 e 2 acontecendo ao vivo na aplicação de marketing.</p>
+</section>
+<section id="intervalos-de-confiança-o-tamanho-do-efeito-também-tem-incerteza" class="level2">
+<h2 class="anchored" data-anchor-id="intervalos-de-confiança-o-tamanho-do-efeito-também-tem-incerteza">📐 Intervalos de confiança: o tamanho do efeito também tem incerteza</h2>
+<p>Um tamanho do efeito é uma <strong>estimativa</strong>, e toda estimativa merece um intervalo de confiança. Espírito-Santo &amp; Daniel (2018) são enfáticos nisso, e a APA também. No R, o pacote <code>effectsize</code> entrega o IC automaticamente, mas tem um <strong>detalhe técnico</strong> que pega muita gente de surpresa: por padrão, o IC dos etas é <strong>unilateral</strong> (<code>alternative = "greater"</code>), com o limite superior fixado em 1. A justificativa é que η² não pode ser negativo, então a pergunta natural é “o efeito é maior do que zero?”.</p>
+<p>Se você preferir o IC <strong>bilateral</strong>, a convenção é usar <strong>90%</strong>, e não 95%. O motivo: o teste F é intrinsecamente unilateral, e um IC bilateral de 90% para η² é o que fica coerente com um teste F a 5% (o limite inferior do IC exclui o zero exatamente quando p &lt; 0,05). Vamos usar as duas versões a seguir.</p>
+</section>
+<section id="aplicação-em-marketing-criativo-canal-perfil-do-cliente" class="level2">
+<h2 class="anchored" data-anchor-id="aplicação-em-marketing-criativo-canal-perfil-do-cliente">🛒 Aplicação em marketing: criativo × canal × perfil do cliente</h2>
+<p>Agora vamos ao mundo real. Lembram das três campanhas do <a href="../../posts/anova_na_pratica_campanhas_marketing/index.html">post de ANOVA</a>, com <strong>Foco em Preço</strong>, <strong>Foco em Qualidade</strong> e <strong>Foco em Urgência</strong>? O e-commerce de cosméticos gostou tanto da análise que resolveu fazer um experimento maior:</p>
+<ul>
+<li><strong>Criativo</strong> (fator <strong>manipulado</strong>): Preço, Qualidade ou Urgência, sorteado para cada cliente;</li>
+<li><strong>Canal</strong> (fator <strong>manipulado</strong>): E-mail ou Instagram, também sorteado;</li>
+<li><strong>Perfil do cliente</strong> (fator <strong>medido</strong>, não manipulado): Novo ou Recorrente. Ninguém sorteia se o cliente é fiel; isso já vem “de fábrica”.</li>
+</ul>
+<p>A variável resposta é o <strong>ticket médio (R$)</strong> de quem comprou. São <strong>500 clientes em cada uma das 12 combinações</strong>, ou seja, <strong>6.000 clientes</strong> num desenho balanceado.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1010</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>mkt <span class="ot">&lt;-</span> <span class="fu">expand_grid</span>(</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">criativo =</span> <span class="fu">c</span>(<span class="st">"Preço"</span>, <span class="st">"Qualidade"</span>, <span class="st">"Urgência"</span>),</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">canal    =</span> <span class="fu">c</span>(<span class="st">"E-mail"</span>, <span class="st">"Instagram"</span>),</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">perfil   =</span> <span class="fu">c</span>(<span class="st">"Novo"</span>, <span class="st">"Recorrente"</span>),</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">cliente  =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">500</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">media_verdadeira =</span> <span class="dv">180</span> <span class="sc">+</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(Preço <span class="ot">=</span> <span class="dv">0</span>, <span class="at">Qualidade =</span> <span class="dv">12</span>, Urgência <span class="ot">=</span> <span class="dv">6</span>)[criativo] <span class="sc">+</span>   <span class="co"># efeito do criativo</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ifelse</span>(canal <span class="sc">==</span> <span class="st">"Instagram"</span>, <span class="dv">2</span>, <span class="dv">0</span>) <span class="sc">+</span>                       <span class="co"># efeito do canal</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ifelse</span>(perfil <span class="sc">==</span> <span class="st">"Recorrente"</span>, <span class="dv">70</span>, <span class="dv">0</span>) <span class="sc">+</span>                    <span class="co"># cliente fiel gasta mais</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ifelse</span>(criativo <span class="sc">==</span> <span class="st">"Urgência"</span> <span class="sc">&amp;</span> canal <span class="sc">==</span> <span class="st">"Instagram"</span>, <span class="dv">8</span>, <span class="dv">0</span>), <span class="co"># interação</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">ticket =</span> <span class="fu">rnorm</span>(<span class="fu">n</span>(), <span class="at">mean =</span> media_verdadeira, <span class="at">sd =</span> <span class="dv">45</span>),</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">c</span>(criativo, canal, perfil), factor)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>mkt <span class="sc">|&gt;</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(criativo) <span class="sc">|&gt;</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">clientes =</span> <span class="fu">n</span>(), <span class="at">ticket_medio =</span> <span class="fu">mean</span>(ticket), <span class="at">dp =</span> <span class="fu">sd</span>(ticket))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 4
+  criativo  clientes ticket_medio    dp
+  &lt;fct&gt;        &lt;int&gt;        &lt;dbl&gt; &lt;dbl&gt;
+1 Preço         2000         215.  56.3
+2 Qualidade     2000         228.  56.5
+3 Urgência      2000         225.  56.7</code></pre>
+</div>
+</div>
+<p>Na simulação, o perfil do cliente tem um efeito enorme (o recorrente gasta, em média, R$ 70 a mais), o criativo tem um efeito modesto (até R$ 12), e o canal e a interação têm efeitos minúsculos. Vamos ver se a análise consegue contar essa história.</p>
+<section id="passo-1-a-anova-fatorial" class="level3">
+<h3 class="anchored" data-anchor-id="passo-1-a-anova-fatorial">📊 Passo 1: a ANOVA fatorial</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>modelo <span class="ot">&lt;-</span> <span class="fu">aov</span>(ticket <span class="sc">~</span> criativo <span class="sc">*</span> canal <span class="sc">+</span> perfil, <span class="at">data =</span> mkt)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                 Df   Sum Sq Mean Sq  F value   Pr(&gt;F)    
+criativo          2   168095   84048   42.322  &lt; 2e-16 ***
+canal             1    33909   33909   17.075 3.64e-05 ***
+perfil            1  7213542 7213542 3632.332  &lt; 2e-16 ***
+criativo:canal    2    15635    7817    3.936   0.0196 *  
+Residuals      5993 11901654    1986                      
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>tab_anova <span class="ot">&lt;-</span> <span class="fu">summary</span>(modelo)[[<span class="dv">1</span>]]</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(tab_anova) <span class="ot">&lt;-</span> <span class="fu">trimws</span>(<span class="fu">rownames</span>(tab_anova))   <span class="co"># remove espaços dos nomes</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>p_interac  <span class="ot">&lt;-</span> tab_anova[<span class="st">"criativo:canal"</span>, <span class="st">"Pr(&gt;F)"</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Tudo significativo! Criativo, perfil, canal (p &lt; 0,001) e até a interação criativo × canal (p = 0,020). Se a análise parasse aqui, o relatório para a diretoria diria: <em>“todos os fatores impactam o ticket médio”</em>. Com 6.000 clientes, porém, é isso que acontece: <strong>quase tudo vira significativo</strong>. A pergunta que importa é outra: <strong>quanto</strong> cada fator importa?</p>
+<blockquote class="blockquote">
+<p>Como o desenho é balanceado, a ordem dos fatores no modelo não altera as somas dos quadrados. Em desenhos desbalanceados, use <code>car::Anova(modelo, type = 2)</code> ou <code>type = 3</code> e informe o tipo escolhido no relatório.</p>
+</blockquote>
+</section>
+<section id="passo-2-o-tamanho-do-efeito-de-cada-fator" class="level3">
+<h3 class="anchored" data-anchor-id="passo-2-o-tamanho-do-efeito-de-cada-fator">📐 Passo 2: o tamanho do efeito de cada fator</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>efeitos <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">efeito  =</span> <span class="fu">eta_squared</span>(modelo, <span class="at">partial =</span> <span class="cn">FALSE</span>, <span class="at">ci =</span> <span class="cn">NULL</span>)<span class="sc">$</span>Parameter,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">η²</span><span class="st">`</span>    <span class="ot">=</span> <span class="fu">eta_squared</span>(modelo, <span class="at">partial =</span> <span class="cn">FALSE</span>, <span class="at">ci =</span> <span class="cn">NULL</span>)<span class="sc">$</span>Eta2,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">η²p</span><span class="st">`</span>   <span class="ot">=</span> <span class="fu">eta_squared</span>(modelo, <span class="at">partial =</span> <span class="cn">TRUE</span>,  <span class="at">ci =</span> <span class="cn">NULL</span>)<span class="sc">$</span>Eta2_partial,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">η²G</span><span class="st">`</span>   <span class="ot">=</span> <span class="fu">eta_squared</span>(modelo, <span class="at">generalized =</span> <span class="st">"perfil"</span>, <span class="at">ci =</span> <span class="cn">NULL</span>)<span class="sc">$</span>Eta2_generalized,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">ω²p</span><span class="st">`</span>   <span class="ot">=</span> <span class="fu">omega_squared</span>(modelo, <span class="at">partial =</span> <span class="cn">TRUE</span>, <span class="at">ci =</span> <span class="cn">NULL</span>)<span class="sc">$</span>Omega2_partial,</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">f</span><span class="st">`</span>     <span class="ot">=</span> <span class="fu">cohens_f</span>(modelo, <span class="at">ci =</span> <span class="cn">NULL</span>)<span class="sc">$</span>Cohens_f_partial</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>efeitos <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), \(x) <span class="fu">round</span>(x, <span class="dv">4</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 6
+  efeito           `η²`  `η²p`  `η²G`  `ω²p`      f
+  &lt;chr&gt;           &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+1 criativo       0.0087 0.0139 0.0087 0.0136 0.119 
+2 canal          0.0018 0.0028 0.0018 0.0027 0.0534
+3 perfil         0.373  0.377  0.377  0.377  0.778 
+4 criativo:canal 0.0008 0.0013 0.0008 0.001  0.0362</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Intervalos de confiança: unilateral 95% (padrão) e bilateral 90%</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">eta_squared</span>(modelo, <span class="at">partial =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># Effect Size for ANOVA (Type I)
+
+Parameter      | Eta2 (partial) |       95% CI
+----------------------------------------------
+criativo       |           0.01 | [0.01, 1.00]
+canal          |       2.84e-03 | [0.00, 1.00]
+perfil         |           0.38 | [0.36, 1.00]
+criativo:canal |       1.31e-03 | [0.00, 1.00]
+
+- One-sided CIs: upper bound fixed at [1.00].</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">eta_squared</span>(modelo, <span class="at">partial =</span> <span class="cn">TRUE</span>, <span class="at">ci =</span> <span class="fl">0.90</span>, <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># Effect Size for ANOVA (Type I)
+
+Parameter      | Eta2 (partial) |       90% CI
+----------------------------------------------
+criativo       |           0.01 | [0.01, 0.02]
+canal          |       2.84e-03 | [0.00, 0.01]
+perfil         |           0.38 | [0.36, 0.39]
+criativo:canal |       1.31e-03 | [0.00, 0.00]</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>crit <span class="ot">&lt;-</span> efeitos <span class="sc">|&gt;</span> <span class="fu">filter</span>(efeito <span class="sc">==</span> <span class="st">"criativo"</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>soma_eta2p <span class="ot">&lt;-</span> <span class="fu">sum</span>(efeitos<span class="sc">$</span><span class="st">`</span><span class="at">η²p</span><span class="st">`</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>inflacao <span class="ot">&lt;-</span> crit<span class="sc">$</span><span class="st">`</span><span class="at">η²p</span><span class="st">`</span> <span class="sc">/</span> crit<span class="sc">$</span><span class="st">`</span><span class="at">η²G</span><span class="st">`</span> <span class="sc">-</span> <span class="dv">1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Agora a história fica muito mais clara. Vamos por partes:</p>
+<ul>
+<li><strong>Perfil do cliente:</strong> η² ≈ <strong>0,37</strong>, um efeito <strong>enorme</strong>. Sozinho, ele explica mais de um terço da variação do ticket. Mas atenção: ele <strong>não é uma alavanca de marketing</strong>. Não dá para “sortear” clientes fiéis.</li>
+<li><strong>Canal e interação:</strong> p &lt; 0,05, mas η²p de <strong>0,0028</strong> e <strong>0,0013</strong>. Bem abaixo até do “pequeno” de Cohen (0,01). Estatisticamente detectáveis, praticamente desprezíveis.</li>
+<li><strong>Criativo:</strong> aqui está a pegadinha do η²p. O <strong>η²p = 0,0139</strong>, mas o <strong>η²G = 0,0087</strong>. O parcial ficou <strong>60% maior</strong> só porque o perfil do cliente, um fator medido, “limpou” uma parte enorme do erro do denominador. Se outra empresa repetir o mesmo experimento <strong>sem</strong> registrar o perfil, o η²p dela vai se parecer muito mais com o nosso η²G. É por isso que, para comparar com outros estudos, o η²G é o número certo.</li>
+<li>E o aviso nº 1 da pegadinha: a soma dos η²p dá <strong>0,395</strong>, maior do que o η² total explicado pelo modelo (0,384). Somar parciais não tem interpretação de “fatia da pizza”.</li>
+</ul>
+<p>Vamos ver a pizza desse experimento:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>pizza_mkt <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">fatia =</span> <span class="fu">c</span>(<span class="fu">as.character</span>(efeitos<span class="sc">$</span>efeito), <span class="st">"Erro"</span>),</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">sq    =</span> <span class="fu">c</span>(tab_anova<span class="sc">$</span><span class="st">`</span><span class="at">Sum Sq</span><span class="st">`</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">fatia =</span> <span class="fu">recode</span>(fatia, <span class="at">criativo =</span> <span class="st">"Criativo"</span>, <span class="at">canal =</span> <span class="st">"Canal"</span>,</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">perfil =</span> <span class="st">"Perfil"</span>, <span class="st">`</span><span class="at">criativo:canal</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"Criativo × Canal"</span>),</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">fatia =</span> <span class="fu">factor</span>(fatia, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Erro"</span>, <span class="st">"Criativo × Canal"</span>, <span class="st">"Canal"</span>, <span class="st">"Criativo"</span>, <span class="st">"Perfil"</span>)),</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">prop  =</span> sq <span class="sc">/</span> <span class="fu">sum</span>(sq)</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pizza_mkt, <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">"Ticket médio"</span>, <span class="at">y =</span> prop, <span class="at">fill =</span> fatia)) <span class="sc">+</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Erro"</span> <span class="ot">=</span> <span class="st">"grey70"</span>, <span class="st">"Criativo × Canal"</span> <span class="ot">=</span> <span class="st">"#FDAE61"</span>,</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"Canal"</span> <span class="ot">=</span> <span class="st">"#FEE08B"</span>, <span class="st">"Criativo"</span> <span class="ot">=</span> <span class="st">"#D73027"</span>,</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"Perfil"</span> <span class="ot">=</span> <span class="st">"#4575B4"</span>)) <span class="sc">+</span></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"Proporção da soma dos quadrados total"</span>, <span class="at">fill =</span> <span class="cn">NULL</span>,</span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Quem explica a variação do ticket médio?"</span>,</span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"A fatia do criativo é fininha... mas guarde esse pensamento"</span>) <span class="sc">+</span></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>A fatia do criativo é <strong>menos de 1%</strong> da pizza. Pela régua de Cohen, usando o η²G, nem chega a “pequeno”. Hora de jogar fora o criativo de Qualidade? <strong>Calma.</strong> O artigo de Espírito-Santo &amp; Daniel (2018) faz um alerta valioso: o tamanho do efeito <em>omnibus</em> da ANOVA raramente responde ao que se quer saber. Para decidir, precisamos voltar às <strong>comparações específicas</strong> e às <strong>unidades originais</strong>.</p>
+</section>
+<section id="passo-3-de-volta-à-família-d-nas-comparações-par-a-par" class="level3">
+<h3 class="anchored" data-anchor-id="passo-3-de-volta-à-família-d-nas-comparações-par-a-par">🔍 Passo 3: de volta à família <em>d</em>, nas comparações par a par</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>emm_criativo <span class="ot">&lt;-</span> <span class="fu">emmeans</span>(modelo, <span class="sc">~</span> criativo)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>comp_criativo <span class="ot">&lt;-</span> <span class="fu">summary</span>(<span class="fu">pairs</span>(emm_criativo, <span class="at">reverse =</span> <span class="cn">TRUE</span>), <span class="at">infer =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>comp_criativo</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> contrast             estimate   SE   df lower.CL upper.CL t.ratio p.value
+ Qualidade - Preço        12.4 1.41 5993     9.09   15.696   8.794 &lt;0.0001
+ Urgência - Preço          9.5 1.41 5993     6.19   12.799   6.738 &lt;0.0001
+ Urgência - Qualidade     -2.9 1.41 5993    -6.20    0.406  -2.056  0.0993
+
+Results are averaged over the levels of: canal, perfil 
+Confidence level used: 0.95 
+Conf-level adjustment: tukey method for comparing a family of 3 estimates 
+P value adjustment: tukey method for comparing a family of 3 estimates </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Diferenças padronizadas (d de Cohen usando o desvio-padrão residual do modelo)</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">eff_size</span>(emm_criativo, <span class="at">sigma =</span> <span class="fu">sigma</span>(modelo), <span class="at">edf =</span> <span class="fu">df.residual</span>(modelo))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> contrast             effect.size     SE   df lower.CL upper.CL
+ Preço - Qualidade         -0.278 0.0317 5993 -0.34028   -0.216
+ Preço - Urgência          -0.213 0.0317 5993 -0.27519   -0.151
+ Qualidade - Urgência       0.065 0.0316 5993  0.00301    0.127
+
+Results are averaged over the levels of: canal, perfil 
+sigma used for effect sizes: 44.56 
+Confidence level used: 0.95 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>emm_canal <span class="ot">&lt;-</span> <span class="fu">emmeans</span>(modelo, <span class="sc">~</span> canal)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>comp_canal <span class="ot">&lt;-</span> <span class="fu">summary</span>(<span class="fu">pairs</span>(emm_canal, <span class="at">reverse =</span> <span class="cn">TRUE</span>), <span class="at">infer =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>comp_canal</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> contrast             estimate   SE   df lower.CL upper.CL t.ratio p.value
+ Instagram - (E-mail)     4.75 1.15 5993      2.5     7.01   4.132 &lt;0.0001
+
+Results are averaged over the levels of: criativo, perfil 
+Confidence level used: 0.95 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>qual_preco <span class="ot">&lt;-</span> comp_criativo <span class="sc">|&gt;</span> <span class="fu">filter</span>(contrast <span class="sc">==</span> <span class="st">"Qualidade - Preço"</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>insta_email <span class="ot">&lt;-</span> comp_canal[<span class="dv">1</span>, ]</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>d_qual <span class="ot">&lt;-</span> qual_preco<span class="sc">$</span>estimate <span class="sc">/</span> <span class="fu">sigma</span>(modelo)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Agora sim, em <strong>reais por pedido</strong>, que é a língua do negócio:</p>
+<ul>
+<li>O criativo de <strong>Qualidade</strong> gera, em média, <strong>R$ 12,39</strong> a mais por pedido do que o de <strong>Preço</strong> (IC 95% com ajuste de Tukey: R$ 9,09 a R$ 15,70). Em unidades padronizadas, <em>d</em> ≈ <strong>0,28</strong>, um efeito “pequeno” na régua de Cohen.</li>
+<li>O <strong>Instagram</strong> gera <strong>R$ 4,75</strong> a mais por pedido do que o <strong>E-mail</strong> (IC 95%: R$ 2,50 a R$ 7,01).</li>
+</ul>
+<p>Essa é uma recomendação da própria APA, lembrada no artigo: reporte o efeito <strong>nas unidades originais</strong> (mais fácil de discutir no contexto do estudo) <strong>e</strong> na forma <strong>padronizada</strong> (para comparar com outros estudos).</p>
+</section>
+<section id="passo-4-do-efeito-ao-dinheiro" class="level3">
+<h3 class="anchored" data-anchor-id="passo-4-do-efeito-ao-dinheiro">💰 Passo 4: do efeito ao dinheiro</h3>
+<p>Vamos supor que a próxima campanha vai atingir <strong>200.000 clientes</strong>, com uma taxa de compra de <strong>5%</strong> (10.000 pedidos). Produzir um novo criativo de Qualidade custa <strong>R$ 30.000</strong>. Já migrar a campanha do E-mail para o Instagram exige mídia paga, a cerca de <strong>R$ 0,30 por cliente impactado</strong>. Usamos os limites do IC para montar um cenário pessimista e um otimista:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>clientes    <span class="ot">&lt;-</span> <span class="dv">200000</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>taxa_compra <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>pedidos     <span class="ot">&lt;-</span> clientes <span class="sc">*</span> taxa_compra</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>custo_criativo <span class="ot">&lt;-</span> <span class="dv">30000</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>custo_canal    <span class="ot">&lt;-</span> <span class="fl">0.30</span> <span class="sc">*</span> clientes</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>decisao <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">decisao =</span> <span class="fu">c</span>(<span class="st">"Trocar Preço por Qualidade"</span>, <span class="st">"Migrar do E-mail para o Instagram"</span>),</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">significativo =</span> <span class="fu">c</span>(<span class="st">"Sim (p &lt; 0,001)"</span>, <span class="st">"Sim (p &lt; 0,001)"</span>),</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">custo =</span> <span class="fu">c</span>(custo_criativo, custo_canal),</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">pessimista =</span> <span class="fu">c</span>(pedidos <span class="sc">*</span> qual_preco<span class="sc">$</span>lower.CL, pedidos <span class="sc">*</span> insta_email<span class="sc">$</span>lower.CL) <span class="sc">-</span> custo,</span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">provavel   =</span> <span class="fu">c</span>(pedidos <span class="sc">*</span> qual_preco<span class="sc">$</span>estimate, pedidos <span class="sc">*</span> insta_email<span class="sc">$</span>estimate) <span class="sc">-</span> custo,</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">otimista   =</span> <span class="fu">c</span>(pedidos <span class="sc">*</span> qual_preco<span class="sc">$</span>upper.CL, pedidos <span class="sc">*</span> insta_email<span class="sc">$</span>upper.CL) <span class="sc">-</span> custo</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>decisao <span class="sc">|&gt;</span></span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(custo<span class="sc">:</span>otimista, \(x) <span class="fu">paste0</span>(<span class="fu">ifelse</span>(x <span class="sc">&lt;</span> <span class="dv">0</span>, <span class="st">"-R$ "</span>, <span class="st">"R$ "</span>), <span class="fu">br</span>(<span class="fu">abs</span>(x), <span class="dv">0</span>)))) <span class="sc">|&gt;</span></span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Decisão"</span>, <span class="st">"Significativo?"</span>, <span class="st">"Custo"</span>,</span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"Lucro (pessimista)"</span>, <span class="st">"Lucro (provável)"</span>, <span class="st">"Lucro (otimista)"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 30%">
+<col style="width: 14%">
+<col style="width: 8%">
+<col style="width: 16%">
+<col style="width: 15%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Decisão</th>
+<th style="text-align: left;">Significativo?</th>
+<th style="text-align: left;">Custo</th>
+<th style="text-align: left;">Lucro (pessimista)</th>
+<th style="text-align: left;">Lucro (provável)</th>
+<th style="text-align: left;">Lucro (otimista)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Trocar Preço por Qualidade</td>
+<td style="text-align: left;">Sim (p &lt; 0,001)</td>
+<td style="text-align: left;">R$ 30.000</td>
+<td style="text-align: left;">R$ 60.892</td>
+<td style="text-align: left;">R$ 93.928</td>
+<td style="text-align: left;">R$ 126.964</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Migrar do E-mail para o Instagram</td>
+<td style="text-align: left;">Sim (p &lt; 0,001)</td>
+<td style="text-align: left;">R$ 60.000</td>
+<td style="text-align: left;">-R$ 35.011</td>
+<td style="text-align: left;">-R$ 12.454</td>
+<td style="text-align: left;">R$ 10.102</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Olha que interessante: <strong>as duas diferenças são estatisticamente significativas, mas só uma paga a conta.</strong></p>
+<ul>
+<li>O criativo de Qualidade, aquele da fatia “fininha” da pizza, rende cerca de <strong>R$ 93.928</strong> de lucro por disparo, e continua positivo mesmo no cenário pessimista.</li>
+<li>A migração de canal, com p &lt; 0,001, dá <strong>prejuízo</strong> no cenário provável. Só se pagaria no cenário mais otimista.</li>
+</ul>
+<blockquote class="blockquote">
+<p><strong>No marketing, o “pequeno” do Cohen foi calibrado com a psicologia dos anos 1960. O seu “pequeno” é medido em reais.</strong></p>
+</blockquote>
+</section>
+<section id="passo-5-planejando-a-próxima-rodada" class="level3">
+<h3 class="anchored" data-anchor-id="passo-5-planejando-a-próxima-rodada">🧮 Passo 5: planejando a próxima rodada</h3>
+<p>Por fim, o tamanho do efeito serve para <strong>planejar</strong> o próximo experimento. Quantos clientes por criativo precisamos para detectar esse efeito com 80% de poder? E aqui mora um detalhe técnico sutil: <strong>qual eta usar no cálculo?</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>f_parcial <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(crit<span class="sc">$</span><span class="st">`</span><span class="at">η²p</span><span class="st">`</span> <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> crit<span class="sc">$</span><span class="st">`</span><span class="at">η²p</span><span class="st">`</span>))</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>f_geral   <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(crit<span class="sc">$</span><span class="st">`</span><span class="at">η²G</span><span class="st">`</span> <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> crit<span class="sc">$</span><span class="st">`</span><span class="at">η²G</span><span class="st">`</span>))</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>n_parcial <span class="ot">&lt;-</span> <span class="fu">pwr.anova.test</span>(<span class="at">k =</span> <span class="dv">3</span>, <span class="at">f =</span> f_parcial, <span class="at">sig.level =</span> <span class="fl">0.05</span>, <span class="at">power =</span> <span class="fl">0.80</span>)<span class="sc">$</span>n</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>n_geral   <span class="ot">&lt;-</span> <span class="fu">pwr.anova.test</span>(<span class="at">k =</span> <span class="dv">3</span>, <span class="at">f =</span> f_geral,   <span class="at">sig.level =</span> <span class="fl">0.05</span>, <span class="at">power =</span> <span class="fl">0.80</span>)<span class="sc">$</span>n</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">base_do_calculo =</span> <span class="fu">c</span>(<span class="st">"f a partir do η²p (controlando o perfil)"</span>,</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"f a partir do η²G (sem controlar o perfil)"</span>),</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">f =</span> <span class="fu">round</span>(<span class="fu">c</span>(f_parcial, f_geral), <span class="dv">3</span>),</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">clientes_por_criativo =</span> <span class="fu">ceiling</span>(<span class="fu">c</span>(n_parcial, n_geral))</span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 3
+  base_do_calculo                                f clientes_por_criativo
+  &lt;chr&gt;                                      &lt;dbl&gt;                 &lt;dbl&gt;
+1 f a partir do η²p (controlando o perfil)   0.119                   229
+2 f a partir do η²G (sem controlar o perfil) 0.094                   367</code></pre>
+</div>
+</div>
+<p>Se a próxima rodada <strong>também</strong> registrar e controlar o perfil do cliente, bastam cerca de <strong>229</strong> clientes por criativo. Se <strong>não</strong> controlar, precisaremos de uns <strong>367</strong>. Usar o η²p de um estudo para planejar outro com desenho diferente é receita para um experimento <strong>subdimensionado</strong>.</p>
+<p>Um último lembrete de Sullivan &amp; Feinn (2012): o poder deve ser calculado <strong>antes</strong> do estudo. O chamado “poder <em>post-hoc</em>”, calculado com o efeito observado depois do fato, tem valor muito limitado, porque assume que o efeito da amostra é o efeito da população.</p>
+</section>
+</section>
+<section id="como-reportar-modelo-pronto-para-copiar" class="level2">
+<h2 class="anchored" data-anchor-id="como-reportar-modelo-pronto-para-copiar">📝 Como reportar (modelo pronto para copiar)</h2>
+<p>Seguindo as recomendações de Espírito-Santo &amp; Daniel (2018), um bom relato tem cinco ingredientes: <strong>descritivas</strong> (médias, DP e QM do erro), <strong>o efeito com IC</strong>, <strong>qual eta foi usado</strong>, <strong>a interpretação no contexto</strong> e <strong>as implicações práticas</strong>. Algo assim:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>ic_crit <span class="ot">&lt;-</span> <span class="fu">eta_squared</span>(modelo, <span class="at">partial =</span> <span class="cn">TRUE</span>, <span class="at">ci =</span> <span class="fl">0.90</span>, <span class="at">alternative =</span> <span class="st">"two.sided"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Parameter <span class="sc">==</span> <span class="st">"criativo"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<blockquote class="blockquote">
+<p>Houve efeito do criativo sobre o ticket médio, <em>F</em>(2, 5993) = 42,32, <em>p</em> &lt; 0,001, η²p = 0,014, IC 90% [0,009; 0,019], η²G = 0,009 (perfil do cliente tratado como fator medido). Clientes expostos ao criativo Qualidade gastaram, em média, R$ 12,39 a mais por pedido do que os expostos ao criativo Preço (IC 95%: R$ 9,09 a R$ 15,70; <em>d</em> = 0,28).</p>
+</blockquote>
+<p>E um checklist rápido:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">O que reportar</th>
+<th style="text-align: left;">Por quê</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Médias, DP e QM do erro</td>
+<td style="text-align: left;">Permite ao leitor recalcular outros tamanhos do efeito</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">F, graus de liberdade e p</td>
+<td style="text-align: left;">O teste de significância continua tendo seu papel</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Qual</strong> eta (η², η²p, η²G)</td>
+<td style="text-align: left;">Evita a confusão mais comum da literatura</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">IC do tamanho do efeito</td>
+<td style="text-align: left;">Mostra a incerteza da estimativa</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ω² ou ε² quando N for pequeno</td>
+<td style="text-align: left;">Corrige o viés para cima do η²</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Efeito nas unidades originais</td>
+<td style="text-align: left;">É a linguagem de quem vai tomar a decisão</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Comparação com outros estudos da área</td>
+<td style="text-align: left;">“Pequeno” e “grande” dependem do contexto</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="em-resumo" class="level2">
+<h2 class="anchored" data-anchor-id="em-resumo">🎯 Em resumo:</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Situação</th>
+<th style="text-align: left;">Reportar</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">ANOVA de 1 fator, N grande</td>
+<td style="text-align: left;">η² (praticamente igual ao ω²)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ANOVA de 1 fator, N pequeno</td>
+<td style="text-align: left;">ω² ou ε²</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ANOVA fatorial, comparando com estudos de mesmo desenho</td>
+<td style="text-align: left;">η²p (e ω²p se N for pequeno)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Fatorial com fatores medidos (perfil, sexo, região), comparando entre estudos</td>
+<td style="text-align: left;">η²G</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Planejar o tamanho da amostra</td>
+<td style="text-align: left;"><em>f</em> de Cohen, a partir do eta compatível com o próximo desenho</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Decisão de negócio ou comparação entre 2 grupos</td>
+<td style="text-align: left;">Diferença nas unidades originais + <em>d</em> / <em>g</em> de Hedges, com IC</td>
+</tr>
+</tbody>
+</table>
+<blockquote class="blockquote">
+<p><strong>Tamanho do efeito não é um número para enfeitar a tabela: é a resposta para a pergunta que o seu chefe (ou o revisor) realmente fez.</strong></p>
+</blockquote>
+<p>Da próxima vez que a saída do software mostrar um “eta-quadrado” solitário, você já sabe o roteiro: descobrir <strong>qual</strong> eta é, verificar se a amostra pede uma <strong>correção</strong>, colocar um <strong>intervalo de confiança</strong> do lado e, principalmente, traduzir o efeito para a <strong>unidade que importa</strong> para quem vai decidir. Testem esses códigos com os dados das suas próprias pesquisas e campanhas e mandem as dúvidas no nosso WhatsApp. Obrigado pela leitura!</p>
+<p><strong>Referências</strong></p>
+<ul>
+<li>Ben-Shachar, M. S., Lüdecke, D., &amp; Makowski, D. (2020). effectsize: Estimation of Effect Size Indices and Standardized Parameters. <em>Journal of Open Source Software</em>, 5(56), 2815.</li>
+<li>Cohen, J. (1988). <em>Statistical Power Analysis for the Behavioral Sciences</em> (2ª ed.). Lawrence Erlbaum.</li>
+<li>Espírito-Santo, H., &amp; Daniel, F. (2018). Calcular e apresentar tamanhos do efeito em trabalhos científicos (3): Guia para reportar os tamanhos do efeito para análises de regressão e ANOVAs. <em>Revista Portuguesa de Investigação Comportamental e Social</em>, 4(1), 43–60.</li>
+<li>Lakens, D. (2013). Calculating and reporting effect sizes to facilitate cumulative science: a practical primer for t-tests and ANOVAs. <em>Frontiers in Psychology</em>, 4, 863.</li>
+<li>Okada, K. (2013). Is omega squared less biased? A comparison of three major effect size indices in one-way ANOVA. <em>Behaviormetrika</em>, 40(2), 129–147.</li>
+<li>Olejnik, S., &amp; Algina, J. (2003). Generalized eta and omega squared statistics: measures of effect size for some common research designs. <em>Psychological Methods</em>, 8(4), 434–447.</li>
+<li>Sullivan, G. M., &amp; Feinn, R. (2012). Using Effect Size, or Why the P Value Is Not Enough. <em>Journal of Graduate Medical Education</em>, 4(3), 279–282.</li>
+</ul>
+<p>EDA | TESTE T | ENQUETES | ANOVA | MODELOS DE REGRESSÃO | ANÁLISE FATORIAL | MODELAGEM DE EQUAÇÕES ESTRUTURAIS | TRI | RASCH MODELS | MACHINE LEARNING</p>
+<p><img src="images/whatsapp_logo.png" width="20" height="20"> <a href="https://wa.me/5562992138972"><strong>Prof.&nbsp;Jobenil Júnior</strong></a></p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/tamanho_do_efeito_na_anova_eta_omega/index.html",
       "/posts/teste_ab_significancia_e_tamanho_do_efeito/index.html",
       "/posts/equacao_diferencial_duffing_fidelidade_de_marca/index.html",
       "/posts/simulacao_monte_carlo_elasticidade_preco/index.html",
