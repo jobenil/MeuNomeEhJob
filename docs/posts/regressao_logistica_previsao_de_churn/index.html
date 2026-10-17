@@ -1,0 +1,1886 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jobenil Júnior">
+<meta name="dcterms.date" content="2026-10-17">
+
+<title>Quem Vai Cancelar a Matrícula? Prevendo Churn com Regressão Logística no R – Posts</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-a5a41e6a67f4ce0b8799e496220e48a6.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/meunomeejog_logo.png" alt="" class="navbar-logo light-content">
+    <img src="../../images/meunomeejog_logo.png" alt="" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Posts</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">Educação</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://wa.me/5562992138972"> <i class="bi bi-whatsapp" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/jobeniljunior/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Quem Vai Cancelar a Matrícula? Prevendo Churn com Regressão Logística no R</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">r-code</div>
+                <div class="quarto-category">regressão logística</div>
+                <div class="quarto-category">churn</div>
+                <div class="quarto-category">glm</div>
+                <div class="quarto-category">marketing analytics</div>
+                <div class="quarto-category">machine learning</div>
+                <div class="quarto-category">alfabetização de dados</div>
+                <div class="quarto-category">data literacy</div>
+                <div class="quarto-category">estatística</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Jobenil Júnior </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">October 17, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>Toda academia conhece esse filme: em janeiro, a recepção lota de gente cheia de promessas de Ano Novo. Em março, metade das fichas está parada na gaveta. E o pior: o aluno raramente avisa que vai sair. Ele simplesmente some, falta uma semana, depois duas, e um mês depois aparece no balcão (ou no aplicativo) pedindo o cancelamento. E se você pudesse olhar para a sua lista de alunos <strong>hoje</strong> e dizer: <em>“Esta aqui tem 87% de chance de cancelar no próximo trimestre; aquele outro, só 18%”</em>? É exatamente isso que a <strong>regressão logística</strong> faz. Hoje vamos construir, do zero e em R, um modelo de previsão de <strong>churn</strong> (evasão de clientes) e, no final, usar as probabilidades para decidir <strong>para quem vale a pena ligar</strong> antes que seja tarde.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/regressao_logistica_churn_alunos.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+<p>No <a href="../../posts/o_que_e_regressao_logistica_multinomial/index.html">post sobre Regressão Logística Multinomial</a>, aquele do iogurte, eu comentei que a regressão logística “tradicional” responde perguntas de sim ou não, como <em>“o cliente vai cancelar o serviço?”</em>. Pois bem: chegou a hora de mostrar essa versão com calma, do jeito que ela é usada no dia a dia das empresas.</p>
+<section id="o-que-é-churn-e-por-que-ele-custa-tão-caro" class="level2">
+<h2 class="anchored" data-anchor-id="o-que-é-churn-e-por-que-ele-custa-tão-caro">🚪 O que é churn (e por que ele custa tão caro)</h2>
+<p><strong>Churn</strong> (ou taxa de evasão) é a proporção de clientes que encerram o relacionamento com uma empresa em um determinado período. Se a sua academia começou o trimestre com 1.000 alunos e 250 cancelaram, o churn trimestral foi de 25%.</p>
+<p>Ele aparece em todo lugar onde existe assinatura ou recorrência:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Negócio</th>
+<th>Como o churn aparece</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Academia</td>
+<td>Aluno cancela a matrícula (ou simplesmente para de pagar)</td>
+</tr>
+<tr class="even">
+<td>Operadora de celular</td>
+<td>Cliente faz portabilidade para a concorrente</td>
+</tr>
+<tr class="odd">
+<td>Streaming</td>
+<td>Assinante cancela depois que a série favorita acabou</td>
+</tr>
+<tr class="even">
+<td>Curso EAD</td>
+<td>Aluno abandona antes de concluir o módulo</td>
+</tr>
+<tr class="odd">
+<td>Banco digital</td>
+<td>Correntista deixa a conta “às moscas” e migra</td>
+</tr>
+</tbody>
+</table>
+<p>Existe uma regra de bolso famosa no marketing: <strong>conquistar um cliente novo custa várias vezes mais do que manter um cliente atual</strong>. Propaganda, comissão de vendas, matrícula com desconto… tudo isso é dinheiro gasto para colocar alguém para dentro. Quando esse alguém sai pela porta dos fundos três meses depois, o investimento vai embora junto.</p>
+<blockquote class="blockquote">
+<p><strong>Churn não é um evento; é uma probabilidade. E probabilidade a gente modela.</strong></p>
+</blockquote>
+</section>
+<section id="por-que-não-usar-a-boa-e-velha-regressão-linear" class="level2">
+<h2 class="anchored" data-anchor-id="por-que-não-usar-a-boa-e-velha-regressão-linear">📏 Por que não usar a boa e velha regressão linear?</h2>
+<p>A nossa variável resposta é do tipo <strong>sim ou não</strong>: o aluno cancelou (1) ou continuou (0). A primeira tentação de quem já conhece regressão linear é jogar tudo no <code>lm()</code> e interpretar a previsão como “probabilidade”. Isso tem até nome: <em>modelo de probabilidade linear</em>. O problema aparece nas pontas.</p>
+<p>Vamos ver isso na prática. Primeiro, simulamos os dados de uma academia fictícia (os detalhes da simulação estão mais abaixo, na seção dos dados):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2026</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">3000</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>alunos <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">meses_matricula =</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">36</span>, n, <span class="at">replace =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">treinos_mes     =</span> <span class="fu">pmin</span>(<span class="fu">rpois</span>(n, <span class="at">lambda =</span> <span class="dv">8</span>), <span class="dv">25</span>),</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">plano           =</span> <span class="fu">factor</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"Completo"</span>, <span class="st">"Básico"</span>), n, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.45</span>, <span class="fl">0.55</span>)),</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>                           <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Completo"</span>, <span class="st">"Básico"</span>)),</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">satisfacao      =</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, n, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.08</span>, <span class="fl">0.15</span>, <span class="fl">0.30</span>, <span class="fl">0.30</span>, <span class="fl">0.17</span>)),</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">idade           =</span> <span class="fu">sample</span>(<span class="dv">18</span><span class="sc">:</span><span class="dv">65</span>, n, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">logito =</span> <span class="sc">-</span><span class="fl">0.9</span> <span class="sc">-</span> <span class="fl">0.05</span> <span class="sc">*</span> meses_matricula <span class="sc">-</span> <span class="fl">0.18</span> <span class="sc">*</span> (treinos_mes <span class="sc">-</span> <span class="dv">8</span>) <span class="sc">+</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>             <span class="fl">1.0</span> <span class="sc">*</span> (plano <span class="sc">==</span> <span class="st">"Básico"</span>) <span class="sc">-</span> <span class="fl">0.6</span> <span class="sc">*</span> (satisfacao <span class="sc">-</span> <span class="dv">3</span>),</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">churn  =</span> <span class="fu">rbinom</span>(n, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">prob =</span> <span class="fu">plogis</span>(logito))</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Divisão treino (70%) / teste (30%)</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>id_treino <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">seq_len</span>(n), <span class="at">size =</span> <span class="fl">0.7</span> <span class="sc">*</span> n)</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>treino <span class="ot">&lt;-</span> alunos[id_treino, ]</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>teste  <span class="ot">&lt;-</span> alunos[<span class="sc">-</span>id_treino, ]</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(alunos<span class="sc">$</span>churn)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.2456667</code></pre>
+</div>
+</div>
+<p>Cerca de <strong>25% dos alunos cancelaram</strong>. Agora, a regressão linear:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mpl <span class="ot">&lt;-</span> <span class="fu">lm</span>(churn <span class="sc">~</span> meses_matricula <span class="sc">+</span> treinos_mes <span class="sc">+</span> plano <span class="sc">+</span> satisfacao <span class="sc">+</span> idade,</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> treino)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">fitted</span>(mpl) <span class="sc">&lt;</span> <span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 174</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">range</span>(<span class="fu">fitted</span>(mpl))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -0.3108318  0.7794035</code></pre>
+</div>
+</div>
+<p>O modelo linear previu uma <strong>“probabilidade” negativa</strong> para 174 alunos do conjunto de treino, chegando a -31%. O que significa ter uma chance <em>negativa</em> de cancelar? Nada! Probabilidade vive entre 0 e 1, e a reta não sabe disso. O gráfico abaixo mostra o problema usando só a frequência de treinos:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(treino, <span class="fu">aes</span>(treinos_mes, churn)) <span class="sc">+</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">height =</span> <span class="fl">0.03</span>, <span class="at">width =</span> <span class="fl">0.3</span>, <span class="at">alpha =</span> <span class="fl">0.15</span>) <span class="sc">+</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(<span class="at">color =</span> <span class="st">"Regressão linear"</span>), <span class="at">method =</span> <span class="st">"lm"</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">fullrange =</span> <span class="cn">TRUE</span>, <span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(<span class="at">color =</span> <span class="st">"Regressão logística"</span>), <span class="at">method =</span> <span class="st">"glm"</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">method.args =</span> <span class="fu">list</span>(<span class="at">family =</span> binomial),</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">fullrange =</span> <span class="cn">TRUE</span>, <span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"grey50"</span>) <span class="sc">+</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">30</span>)) <span class="sc">+</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Regressão linear"</span> <span class="ot">=</span> <span class="st">"#E4572E"</span>,</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Regressão logística"</span> <span class="ot">=</span> <span class="st">"#1F6FB2"</span>)) <span class="sc">+</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Treinos no último mês"</span>, <span class="at">y =</span> <span class="st">"Cancelou (0/1) / probabilidade"</span>,</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"top"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>A reta vermelha atravessa o zero e segue descendo como se nada tivesse acontecido. A curva azul, a da regressão logística, vai se achatando e <strong>nunca</strong> sai do intervalo entre 0 e 1.</p>
+<blockquote class="blockquote">
+<p><strong>Usar regressão linear para prever “sim ou não” é como medir febre com uma régua: até funciona no meio, mas nas pontas dá resultado absurdo.</strong></p>
+</blockquote>
+</section>
+<section id="imagine-assim-a-curva-em-s" class="level2">
+<h2 class="anchored" data-anchor-id="imagine-assim-a-curva-em-s">🧸 Imagine assim: a curva em S</h2>
+<p>A regressão logística pega aquela mesma reta da regressão linear e a “dobra” para que ela caiba entre 0 e 1. Quem faz essa dobra é a <strong>função logística</strong>:</p>
+<p><span class="math display">\[
+P(\text{churn}) = \frac{1}{1 + e^{-(\beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots + \beta_p x_p)}}
+\]</span></p>
+<p>Não se assuste com a fórmula. Pense em um <strong>dimmer de luz</strong>, aquele botão giratório que regula a intensidade da lâmpada. Ele não é um interruptor de liga/desliga: vai do apagado (0) ao totalmente aceso (1) aos poucos. Perto das pontas, você gira, gira, e quase nada muda. É no meio do caminho que cada giro faz mais diferença.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">z =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">6</span>, <span class="dv">6</span>, <span class="at">by =</span> <span class="fl">0.05</span>), <span class="at">p =</span> <span class="fu">plogis</span>(z)) <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(z, p)) <span class="sc">+</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"#1F6FB2"</span>, <span class="at">linewidth =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">0.5</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"grey50"</span>) <span class="sc">+</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"grey50"</span>) <span class="sc">+</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="sc">-</span><span class="dv">4</span>, <span class="at">y =</span> <span class="fl">0.12</span>, <span class="at">label =</span> <span class="st">"Perfil de baixo risco"</span>, <span class="at">size =</span> <span class="fl">4.5</span>) <span class="sc">+</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">4</span>, <span class="at">y =</span> <span class="fl">0.88</span>, <span class="at">label =</span> <span class="st">"Perfil de alto risco"</span>, <span class="at">size =</span> <span class="fl">4.5</span>) <span class="sc">+</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(<span class="st">"Índice de risco: "</span> <span class="sc">*</span> beta[<span class="dv">0</span>] <span class="sc">+</span> beta[<span class="dv">1</span>] <span class="sc">*</span> x[<span class="dv">1</span>] <span class="sc">+</span> <span class="st">"..."</span> <span class="sc">+</span> beta[p] <span class="sc">*</span> x[p]),</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Probabilidade de churn"</span>) <span class="sc">+</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>No eixo horizontal está o “índice de risco” do aluno, uma soma ponderada das características dele. No eixo vertical, a probabilidade de cancelar. A curva em S garante que, por mais extremo que seja o aluno, a probabilidade nunca passa de 100% nem fica abaixo de 0%.</p>
+</section>
+<section id="chance-odds-e-log-odds-a-linguagem-da-logística" class="level2">
+<h2 class="anchored" data-anchor-id="chance-odds-e-log-odds-a-linguagem-da-logística">🎲 Chance, odds e log-odds: a linguagem da logística</h2>
+<p>Para entender os coeficientes da regressão logística, precisamos de um conceito que todo apostador conhece: as <strong>odds</strong> (às vezes traduzidas como “chance”). Quando a casa de apostas diz que um resultado “paga 3 para 1”, ela está falando de odds.</p>
+<p><span class="math display">\[
+\text{odds} = \frac{p}{1 - p}
+\]</span></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Probabilidade (p)</th>
+<th>Odds = p / (1 − p)</th>
+<th>Log-odds = ln(odds)</th>
+<th>Leitura</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0,50</td>
+<td>1</td>
+<td>0</td>
+<td>“1 para 1”, tanto faz</td>
+</tr>
+<tr class="even">
+<td>0,75</td>
+<td>3</td>
+<td>1,10</td>
+<td>“3 para 1” a favor de cancelar</td>
+</tr>
+<tr class="odd">
+<td>0,20</td>
+<td>0,25</td>
+<td>−1,39</td>
+<td>“1 para 4”, ou seja, 4 vezes mais provável ficar</td>
+</tr>
+<tr class="even">
+<td>0,90</td>
+<td>9</td>
+<td>2,20</td>
+<td>“9 para 1” a favor de cancelar</td>
+</tr>
+</tbody>
+</table>
+<p>O segredo da regressão logística é que ela modela os <strong>log-odds</strong> (o logaritmo das odds) como uma reta:</p>
+<p><span class="math display">\[
+\ln\left(\frac{p}{1-p}\right) = \beta_0 + \beta_1 x_1 + \dots + \beta_p x_p
+\]</span></p>
+<p>Por isso, os coeficientes que o R devolve estão na escala de log-odds, que ninguém consegue interpretar de cabeça. A tradução é simples: aplicamos a exponencial, <code>exp(coef)</code>, e obtemos as <strong>odds ratios</strong> (razões de chances).</p>
+<blockquote class="blockquote">
+<p><strong>Coeficiente cru da logística é “língua de máquina”. Odds ratio é a tradução para gente.</strong></p>
+</blockquote>
+</section>
+<section id="nossos-dados-a-academia-fictícia" class="level2">
+<h2 class="anchored" data-anchor-id="nossos-dados-a-academia-fictícia">🧪 Nossos dados: a Academia Fictícia</h2>
+<p>Os dados que simulamos lá em cima representam 3.000 alunos de uma academia, com as seguintes informações:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variável</th>
+<th>Tipo</th>
+<th>Efeito que colocamos na simulação</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>meses_matricula</code></td>
+<td>numérica (1 a 36 meses)</td>
+<td>quanto mais tempo de casa, <strong>menor</strong> a chance de cancelar</td>
+</tr>
+<tr class="even">
+<td><code>treinos_mes</code></td>
+<td>contagem (treinos no último mês)</td>
+<td>quem treina mais, cancela <strong>menos</strong></td>
+</tr>
+<tr class="odd">
+<td><code>plano</code></td>
+<td>Completo / Básico</td>
+<td>plano Básico cancela <strong>mais</strong></td>
+</tr>
+<tr class="even">
+<td><code>satisfacao</code></td>
+<td>nota de 1 a 5</td>
+<td>quanto mais satisfeito, <strong>menor</strong> a chance</td>
+</tr>
+<tr class="odd">
+<td><code>idade</code></td>
+<td>numérica (18 a 65 anos)</td>
+<td><strong>nenhum</strong> efeito (de propósito!)</td>
+</tr>
+<tr class="even">
+<td><code>churn</code></td>
+<td>0 = continuou / 1 = cancelou</td>
+<td>é o que queremos prever</td>
+</tr>
+</tbody>
+</table>
+<p>A grande vantagem de simular os dados é que <strong>nós sabemos a resposta certa</strong>. Colocamos de propósito uma variável sem nenhum efeito (a idade) para ver se o modelo é esperto o suficiente para “desconfiar” dela.</p>
+<p>Também dividimos os alunos em dois grupos: <strong>treino (70%)</strong>, usado para ajustar o modelo, e <strong>teste (30%)</strong>, guardado para avaliar se ele funciona com alunos que ele nunca viu. É como estudar pela lista de exercícios e depois fazer a prova com questões novas: se você só decorou a lista, a prova vai mostrar.</p>
+</section>
+<section id="ajustando-o-modelo-com-glm" class="level2">
+<h2 class="anchored" data-anchor-id="ajustando-o-modelo-com-glm">🧠 Ajustando o modelo com glm()</h2>
+<p>No R, a regressão logística é feita com a função <code>glm()</code> (<em>Generalized Linear Model</em>). O detalhe que transforma o <code>glm</code> em regressão logística é o argumento <code>family = binomial</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>modelo <span class="ot">&lt;-</span> <span class="fu">glm</span>(churn <span class="sc">~</span> meses_matricula <span class="sc">+</span> treinos_mes <span class="sc">+</span> plano <span class="sc">+</span> satisfacao <span class="sc">+</span> idade,</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">family =</span> binomial, <span class="at">data =</span> treino)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = churn ~ meses_matricula + treinos_mes + plano + 
+    satisfacao + idade, family = binomial, data = treino)
+
+Coefficients:
+                 Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)      2.435744   0.316232   7.702 1.34e-14 ***
+meses_matricula -0.052550   0.005649  -9.303  &lt; 2e-16 ***
+treinos_mes     -0.203151   0.021594  -9.408  &lt; 2e-16 ***
+planoBásico      1.077048   0.119681   8.999  &lt; 2e-16 ***
+satisfacao      -0.584102   0.050459 -11.576  &lt; 2e-16 ***
+idade            0.001720   0.004010   0.429    0.668    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 2350.8  on 2099  degrees of freedom
+Residual deviance: 1958.2  on 2094  degrees of freedom
+AIC: 1970.2
+
+Number of Fisher Scoring iterations: 5</code></pre>
+</div>
+</div>
+<p>Como ler essa saída:</p>
+<ul>
+<li><strong>Estimate</strong>: o coeficiente na escala de log-odds. O <strong>sinal</strong> já diz muita coisa: negativo diminui a chance de cancelar; positivo aumenta. Repare que <code>meses_matricula</code>, <code>treinos_mes</code> e <code>satisfacao</code> são negativos, e <code>planoBásico</code> é positivo, exatamente como planejamos.</li>
+<li><strong>z value e Pr(&gt;|z|)</strong>: o teste de Wald, que verifica se o coeficiente é diferente de zero. Todas as variáveis têm <em>p</em> minúsculo, <strong>menos a idade</strong> (<em>p</em> = 0,67). O modelo “desconfiou” dela, como deveria!</li>
+<li><strong>Null deviance × Residual deviance</strong>: a <em>deviance</em> mede o quanto o modelo erra. A <em>null deviance</em> (2.350,8) é o erro de um modelo que só conhece a taxa geral de churn; a <em>residual deviance</em> (1.958,2) é o erro do nosso modelo. A queda mostra que as variáveis ajudam, e muito, a separar quem fica de quem sai.</li>
+</ul>
+</section>
+<section id="interpretação-dos-coeficientes-odds-ratios" class="level2">
+<h2 class="anchored" data-anchor-id="interpretação-dos-coeficientes-odds-ratios">📊 Interpretação dos coeficientes (odds ratios)</h2>
+<p>Agora vamos traduzir tudo para odds ratios. O pacote <code>{gtsummary}</code>, que já apresentei no <a href="../../posts/tabelas_de_resumo_academicas_com_gtsummary/index.html">post sobre tabelas de resumo acadêmicas</a>, faz isso com uma linha só:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_regression</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  modelo,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">exponentiate =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> <span class="fu">list</span>(</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    meses_matricula <span class="sc">~</span> <span class="st">"Meses de matrícula"</span>,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    treinos_mes     <span class="sc">~</span> <span class="st">"Treinos no último mês"</span>,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    plano           <span class="sc">~</span> <span class="st">"Plano"</span>,</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    satisfacao      <span class="sc">~</span> <span class="st">"Satisfação (1 a 5)"</span>,</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    idade           <span class="sc">~</span> <span class="st">"Idade (anos)"</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bold_p</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="ytanrsipww" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ytanrsipww table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#ytanrsipww thead, #ytanrsipww tbody, #ytanrsipww tfoot, #ytanrsipww tr, #ytanrsipww td, #ytanrsipww th {
+  border-style: none;
+}
+
+#ytanrsipww p {
+  margin: 0;
+  padding: 0;
+}
+
+#ytanrsipww .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#ytanrsipww .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#ytanrsipww .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#ytanrsipww .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#ytanrsipww .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ytanrsipww .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ytanrsipww .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ytanrsipww .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#ytanrsipww .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#ytanrsipww .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#ytanrsipww .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#ytanrsipww .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#ytanrsipww .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#ytanrsipww .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#ytanrsipww .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#ytanrsipww .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#ytanrsipww .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#ytanrsipww .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#ytanrsipww .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ytanrsipww .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#ytanrsipww .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#ytanrsipww .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#ytanrsipww .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ytanrsipww .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#ytanrsipww .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#ytanrsipww .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ytanrsipww .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ytanrsipww .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#ytanrsipww .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ytanrsipww .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#ytanrsipww .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ytanrsipww .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ytanrsipww .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ytanrsipww .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ytanrsipww .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ytanrsipww .gt_left {
+  text-align: left;
+}
+
+#ytanrsipww .gt_center {
+  text-align: center;
+}
+
+#ytanrsipww .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#ytanrsipww .gt_font_normal {
+  font-weight: normal;
+}
+
+#ytanrsipww .gt_font_bold {
+  font-weight: bold;
+}
+
+#ytanrsipww .gt_font_italic {
+  font-style: italic;
+}
+
+#ytanrsipww .gt_super {
+  font-size: 65%;
+}
+
+#ytanrsipww .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#ytanrsipww .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#ytanrsipww .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#ytanrsipww .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#ytanrsipww .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#ytanrsipww .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#ytanrsipww .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#ytanrsipww .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#ytanrsipww div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="gt_col_headings header">
+<th id="label" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"><strong>Characteristic</strong></th>
+<th id="estimate" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>OR</strong></th>
+<th id="conf.low" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>95% CI</strong></th>
+<th id="p.value" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>p-value</strong></th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">Meses de matrícula</td>
+<td class="gt_row gt_center" headers="estimate">0.95</td>
+<td class="gt_row gt_center" headers="conf.low">0.94, 0.96</td>
+<td class="gt_row gt_center" headers="p.value" style="font-weight: bold">&lt;0.001</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">Treinos no último mês</td>
+<td class="gt_row gt_center" headers="estimate">0.82</td>
+<td class="gt_row gt_center" headers="conf.low">0.78, 0.85</td>
+<td class="gt_row gt_center" headers="p.value" style="font-weight: bold">&lt;0.001</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">Plano</td>
+<td class="gt_row gt_center" headers="estimate"><br>
+</td>
+<td class="gt_row gt_center" headers="conf.low"><br>
+</td>
+<td class="gt_row gt_center" headers="p.value"><br>
+</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Completo</td>
+<td class="gt_row gt_center" headers="estimate">—</td>
+<td class="gt_row gt_center" headers="conf.low">—</td>
+<td class="gt_row gt_center" headers="p.value"><br>
+</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Básico</td>
+<td class="gt_row gt_center" headers="estimate">2.94</td>
+<td class="gt_row gt_center" headers="conf.low">2.33, 3.72</td>
+<td class="gt_row gt_center" headers="p.value" style="font-weight: bold">&lt;0.001</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">Satisfação (1 a 5)</td>
+<td class="gt_row gt_center" headers="estimate">0.56</td>
+<td class="gt_row gt_center" headers="conf.low">0.50, 0.61</td>
+<td class="gt_row gt_center" headers="p.value" style="font-weight: bold">&lt;0.001</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">Idade (anos)</td>
+<td class="gt_row gt_center" headers="estimate">1.00</td>
+<td class="gt_row gt_center" headers="conf.low">0.99, 1.01</td>
+<td class="gt_row gt_center" headers="p.value">0.7</td>
+</tr>
+</tbody><tfoot>
+<tr class="gt_sourcenotes odd">
+<td colspan="4" class="gt_sourcenote">Abbreviations: CI = Confidence Interval, OR = Odds Ratio</td>
+</tr>
+</tfoot>
+
+</table>
+
+</div>
+</div>
+</div>
+<p>A regra de leitura da odds ratio (OR) é simples:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>OR</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>OR = 1</td>
+<td>A variável não muda as chances de cancelar</td>
+</tr>
+<tr class="even">
+<td>OR &gt; 1</td>
+<td>Aumenta as chances de cancelar</td>
+</tr>
+<tr class="odd">
+<td>OR &lt; 1</td>
+<td>Diminui as chances de cancelar</td>
+</tr>
+</tbody>
+</table>
+<p>Traduzindo para a linguagem da gerência da academia:</p>
+<ul>
+<li><strong>Plano Básico (OR ≈ 2,94)</strong>: as <em>chances</em> de um aluno do plano Básico cancelar são quase <strong>3 vezes</strong> as de um aluno do plano Completo, mantidas as demais variáveis constantes.</li>
+<li><strong>Treinos no último mês (OR ≈ 0,82)</strong>: cada treino a mais no mês reduz as chances de cancelar em cerca de <strong>18%</strong>. Frequência é o melhor termômetro de engajamento!</li>
+<li><strong>Satisfação (OR ≈ 0,56)</strong>: cada ponto a mais na nota de satisfação reduz as chances de cancelar em cerca de <strong>44%</strong>.</li>
+<li><strong>Meses de matrícula (OR ≈ 0,95 por mês)</strong>: parece pouco, mas o efeito se acumula. Por ano de casa, a OR é:</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="dv">12</span> <span class="sc">*</span> <span class="fu">coef</span>(modelo)[<span class="st">"meses_matricula"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>meses_matricula 
+      0.5322755 </code></pre>
+</div>
+</div>
+<p>Ou seja, cada <strong>ano</strong> a mais de matrícula reduz as chances de cancelar em quase <strong>47%</strong>.</p>
+<ul>
+<li><strong>Idade (OR ≈ 1,00, IC 95% de 0,99 a 1,01)</strong>: o intervalo de confiança cruza o 1. Não há evidência de que a idade influencie o cancelamento, que é exatamente a verdade que colocamos na simulação.</li>
+</ul>
+<section id="a-pegadinha-odds-ratio-não-é-risco-x-vezes-maior" class="level3">
+<h3 class="anchored" data-anchor-id="a-pegadinha-odds-ratio-não-é-risco-x-vezes-maior">⚠️ A pegadinha: odds ratio não é “risco X vezes maior”</h3>
+<p>Esse é o erro mais comum em relatórios, artigos e até em notícias de jornal. Dizer que o plano Básico tem OR = 2,94 <strong>não</strong> significa que a <em>probabilidade</em> de cancelar é 2,94 vezes maior. Veja:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Probabilidade no plano Completo</th>
+<th>Odds no Completo</th>
+<th>Odds no Básico (× 2,94)</th>
+<th>Probabilidade no Básico</th>
+<th>Quantas vezes maior?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10%</td>
+<td>0,111</td>
+<td>0,327</td>
+<td>24,6%</td>
+<td>2,5 vezes</td>
+</tr>
+<tr class="even">
+<td>40%</td>
+<td>0,667</td>
+<td>1,960</td>
+<td>66,2%</td>
+<td>1,7 vezes</td>
+</tr>
+</tbody>
+</table>
+<p>A mesma odds ratio produz aumentos de probabilidade diferentes, dependendo de onde o aluno está na curva em S. (Para falar em pontos percentuais de forma rigorosa existem os <em>efeitos marginais</em>, assunto para um próximo post.)</p>
+<blockquote class="blockquote">
+<p><strong>Odds ratio diz a direção e a força do efeito. Para falar em probabilidade, olhe as probabilidades previstas.</strong></p>
+</blockquote>
+</section>
+</section>
+<section id="do-coeficiente-à-probabilidade-predicttype-response" class="level2">
+<h2 class="anchored" data-anchor-id="do-coeficiente-à-probabilidade-predicttype-response">🔮 Do coeficiente à probabilidade: predict(type = “response”)</h2>
+<p>O grande produto da regressão logística é a probabilidade prevista para cada aluno. Ela vem da função <code>predict()</code>, com um detalhe que derruba muito iniciante: <strong>sem</strong> o argumento <code>type = "response"</code>, o R devolve os log-odds; <strong>com</strong> ele, devolve a probabilidade.</p>
+<p>Vamos conhecer três alunos da academia, a Ana, o Bruno e a Carla:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>personagens <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">nome            =</span> <span class="fu">c</span>(<span class="st">"Ana"</span>, <span class="st">"Bruno"</span>, <span class="st">"Carla"</span>),</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">meses_matricula =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">6</span>, <span class="dv">12</span>),</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">treinos_mes     =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">8</span>),</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">plano           =</span> <span class="fu">c</span>(<span class="st">"Básico"</span>, <span class="st">"Básico"</span>, <span class="st">"Completo"</span>),</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">satisfacao      =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">3</span>),</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">idade           =</span> <span class="fu">c</span>(<span class="dv">24</span>, <span class="dv">35</span>, <span class="dv">47</span>)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>personagens <span class="sc">|&gt;</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prob_churn =</span> scales<span class="sc">::</span><span class="fu">percent</span>(</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">predict</span>(modelo, <span class="at">newdata =</span> personagens, <span class="at">type =</span> <span class="st">"response"</span>), <span class="at">accuracy =</span> <span class="dv">1</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  ))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 7
+  nome  meses_matricula treinos_mes plano    satisfacao idade prob_churn
+  &lt;chr&gt;           &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;     
+1 Ana                 2           2 Básico            2    24 87%       
+2 Bruno               6           5 Básico            3    35 62%       
+3 Carla              12           8 Completo          3    47 18%       </code></pre>
+</div>
+</div>
+<ul>
+<li><strong>Ana</strong> chegou há 2 meses, foi só 2 vezes à academia no último mês, está no plano Básico e deu nota 2 de satisfação: <strong>87% de chance de cancelar</strong>. Alto risco!</li>
+<li><strong>Bruno</strong> está há 6 meses, treinou 5 vezes no último mês, plano Básico e satisfação mediana: <strong>62%</strong>. Risco moderado.</li>
+<li><strong>Carla</strong> está há um ano, treina duas vezes por semana e tem o plano Completo: <strong>18%</strong>. Baixo risco.</li>
+</ul>
+<p>Para enxergar o efeito de forma contínua, fixamos um “aluno típico” (6 treinos no mês, satisfação 3, 35 anos) e variamos o tempo de matrícula e o plano:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>grade <span class="ot">&lt;-</span> <span class="fu">expand_grid</span>(</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">meses_matricula =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">36</span>,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">plano           =</span> <span class="fu">c</span>(<span class="st">"Completo"</span>, <span class="st">"Básico"</span>),</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">treinos_mes     =</span> <span class="dv">6</span>,</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">satisfacao      =</span> <span class="dv">3</span>,</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">idade           =</span> <span class="dv">35</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>grade<span class="sc">$</span>prob <span class="ot">&lt;-</span> <span class="fu">predict</span>(modelo, <span class="at">newdata =</span> grade, <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(grade, <span class="fu">aes</span>(meses_matricula, prob, <span class="at">color =</span> plano)) <span class="sc">+</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="fl">1.3</span>) <span class="sc">+</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Completo"</span> <span class="ot">=</span> <span class="st">"#1F6FB2"</span>, <span class="st">"Básico"</span> <span class="ot">=</span> <span class="st">"#E4572E"</span>)) <span class="sc">+</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Meses de matrícula"</span>, <span class="at">y =</span> <span class="st">"Probabilidade de churn"</span>, <span class="at">color =</span> <span class="st">"Plano"</span>) <span class="sc">+</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"top"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Um aluno típico do plano Básico, recém-matriculado, tem mais de 60% de chance de cancelar. No plano Completo, essa chance começa bem mais baixa. E, nos dois planos, o risco despenca com o tempo de casa: <strong>os primeiros meses são a zona de perigo</strong>.</p>
+</section>
+<section id="o-modelo-acerta-matriz-de-confusão-e-o-paradoxo-da-acurácia" class="level2">
+<h2 class="anchored" data-anchor-id="o-modelo-acerta-matriz-de-confusão-e-o-paradoxo-da-acurácia">🎯 O modelo acerta? Matriz de confusão e o paradoxo da acurácia</h2>
+<p>Chegou a hora da “prova”. Vamos calcular a probabilidade para os 900 alunos do conjunto de <strong>teste</strong> e classificar como “Cancela” todo mundo com probabilidade acima de 50%:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>teste <span class="ot">&lt;-</span> teste <span class="sc">|&gt;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prob =</span> <span class="fu">predict</span>(modelo, <span class="at">newdata =</span> teste, <span class="at">type =</span> <span class="st">"response"</span>))</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>matriz <span class="ot">&lt;-</span> <span class="fu">table</span>(</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">Previsto =</span> <span class="fu">factor</span>(<span class="fu">ifelse</span>(teste<span class="sc">$</span>prob <span class="sc">&gt;=</span> <span class="fl">0.5</span>, <span class="st">"Cancela"</span>, <span class="st">"Fica"</span>), <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Fica"</span>, <span class="st">"Cancela"</span>)),</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">Real     =</span> <span class="fu">factor</span>(<span class="fu">ifelse</span>(teste<span class="sc">$</span>churn <span class="sc">==</span> <span class="dv">1</span>, <span class="st">"Cancela"</span>, <span class="st">"Fica"</span>), <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Fica"</span>, <span class="st">"Cancela"</span>))</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>matriz</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         Real
+Previsto  Fica Cancela
+  Fica     634     140
+  Cancela   49      77</code></pre>
+</div>
+</div>
+<p>Essa tabela é a <strong>matriz de confusão</strong>. Dela saem as métricas mais usadas:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  Métrica <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Acurácia"</span>, <span class="st">"Sensibilidade"</span>, <span class="st">"Precisão"</span>, <span class="st">"Especificidade"</span>),</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Pergunta =</span> <span class="fu">c</span>(<span class="st">"Quanto o modelo acertou no geral?"</span>,</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>               <span class="st">"Dos que cancelaram, quantos o modelo pegou?"</span>,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>               <span class="st">"Dos que o modelo apontou, quantos cancelaram de fato?"</span>,</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>               <span class="st">"Dos que ficaram, quantos o modelo reconheceu?"</span>),</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">Valor =</span> <span class="fu">c</span>(<span class="fu">sum</span>(<span class="fu">diag</span>(matriz)) <span class="sc">/</span> <span class="fu">sum</span>(matriz),</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>            matriz[<span class="st">"Cancela"</span>, <span class="st">"Cancela"</span>] <span class="sc">/</span> <span class="fu">sum</span>(matriz[, <span class="st">"Cancela"</span>]),</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>            matriz[<span class="st">"Cancela"</span>, <span class="st">"Cancela"</span>] <span class="sc">/</span> <span class="fu">sum</span>(matriz[<span class="st">"Cancela"</span>, ]),</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>            matriz[<span class="st">"Fica"</span>, <span class="st">"Fica"</span>] <span class="sc">/</span> <span class="fu">sum</span>(matriz[, <span class="st">"Fica"</span>]))</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Valor =</span> scales<span class="sc">::</span><span class="fu">percent</span>(Valor, <span class="at">accuracy =</span> <span class="fl">0.1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 3
+  Métrica        Pergunta                                              Valor
+  &lt;chr&gt;          &lt;chr&gt;                                                 &lt;chr&gt;
+1 Acurácia       Quanto o modelo acertou no geral?                     79.0%
+2 Sensibilidade  Dos que cancelaram, quantos o modelo pegou?           35.5%
+3 Precisão       Dos que o modelo apontou, quantos cancelaram de fato? 61.1%
+4 Especificidade Dos que ficaram, quantos o modelo reconheceu?         92.8%</code></pre>
+</div>
+</div>
+<p>Uma acurácia de 79% parece ótima, não parece? Agora olhe isto:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teste<span class="sc">$</span>churn <span class="sc">==</span> <span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.7588889</code></pre>
+</div>
+</div>
+<p>Um “modelo preguiçoso”, que simplesmente diz que <strong>ninguém</strong> vai cancelar, acertaria 75,9% das vezes, sem fazer conta nenhuma! Esse é o <strong>paradoxo da acurácia</strong>: quando uma das classes é bem mais comum que a outra, acertar muito é fácil. E repare na sensibilidade: com o limiar de 50%, o modelo só “pega” cerca de 35% dos alunos que de fato cancelaram. Os outros 65% saem pela porta sem que ninguém da academia ligue para eles.</p>
+<blockquote class="blockquote">
+<p><strong>Acurácia sozinha engana. Em churn, a pergunta que importa é: quantos dos que iam sair nós conseguimos enxergar a tempo?</strong></p>
+</blockquote>
+<p>(Existe um gráfico que avalia o modelo em todos os limiares possíveis de uma só vez, a famosa <strong>curva ROC</strong>. Ela merece um post só para ela.)</p>
+</section>
+<section id="o-limiar-de-05-é-uma-convenção-não-uma-lei-deixe-o-dinheiro-decidir" class="level2">
+<h2 class="anchored" data-anchor-id="o-limiar-de-05-é-uma-convenção-não-uma-lei-deixe-o-dinheiro-decidir">💰 O limiar de 0,5 é uma convenção, não uma lei: deixe o dinheiro decidir</h2>
+<p>Aqui está, para mim, a parte mais importante do post. Ninguém disse que precisamos cortar em 50%. Esse número é só uma convenção. <strong>Quem deve escolher o limiar é a planilha de custos da academia.</strong></p>
+<p>Vamos supor (valores hipotéticos, adapte aos seus):</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parâmetro</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Custo de uma ação de retenção (ligação + 1 mês de aula com personal de brinde)</td>
+<td>R$ 50</td>
+</tr>
+<tr class="even">
+<td>Taxa de sucesso da ação entre os alunos que iam cancelar</td>
+<td>30%</td>
+</tr>
+<tr class="odd">
+<td>Valor de um aluno retido (cerca de 9 meses de mensalidade)</td>
+<td>R$ 900</td>
+</tr>
+</tbody>
+</table>
+<p>Se ligamos para um aluno com probabilidade <em>p</em> de cancelar, o ganho esperado é <em>p</em> × 0,30 × 900, e o custo é sempre R$ 50. Vale a pena ligar quando o ganho supera o custo:</p>
+<p><span class="math display">\[
+p \times 0{,}30 \times 900 &gt; 50 \quad \Longrightarrow \quad p &gt; \frac{50}{270} \approx 0{,}185
+\]</span></p>
+<p>Ou seja: pela lógica do negócio, devemos ligar para <strong>todo aluno com mais de 18,5% de chance de cancelar</strong>, e não só para os que passam de 50%! Vamos conferir no conjunto de teste, calculando o lucro da campanha para cada limiar possível:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>custo_contato <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>taxa_sucesso  <span class="ot">&lt;-</span> <span class="fl">0.30</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>valor_aluno   <span class="ot">&lt;-</span> <span class="dv">900</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>limiar_teorico <span class="ot">&lt;-</span> custo_contato <span class="sc">/</span> (taxa_sucesso <span class="sc">*</span> valor_aluno)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>lucro <span class="ot">&lt;-</span> <span class="cf">function</span>(limiar) {</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  alvo <span class="ot">&lt;-</span> teste<span class="sc">$</span>prob <span class="sc">&gt;=</span> limiar</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>(alvo <span class="sc">&amp;</span> teste<span class="sc">$</span>churn <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">*</span> taxa_sucesso <span class="sc">*</span> valor_aluno <span class="sc">-</span> <span class="fu">sum</span>(alvo) <span class="sc">*</span> custo_contato</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>curva_lucro <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">limiar =</span> <span class="fu">seq</span>(<span class="fl">0.05</span>, <span class="fl">0.90</span>, <span class="at">by =</span> <span class="fl">0.01</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">lucro =</span> <span class="fu">map_dbl</span>(limiar, lucro))</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(curva_lucro, <span class="fu">aes</span>(limiar, lucro)) <span class="sc">+</span></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"#1F6FB2"</span>, <span class="at">linewidth =</span> <span class="fl">1.3</span>) <span class="sc">+</span></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> limiar_teorico, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"#2E9E5B"</span>) <span class="sc">+</span></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fl">0.5</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"#E4572E"</span>) <span class="sc">+</span></span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> limiar_teorico <span class="sc">+</span> <span class="fl">0.01</span>, <span class="at">y =</span> <span class="dv">5000</span>, <span class="at">hjust =</span> <span class="dv">0</span>,</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> <span class="st">"Limiar do negócio (18,5%)"</span>, <span class="at">color =</span> <span class="st">"#2E9E5B"</span>, <span class="at">size =</span> <span class="fl">4.2</span>) <span class="sc">+</span></span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="fl">0.51</span>, <span class="at">y =</span> <span class="dv">21000</span>, <span class="at">hjust =</span> <span class="dv">0</span>,</span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> <span class="st">"Limiar convencional (50%)"</span>, <span class="at">color =</span> <span class="st">"#E4572E"</span>, <span class="at">size =</span> <span class="fl">4.2</span>) <span class="sc">+</span></span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">label_dollar</span>(<span class="at">prefix =</span> <span class="st">"R$ "</span>, <span class="at">big.mark =</span> <span class="st">"."</span>,</span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>                                                   <span class="at">decimal.mark =</span> <span class="st">","</span>)) <span class="sc">+</span></span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Limiar de probabilidade para ligar"</span>, <span class="at">y =</span> <span class="st">"Lucro esperado da campanha"</span>) <span class="sc">+</span></span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">limiar_50 =</span> <span class="fu">lucro</span>(<span class="fl">0.5</span>), <span class="at">limiar_negocio =</span> <span class="fu">lucro</span>(limiar_teorico), <span class="at">ligar_para_todos =</span> <span class="fu">lucro</span>(<span class="dv">0</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       limiar_50   limiar_negocio ligar_para_todos 
+           14490            23860            13590 </code></pre>
+</div>
+</div>
+<p>Com o limiar convencional de 50%, a campanha renderia cerca de <strong>R$ 14,5 mil</strong>. Com o limiar definido pelo negócio, cerca de <strong>R$ 23,9 mil</strong>: um ganho de quase <strong>65%</strong>, usando o <strong>mesmo modelo</strong>, só mudando a régua de decisão. E ligar para todo mundo, sem modelo nenhum, renderia apenas R$ 13,6 mil, porque gastaríamos dinheiro com centenas de alunos que nunca iam sair.</p>
+<p>Outra forma de ver o valor do modelo é a <strong>curva de ganho</strong>: ordenamos os alunos do maior para o menor risco e perguntamos <em>“se eu ligar só para os X% do topo da lista, quantos dos cancelamentos eu capturo?”</em></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>ganho <span class="ot">&lt;-</span> teste <span class="sc">|&gt;</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(prob)) <span class="sc">|&gt;</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pct_contatados     =</span> <span class="fu">row_number</span>() <span class="sc">/</span> <span class="fu">n</span>(),</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">pct_churn_capturado =</span> <span class="fu">cumsum</span>(churn) <span class="sc">/</span> <span class="fu">sum</span>(churn))</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ganho, <span class="fu">aes</span>(pct_contatados, pct_churn_capturado)) <span class="sc">+</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"#1F6FB2"</span>, <span class="at">linewidth =</span> <span class="fl">1.3</span>) <span class="sc">+</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"grey50"</span>) <span class="sc">+</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="fl">0.62</span>, <span class="at">y =</span> <span class="fl">0.52</span>, <span class="at">label =</span> <span class="st">"Ligações aleatórias"</span>, <span class="at">color =</span> <span class="st">"grey40"</span>,</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>           <span class="at">size =</span> <span class="fl">4.2</span>, <span class="at">angle =</span> <span class="dv">33</span>) <span class="sc">+</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"% de alunos contatados (do maior para o menor risco)"</span>,</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"% dos cancelamentos capturados"</span>) <span class="sc">+</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Ligando para apenas <strong>20%</strong> dos alunos (os de maior risco), capturamos quase <strong>metade</strong> de todos os cancelamentos. Se as ligações fossem feitas ao acaso, os mesmos 20% de ligações capturariam só 20% dos cancelamentos (a linha tracejada).</p>
+<blockquote class="blockquote">
+<p><strong>O modelo entrega uma fila de prioridade. Quem decide onde cortar a fila é a planilha de custos.</strong></p>
+</blockquote>
+</section>
+<section id="cuidados-antes-de-levar-para-a-vida-real" class="level2">
+<h2 class="anchored" data-anchor-id="cuidados-antes-de-levar-para-a-vida-real">⚠️ Cuidados antes de levar para a vida real</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Cuidado</th>
+<th>Por quê</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Vazamento de informação</strong></td>
+<td>Não use variáveis que só existem <em>depois</em> do cancelamento (ex.: “pediu o boleto de quitação”). O modelo fica perfeito no papel e inútil na prática.</td>
+</tr>
+<tr class="even">
+<td><strong>Associação não é causa</strong></td>
+<td>A OR da satisfação mostra associação. Ela não prova que aumentar a nota (ex.: pressionando o aluno a avaliar bem) vai reduzir o churn.</td>
+</tr>
+<tr class="odd">
+<td><strong>Classes raras</strong></td>
+<td>Se o churn for de 2%, e não de 25%, o paradoxo da acurácia fica ainda pior e exige técnicas específicas.</td>
+</tr>
+<tr class="even">
+<td><strong>Horizonte de tempo</strong></td>
+<td>O nosso modelo responde <em>“vai cancelar no trimestre?”</em>. Se a pergunta for <em>“quando vai cancelar?”</em>, a ferramenta certa é a análise de sobrevivência.</td>
+</tr>
+<tr class="odd">
+<td><strong>O modelo envelhece</strong></td>
+<td>O comportamento dos alunos muda (nova concorrente no bairro, aumento de preço). Reajuste o modelo periodicamente.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="em-resumo" class="level2">
+<h2 class="anchored" data-anchor-id="em-resumo">🎯 Em resumo:</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pergunta</th>
+<th>Ferramenta no R</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Qual a chance de cada aluno cancelar?</td>
+<td><code>glm(..., family = binomial)</code> + <code>predict(type = "response")</code></td>
+</tr>
+<tr class="even">
+<td>Quais fatores pesam mais?</td>
+<td><code>exp(coef())</code> ou <code>tbl_regression(exponentiate = TRUE)</code></td>
+</tr>
+<tr class="odd">
+<td>O modelo acerta?</td>
+<td>Matriz de confusão no conjunto de <strong>teste</strong> (e não só a acurácia!)</td>
+</tr>
+<tr class="even">
+<td>Para quem eu ligo?</td>
+<td>Limiar definido por <strong>custo × benefício</strong>, e não pelo 0,5</td>
+</tr>
+</tbody>
+</table>
+<ol type="1">
+<li>A regressão logística transforma características dos clientes em <strong>probabilidades</strong> de churn, sempre entre 0 e 1.</li>
+<li>Os coeficientes estão em <strong>log-odds</strong>; com <code>exp()</code> viram <strong>odds ratios</strong>, que dizem a direção e a força de cada fator.</li>
+<li>Odds ratio <strong>não é</strong> “probabilidade X vezes maior”.</li>
+<li>A acurácia pode enganar quando uma das classes é muito mais comum.</li>
+<li>O melhor limiar de decisão vem do <strong>negócio</strong>, e pode valer milhares de reais a mais com o mesmo modelo.</li>
+</ol>
+<p>Se quiser se aprofundar, o capítulo 4 (<em>Classification</em>) do livro <strong>An Introduction to Statistical Learning</strong>, de Gareth James, Daniela Witten, Trevor Hastie e Robert Tibshirani, é uma referência excelente e está disponível gratuitamente em <a href="https://www.statlearning.com">statlearning.com</a>. E se o seu problema tiver três ou mais opções em vez de “fica ou sai”, o próximo passo é o <a href="../../posts/o_que_e_regressao_logistica_multinomial/index.html">post do iogurte</a>, sobre Regressão Logística Multinomial.</p>
+<p>Lembra da academia lotada em janeiro e vazia em março? Com uma regressão logística, a gerente não precisa esperar março chegar. Ela recebe, toda semana, uma lista dos alunos que estão “sumindo”, com a probabilidade de cada um ir embora, e sabe exatamente até onde vale a pena descer nessa lista com o telefone na mão.</p>
+<blockquote class="blockquote">
+<p><strong>Isso, para mim, é a alfabetização de dados na veia!</strong></p>
+</blockquote>
+<p>EDA | TESTE T | ENQUETES | ANOVA | MODELOS DE REGRESSÃO | ANÁLISE FATORIAL | MODELAGEM DE EQUAÇÕES ESTRUTURAIS | TRI | RASCH MODELS | MACHINE LEARNING</p>
+<p><img src="images/whatsapp_logo.png" width="20" height="20"> <a href="https://wa.me/5562992138972"><strong>Prof.&nbsp;Jobenil Júnior</strong></a></p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
