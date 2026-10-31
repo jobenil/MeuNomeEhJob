@@ -1,5 +1,6 @@
 ---
 title: "Sua Campanha de Ads Vai Dar Lucro? Qual a relação com Simulação de Monte Carlo"
+description: "Sua campanha de anúncios vai dar lucro? Em vez de um número único de planilha, use a Simulação de Monte Carlo para enxergar o risco de prejuízo da campanha."
 author: "Jobenil Júnior"
 date: "2026-09-12"
 execute:

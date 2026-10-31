@@ -1,5 +1,6 @@
 ---
 title: "A Física da Fidelidade: O Que a Equação de Duffing Ensina Sobre Guerra de Marcas"
+description: "Por que clientes fiéis trocam de marca de repente, e às vezes voltam? A equação de Duffing, da física não linear, ajuda a entender a guerra de marcas."
 author: "Jobenil Júnior"
 date: "2026-09-26"
 execute:

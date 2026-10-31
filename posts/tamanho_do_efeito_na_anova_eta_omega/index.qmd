@@ -1,5 +1,6 @@
 ---
 title: "Eta, Ômega ou Épsilon? O Tamanho do Efeito Que Sua ANOVA Está Escondendo"
+description: "Eta, eta parcial, ômega ou épsilon? Entenda o que cada medida de tamanho do efeito da ANOVA diz, qual delas reportar e como calculá-las no R."
 author: "Jobenil Júnior"
 date: "2026-10-10"
 execute:

@@ -1,5 +1,6 @@
 ---
 title: "Agente de IA: O Que Faz? Como Usa? Andrew Ng Explica (e a resposta envolve 'Falar a Língua' dos Dados!)"
+description: "Andrew Ng e Harrison Chase explicam o que é um agente de IA, e por que saber 'falar a língua' dos dados é a habilidade central da alfabetização de dados na era da IA."
 author: "Jobenil Júnior"
 date: "2025-05-31"
 categories: [inteligencia artificial, agentes inteligentes, alfabetização de dados, data literacy]

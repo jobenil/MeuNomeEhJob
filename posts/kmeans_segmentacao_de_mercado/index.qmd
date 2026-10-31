@@ -1,5 +1,6 @@
 ---
 title: "Pare de tratar clientes de forma igual: Passo a passo da Segmentação com K-Means e Python"
+description: "Mesmo cupom, três reações diferentes. Aprenda passo a passo a segmentar clientes com K-Means em Python e veja como a segmentação muda o ROI das campanhas."
 author: "Jobenil Júnior"
 date: "2026-10-31"
 execute:

@@ -1,5 +1,6 @@
 ---
 title: "Para que serve o Teste de Hausman-McFadden?"
+description: "Uma explicação 'como para um bebê' do teste de Hausman-McFadden: o que é a hipótese IIA do logit multinomial e como testar se ela vale nos seus dados."
 author: "Jobenil Júnior"
 date: "2025-10-10"
 categories: [r-code, alfabetização de dados, data literacy, teste, estatística]

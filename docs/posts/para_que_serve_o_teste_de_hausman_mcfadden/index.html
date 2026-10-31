@@ -8,6 +8,7 @@
 
 <meta name="author" content="Jobenil Júnior">
 <meta name="dcterms.date" content="2025-10-10">
+<meta name="description" content="Uma explicação ‘como para um bebê’ do teste de Hausman-McFadden: o que é a hipótese IIA do logit multinomial e como testar se ela vale nos seus dados.">
 
 <title>Para que serve o Teste de Hausman-McFadden? – Posts</title>
 <style>
@@ -78,6 +79,10 @@ ul.task-list li input[type="checkbox"] {
 
 
 <link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Para que serve o Teste de Hausman-McFadden? – Posts">
+<meta property="og:description" content="Uma explicação ‘como para um bebê’ do teste de Hausman-McFadden: o que é a hipótese IIA do logit multinomial e como testar se ela vale nos seus dados.">
+<meta property="og:image" content="https://jobenil.github.io/MeuNomeEhJob/posts/para_que_serve_o_teste_de_hausman_mcfadden/images/generatedImage3.jpg">
+<meta property="og:site_name" content="Posts">
 </head>
 
 <body class="nav-fixed fullcontent quarto-light">
@@ -127,7 +132,12 @@ ul.task-list li input[type="checkbox"] {
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
       <h1 class="title">Para que serve o Teste de Hausman-McFadden?</h1>
-                                <div class="quarto-categories">
+                  <div>
+        <div class="description">
+          Uma explicação ‘como para um bebê’ do teste de Hausman-McFadden: o que é a hipótese IIA do logit multinomial e como testar se ela vale nos seus dados.
+        </div>
+      </div>
+                          <div class="quarto-categories">
                 <div class="quarto-category">r-code</div>
                 <div class="quarto-category">alfabetização de dados</div>
                 <div class="quarto-category">data literacy</div>
@@ -405,7 +415,7 @@ o que nos indica que <strong>não rejeitamos H₀</strong>, ou seja, que as alte
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
+        var filterRegex = new RegExp("https:\/\/jobenil\.github\.io\/MeuNomeEhJob\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

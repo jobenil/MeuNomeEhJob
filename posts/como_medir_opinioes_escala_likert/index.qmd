@@ -1,5 +1,6 @@
 ---
 title: "Entendendo e Analisando a Escala Likert no R com {gtsummary} e {ggplot2}"
+description: "Como transformar opiniões em dados? Conheça a história e a lógica da Escala Likert e aprenda a tabular e visualizar respostas no R com {gtsummary} e {ggplot2}."
 author: "Jobenil Júnior"
 date: "2026-07-21"
 categories: [r-code, alfabetização de dados, data literacy, escala likert, gtsummary, ggplot2, estatística]

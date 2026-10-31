@@ -1,5 +1,6 @@
 ---
 title: "Quem Vai Cancelar a Matrícula? Prevendo Churn com Regressão Logística no R"
+description: "Quem vai cancelar a matrícula? Construa do zero, em R, um modelo de regressão logística para prever churn e decida pelo custo-benefício quem vale a pena contatar."
 author: "Jobenil Júnior"
 date: "2026-10-17"
 execute:

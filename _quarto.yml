@@ -9,6 +9,8 @@ project:
 
 website:
   title: "Posts"
+  site-url: https://jobenil.github.io/MeuNomeEhJob/
+  open-graph: true
   navbar:
     logo: /images/meunomeejog_logo.png
     background: "#00CC00"

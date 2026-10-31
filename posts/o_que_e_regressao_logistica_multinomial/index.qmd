@@ -1,9 +1,10 @@
 ---
 title: "O que a escolha de seu iogurte tem a ver com Regressão Logística Multinomial?"
+description: "Natural, grego ou zero? Entenda como a Regressão Logística Multinomial estima a probabilidade de cada escolha entre três ou mais opções, com simulação em R."
 author: "Jobenil Júnior"
 date: "2026-07-28"
 categories: [r-code, alfabetização de dados, data literacy, regressão logística multinomial, nnet, gtsummary, estatística]
-image: "images/capa_carrinho_iogurte.svg"
+image: "images/capa_carrinho_iogurte.png"
 ---
 
 Como prever, entre **três ou mais opções**, qual delas uma pessoa vai escolher?

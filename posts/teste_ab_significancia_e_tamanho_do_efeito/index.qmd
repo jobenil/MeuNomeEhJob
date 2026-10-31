@@ -1,5 +1,6 @@
 ---
 title: "Deu p < 0,05 no Teste A/B. E Agora, Vale a Pena Mudar o Site?"
+description: "Deu p < 0,05 no teste A/B. E agora? Entenda a diferença entre significância estatística e prática e por que o tamanho do efeito decide se a mudança vale a pena."
 author: "Jobenil Júnior"
 date: "2026-10-03"
 execute:
@@ -36,7 +37,7 @@ E tem um detalhe que pesa muito em marketing digital: o valor de p depende diret
 ## ⚖️ Significância estatística vs. significância prática
 
 | Característica | Significância Estatística | Significância Prática |
-|:-----------------------|:-----------------------|:-----------------------|
+|:---|:---|:---|
 | **Pergunta central** | A diferença entre A e B é fruto do acaso? | Quão grande é essa diferença no mundo real? |
 | **Métrica principal** | Valor de p | Tamanho do efeito (*d*, *h*, lift, R\$) |
 | **Sensibilidade ao N** | Altíssima | Praticamente nenhuma |
@@ -286,7 +287,7 @@ Planejar o tamanho da amostra evita os dois desperdícios clássicos: parar o te
 ## 🎯 Em resumo:
 
 | Pergunta | Métrica | Resposta no nosso exemplo |
-|:-----------------------|:-----------------------|:-----------------------|
+|:---|:---|:---|
 | A diferença foi sorte? | Valor de p | Provavelmente não (p ≈ 0,01) |
 | Quão grande é a diferença? | *d* / *h* de Cohen + IC 95% | Pequena na régua clássica (≈ 0,11), mas +62% de *lift* |
 | O número da imagem confere? | Refazer a conta | Não: d ≈ 0,11, e não 0,42 |

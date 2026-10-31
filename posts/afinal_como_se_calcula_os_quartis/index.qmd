@@ -1,5 +1,6 @@
 ---
 title: "Afinal, como se calcula os quartis?"
+description: "Você sabia que o R tem nove formas diferentes de calcular quartis? Entenda por que os resultados mudam e veja as diferenças na prática com a função quantile()."
 author: "Jobenil Júnior"
 date: "2025-05-20"
 categories: [r-code, alfabetização de dados, data literacy]

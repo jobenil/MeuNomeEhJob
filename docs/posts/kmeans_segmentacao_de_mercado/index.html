@@ -8,6 +8,7 @@
 
 <meta name="author" content="Jobenil Júnior">
 <meta name="dcterms.date" content="2026-10-31">
+<meta name="description" content="Mesmo cupom, três reações diferentes. Aprenda passo a passo a segmentar clientes com K-Means em Python e veja como a segmentação muda o ROI das campanhas.">
 
 <title>Pare de tratar clientes de forma igual: Passo a passo da Segmentação com K-Means e Python – Posts</title>
 <style>
@@ -112,7 +113,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 <script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
 
+
+
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
@@ -145,6 +149,12 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Pare de tratar clientes de forma igual: Passo a passo da Segmentação com K-Means e Python – Posts">
+<meta property="og:description" content="Mesmo cupom, três reações diferentes. Aprenda passo a passo a segmentar clientes com K-Means em Python e veja como a segmentação muda o ROI das campanhas.">
+<meta property="og:image" content="https://jobenil.github.io/MeuNomeEhJob/posts/kmeans_segmentacao_de_mercado/images/capa_kmeans_segmentacao.png">
+<meta property="og:site_name" content="Posts">
+<meta property="og:image:height" content="1024">
+<meta property="og:image:width" content="1536">
 </head>
 
 <body class="nav-fixed fullcontent quarto-light">
@@ -194,7 +204,12 @@ window.Quarto = {
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
       <h1 class="title">Pare de tratar clientes de forma igual: Passo a passo da Segmentação com K-Means e Python</h1>
-                                <div class="quarto-categories">
+                  <div>
+        <div class="description">
+          Mesmo cupom, três reações diferentes. Aprenda passo a passo a segmentar clientes com K-Means em Python e veja como a segmentação muda o ROI das campanhas.
+        </div>
+      </div>
+                          <div class="quarto-categories">
                 <div class="quarto-category">python</div>
                 <div class="quarto-category">k-means</div>
                 <div class="quarto-category">clusterização</div>
@@ -1504,7 +1519,7 @@ Inércia final: 464.1</code></pre>
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
+        var filterRegex = new RegExp("https:\/\/jobenil\.github\.io\/MeuNomeEhJob\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

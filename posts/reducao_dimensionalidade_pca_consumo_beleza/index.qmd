@@ -1,5 +1,6 @@
 ---
 title: "O que realmente faz ela comprar? O PCA Revela!"
+description: "Pesquisa longa, insight curto? Veja como o PCA, em Python, transforma dezenas de perguntas correlacionadas em poucos índices que revelam o que faz a consumidora comprar."
 author: "Jobenil Júnior"
 date: "2026-09-05"
 execute:

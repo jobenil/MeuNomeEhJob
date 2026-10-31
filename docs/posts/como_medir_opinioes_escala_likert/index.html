@@ -8,6 +8,7 @@
 
 <meta name="author" content="Jobenil Júnior">
 <meta name="dcterms.date" content="2026-07-21">
+<meta name="description" content="Como transformar opiniões em dados? Conheça a história e a lógica da Escala Likert e aprenda a tabular e visualizar respostas no R com {gtsummary} e {ggplot2}.">
 
 <title>Entendendo e Analisando a Escala Likert no R com {gtsummary} e {ggplot2} – Posts</title>
 <style>
@@ -113,6 +114,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Entendendo e Analisando a Escala Likert no R com {gtsummary} e {ggplot2} – Posts">
+<meta property="og:description" content="Como transformar opiniões em dados? Conheça a história e a lógica da Escala Likert e aprenda a tabular e visualizar respostas no R com {gtsummary} e {ggplot2}.">
+<meta property="og:image" content="https://jobenil.github.io/MeuNomeEhJob/posts/como_medir_opinioes_escala_likert/images/escala_likert_capa.png">
+<meta property="og:site_name" content="Posts">
+<meta property="og:image:height" content="1024">
+<meta property="og:image:width" content="1024">
 </head>
 
 <body class="nav-fixed fullcontent quarto-light">
@@ -162,7 +169,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
       <h1 class="title">Entendendo e Analisando a Escala Likert no R com {gtsummary} e {ggplot2}</h1>
-                                <div class="quarto-categories">
+                  <div>
+        <div class="description">
+          Como transformar opiniões em dados? Conheça a história e a lógica da Escala Likert e aprenda a tabular e visualizar respostas no R com {gtsummary} e {ggplot2}.
+        </div>
+      </div>
+                          <div class="quarto-categories">
                 <div class="quarto-category">r-code</div>
                 <div class="quarto-category">alfabetização de dados</div>
                 <div class="quarto-category">data literacy</div>
@@ -1044,7 +1056,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
+        var filterRegex = new RegExp("https:\/\/jobenil\.github\.io\/MeuNomeEhJob\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

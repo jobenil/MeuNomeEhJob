@@ -1,5 +1,6 @@
 ---
 title: "Vale a Pena Subir o Preço?\nA Simulação de Monte Carlo Aplicada Sobre a Elasticidade"
+description: "Subir o preço em 20% vale a pena? Ninguém conhece a elasticidade exata do próprio produto: veja como a Simulação de Monte Carlo transforma essa incerteza em decisão."
 author: "Jobenil Júnior"
 date: "2026-09-20"
 execute:

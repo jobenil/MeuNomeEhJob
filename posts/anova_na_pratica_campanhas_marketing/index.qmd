@@ -1,5 +1,6 @@
 ---
 title: "Como Comparar 3 Campanhas de Marketing sem Cair na Armadilha dos Testes t"
+description: "Três campanhas de marketing: qual vende mais? Veja por que empilhar testes t é uma armadilha e como a ANOVA compara várias médias de uma só vez."
 author: "Jobenil Júnior"
 date: "2026-08-08"
 execute:

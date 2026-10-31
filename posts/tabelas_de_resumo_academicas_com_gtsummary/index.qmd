@@ -1,5 +1,6 @@
 ---
 title: "Chega de Formatar Tabela no Word: Automatizando Resultados com gtsummary"
+description: "Chega de copiar o summary() do R para o Word. Veja como o pacote gtsummary gera tabelas de resumo e de regressão prontas para artigos acadêmicos."
 author: "Jobenil Júnior"
 date: "2026-08-23"
 execute:
