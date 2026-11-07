@@ -1,0 +1,3592 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jobenil Júnior">
+<meta name="dcterms.date" content="2026-11-07">
+<meta name="description" content="Suporte, confiança e lift explicados com 5.000 cupons fiscais simulados: rode o algoritmo Apriori no R com {arules}, separe regras úteis de regras óbvias (ou enganosas) e desenhe o mapa do carrinho com {arulesViz}.">
+
+<title>Quem Leva Pão Também Leva Manteiga? Análise de Cesta de Compras com Apriori no R – Posts</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-a5a41e6a67f4ce0b8799e496220e48a6.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="../../site_libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
+
+<script src="../../site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+
+<link href="../../site_libs/vis-9.1.0/vis-network.min.css" rel="stylesheet">
+
+<script src="../../site_libs/vis-9.1.0/vis-network.min.js"></script>
+
+<script src="../../site_libs/visNetwork-binding-2.1.4/visNetwork.js"></script>
+
+
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Quem Leva Pão Também Leva Manteiga? Análise de Cesta de Compras com Apriori no R – Posts">
+<meta property="og:description" content="Suporte, confiança e lift explicados com 5.000 cupons fiscais simulados: rode o algoritmo Apriori no R com {arules}, separe regras úteis de regras óbvias (ou enganosas) e desenhe o mapa do carrinho com {arulesViz}.">
+<meta property="og:image" content="https://jobenil.github.io/MeuNomeEhJob/posts/analise_cesta_de_compras_apriori/images/cesta_de_compras.png">
+<meta property="og:site_name" content="Posts">
+<meta property="og:image:height" content="1024">
+<meta property="og:image:width" content="1536">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/meunomeejog_logo.png" alt="" class="navbar-logo light-content">
+    <img src="../../images/meunomeejog_logo.png" alt="" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Posts</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">Educação</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://wa.me/5562992138972"> <i class="bi bi-whatsapp" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/jobeniljunior/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Quem Leva Pão Também Leva Manteiga? Análise de Cesta de Compras com Apriori no R</h1>
+                  <div>
+        <div class="description">
+          Suporte, confiança e lift explicados com 5.000 cupons fiscais simulados: rode o algoritmo Apriori no R com {arules}, separe regras úteis de regras óbvias (ou enganosas) e desenhe o mapa do carrinho com {arulesViz}.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">r-code</div>
+                <div class="quarto-category">regras de associação</div>
+                <div class="quarto-category">apriori</div>
+                <div class="quarto-category">arules</div>
+                <div class="quarto-category">arulesviz</div>
+                <div class="quarto-category">cesta de compras</div>
+                <div class="quarto-category">varejo</div>
+                <div class="quarto-category">marketing analytics</div>
+                <div class="quarto-category">machine learning</div>
+                <div class="quarto-category">alfabetização de dados</div>
+                <div class="quarto-category">data literacy</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Jobenil Júnior </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">November 7, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>Existe uma história que todo professor de mineração de dados já contou pelo menos uma vez (eu incluído). Uma grande rede de supermercados americana teria analisado milhões de cupons fiscais e descoberto algo bizarro: <strong>na sexta-feira à noite, quem comprava fraldas também comprava cerveja</strong>. A explicação? Pais jovens, mandados ao mercado para buscar fraldas, aproveitavam para levar a cervejinha do fim de semana. Moral da história: a rede colocou as cervejas ao lado das fraldas e as vendas dispararam.</p>
+<p>Bonita, não é? O problema é que a parte do “final feliz” é <strong>lenda</strong>. A análise original (feita para a rede de farmácias Osco Drug, por volta de 1992) até encontrou uma correlação desse tipo, mas ninguém mudou prateleira nenhuma. <strong>Verdade ou lenda?</strong> Guarde essa pergunta: hoje vamos respondê-la com dados, com três métricas e com um mapa.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/cesta_de_compras.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+<p>E já que estamos no supermercado, fica uma pergunta prática para você ir pensando: <strong>se você fosse o gerente, colocaria a manteiga perto ou longe do pão?</strong></p>
+<p>No <a href="../../posts/kmeans_segmentacao_de_mercado/index.html">post sobre K-Means</a>, nós respondemos à pergunta <em>“quem é o meu cliente?”</em>, agrupando pessoas parecidas em segmentos. Hoje a pergunta é outra: <strong>“o que se compra junto?”</strong>. Bem-vindo à <strong>Análise de Cesta de Compras</strong> (em inglês, <em>Market Basket Analysis</em>).</p>
+<section id="o-que-é-análise-de-cesta-de-compras" class="level2">
+<h2 class="anchored" data-anchor-id="o-que-é-análise-de-cesta-de-compras">🛒 O que é Análise de Cesta de Compras?</h2>
+<p>Pense no cupom fiscal que você recebe no caixa. Para o algoritmo, cada cupom é uma <strong>transação</strong>, e cada transação é simplesmente um <strong>conjunto de itens</strong>: <code>{pão, leite, café}</code>. Não importa se você levou um ou dez pacotes de café, nem quanto pagou; só importa se o item <strong>estava ou não</strong> no carrinho.</p>
+<p>O objetivo é encontrar <strong>regras de associação</strong> do tipo:</p>
+<blockquote class="blockquote">
+<p><strong>SE</strong> o cliente leva {pão} <strong>ENTÃO</strong> ele também leva {manteiga}</p>
+</blockquote>
+<p>O lado do “SE” se chama <strong>antecedente</strong> (ou LHS, <em>left-hand side</em>) e o lado do “ENTÃO” se chama <strong>consequente</strong> (ou RHS, <em>right-hand side</em>). Assim como o K-Means, é aprendizado <strong>não supervisionado</strong>: ninguém diz ao algoritmo qual é a resposta certa. Ele vasculha os cupons e devolve os padrões que aparecem com frequência.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>K-Means</th>
+<th>Cesta de Compras (Apriori)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Pergunta</td>
+<td>Quem é o cliente?</td>
+<td>O que se compra junto?</td>
+</tr>
+<tr class="even">
+<td>Unidade de análise</td>
+<td>Clientes</td>
+<td>Cupons (transações)</td>
+</tr>
+<tr class="odd">
+<td>Resultado</td>
+<td>Segmentos de clientes</td>
+<td>Regras “SE… ENTÃO…” entre produtos</td>
+</tr>
+<tr class="even">
+<td>Uso típico</td>
+<td>Campanhas por perfil</td>
+<td>Combos, layout da loja, recomendações</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="imagine-assim" class="level2">
+<h2 class="anchored" data-anchor-id="imagine-assim">🧸 Imagine assim:</h2>
+<p>Sabe aquela moça do caixa que trabalha há vinte anos no mesmo supermercado? Ela “sabe” que quem passa com carvão vai passar com carne. Que quem leva fralda costuma levar lenço umedecido. Ninguém ensinou isso a ela: foi a repetição, cupom após cupom.</p>
+<p>O algoritmo <strong>Apriori</strong> é essa moça do caixa com memória perfeita para milhões de cupons. Só que ela tem um defeito: <strong>sozinha, não sabe diferenciar o óbvio do interessante, nem o interessante da coincidência</strong>. Para isso, ela precisa de três métricas. Vamos aprendê-las com papel e caneta.</p>
+</section>
+<section id="mão-na-massa-10-cupons-de-papel" class="level2">
+<h2 class="anchored" data-anchor-id="mão-na-massa-10-cupons-de-papel">🧾 Mão na massa: 10 cupons de papel</h2>
+<p>Antes de qualquer código, imagine que o dia foi fraco e só passaram 10 clientes pelo caixa:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">Cupom</th>
+<th>Itens</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td>pão, manteiga, leite</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2</td>
+<td>pão, manteiga, café</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">3</td>
+<td>pão, leite</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">4</td>
+<td>leite, café</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">5</td>
+<td>pão, manteiga</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">6</td>
+<td>salgadinho, refrigerante</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">7</td>
+<td>leite, salgadinho, refrigerante</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">8</td>
+<td>pão, leite, café</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">9</td>
+<td>leite, refrigerante</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">10</td>
+<td>pão, manteiga, leite</td>
+</tr>
+</tbody>
+</table>
+<p>Contando: <strong>pão</strong> aparece em 6 cupons, <strong>manteiga</strong> em 4, <strong>leite</strong> em 7. Pão e manteiga aparecem <strong>juntos</strong> em 4 cupons; pão e leite também aparecem juntos em 4 cupons.</p>
+</section>
+<section id="as-três-métricas-que-separam-o-ouro-do-cascalho" class="level2">
+<h2 class="anchored" data-anchor-id="as-três-métricas-que-separam-o-ouro-do-cascalho">📏 As três métricas que separam o ouro do cascalho</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Métrica</th>
+<th>Pergunta que responde</th>
+<th>Fórmula</th>
+<th>Leitura</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Suporte</strong></td>
+<td>Com que frequência os itens aparecem juntos?</td>
+<td>P(A e B)</td>
+<td>Popularidade da combinação</td>
+</tr>
+<tr class="even">
+<td><strong>Confiança</strong></td>
+<td>Entre quem leva A, quantos levam B?</td>
+<td>P(B | A) = suporte(A e B) / suporte(A)</td>
+<td>Força da regra</td>
+</tr>
+<tr class="odd">
+<td><strong>Lift</strong></td>
+<td>Levar A <strong>aumenta</strong> a chance de levar B?</td>
+<td>confiança / suporte(B)</td>
+<td>&gt; 1 atração; = 1 independência; &lt; 1 repulsão</td>
+</tr>
+</tbody>
+</table>
+<p>Vamos calcular para duas regras com os nossos 10 cupons:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 20%">
+<col style="width: 21%">
+<col style="width: 32%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Regra</th>
+<th style="text-align: center;">Suporte</th>
+<th style="text-align: center;">Confiança</th>
+<th style="text-align: center;">Lift</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>{pão} → {manteiga}</td>
+<td style="text-align: center;">4/10 = <strong>40%</strong></td>
+<td style="text-align: center;">4/6 = <strong>66,7%</strong></td>
+<td style="text-align: center;">0,667 / 0,40 = <strong>1,67</strong></td>
+</tr>
+<tr class="even">
+<td>{pão} → {leite}</td>
+<td style="text-align: center;">4/10 = <strong>40%</strong></td>
+<td style="text-align: center;">4/6 = <strong>66,7%</strong></td>
+<td style="text-align: center;">0,667 / 0,70 = <strong>0,95</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Repare no que aconteceu: as duas regras têm <strong>exatamente o mesmo suporte e a mesma confiança</strong>. Se você olhasse só para a confiança, diria que são igualmente boas. Mas o lift conta outra história:</p>
+<ul>
+<li>Quem leva pão leva manteiga <strong>1,67 vez mais</strong> do que um cliente qualquer. Existe atração de verdade.</li>
+<li>Quem leva pão leva leite em 66,7% das vezes… mas <strong>70% de todos os clientes</strong> já levam leite! Levar pão não aumenta em nada a chance de levar leite (lift 0,95, praticamente 1).</li>
+</ul>
+<blockquote class="blockquote">
+<p><strong>Confiança alta não basta. Sem o lift, você pode estar só “descobrindo” que o leite é popular.</strong></p>
+</blockquote>
+<p>E aqui vai um exercício de alfabetização de dados com a capa deste post: o par <strong>leite + pão</strong> é o mais frequente de todos (10% dos cupons). Mais adiante você vai ver que ele é justamente o <strong>menos interessante</strong>. Por quê? Exatamente pelo motivo acima.</p>
+</section>
+<section id="por-que-apriori-o-truque-que-evita-a-explosão" class="level2">
+<h2 class="anchored" data-anchor-id="por-que-apriori-o-truque-que-evita-a-explosão">🧠 Por que “Apriori”? O truque que evita a explosão</h2>
+<p>Calcular as métricas para 2 regras é fácil. O problema é que um supermercado de bairro tem milhares de produtos. Com apenas 21 itens já existem 2²¹ ≈ <strong>2 milhões</strong> de combinações possíveis; com 169 itens (o tamanho de uma base clássica que veremos no final), são cerca de <strong>7 × 10⁵⁰</strong> combinações. Nenhum computador conta tudo isso.</p>
+<p>O truque do Apriori, proposto por Agrawal e Srikant em 1994, é uma ideia de bom senso chamada <strong>propriedade Apriori</strong>:</p>
+<blockquote class="blockquote">
+<p><strong>Se uma combinação é rara, qualquer combinação maior que a contenha também é rara.</strong></p>
+</blockquote>
+<p>Se pouca gente compra caviar, menos gente ainda compra caviar <strong>e</strong> pão, e menos ainda caviar, pão <strong>e</strong> vinho. Então, assim que o caviar for reprovado, todas as combinações com ele são <strong>podadas</strong> sem precisar ser contadas. Vejamos com os 10 cupons, exigindo suporte mínimo de 30% (3 cupons):</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Passo</th>
+<th>O que acontece</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1. Contar itens</td>
+<td>pão 6, leite 7, manteiga 4, café 3, refrigerante 3, salgadinho 2</td>
+<td>Salgadinho <strong>reprovado</strong> (2 &lt; 3)</td>
+</tr>
+<tr class="even">
+<td>2. Formar pares só com os aprovados</td>
+<td>{salgadinho, refrigerante} <strong>nem é contado</strong></td>
+<td>Poda!</td>
+</tr>
+<tr class="odd">
+<td>3. Contar pares</td>
+<td>{pão, manteiga} 4 e {pão, leite} 4 passam; os demais têm 2 ou menos</td>
+<td>2 pares frequentes</td>
+</tr>
+<tr class="even">
+<td>4. Formar trios</td>
+<td>{pão, manteiga, leite} exigiria {manteiga, leite} frequente, que não é</td>
+<td>Trio <strong>podado sem contar</strong></td>
+</tr>
+<tr class="odd">
+<td>5. Gerar regras</td>
+<td>A partir dos pares frequentes, calcular confiança e lift</td>
+<td>{pão} → {manteiga}, {pão} → {leite}…</td>
+</tr>
+</tbody>
+</table>
+<p>É por isso que o algoritmo se chama Apriori: ele usa um conhecimento <strong>prévio</strong> (os itens frequentes da etapa anterior) para decidir o que vale a pena contar na etapa seguinte.</p>
+</section>
+<section id="o-supermercado-bom-preço-5.000-cupons" class="level2">
+<h2 class="anchored" data-anchor-id="o-supermercado-bom-preço-5.000-cupons">🏪 O Supermercado Bom Preço: 5.000 cupons</h2>
+<p>Agora vamos para uma escala mais realista. Vou simular 5.000 cupons de um supermercado fictício, o <strong>Bom Preço</strong>, com 21 produtos. Cada produto tem uma chance própria de entrar no carrinho e, por cima disso, eu <strong>plantei</strong> algumas associações, como um gabarito escondido que o Apriori precisa reencontrar:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Associação plantada</th>
+<th>O que esperar</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>pão → manteiga</td>
+<td>A regra clássica da capa</td>
+</tr>
+<tr class="even">
+<td>fralda → lenço umedecido e mamadeira</td>
+<td>O “kit bebê”</td>
+</tr>
+<tr class="odd">
+<td>salgadinho → refrigerante</td>
+<td>O combo do petisco</td>
+</tr>
+<tr class="even">
+<td>carvão → carne e cerveja</td>
+<td>O “kit churrasco”</td>
+</tr>
+<tr class="odd">
+<td>fralda → cerveja</td>
+<td>A lenda, mas <strong>fraquinha</strong></td>
+</tr>
+<tr class="even">
+<td>leite</td>
+<td>Muito popular (40%), <strong>sem associação nenhuma</strong></td>
+</tr>
+</tbody>
+</table>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(arules)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(arulesViz)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2026</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">5000</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>base <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"pão"</span> <span class="ot">=</span> <span class="fl">0.25</span>, <span class="st">"leite"</span> <span class="ot">=</span> <span class="fl">0.40</span>, <span class="st">"café"</span> <span class="ot">=</span> <span class="fl">0.20</span>, <span class="st">"açúcar"</span> <span class="ot">=</span> <span class="fl">0.12</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>          <span class="st">"arroz"</span> <span class="ot">=</span> <span class="fl">0.25</span>, <span class="st">"feijão"</span> <span class="ot">=</span> <span class="fl">0.22</span>, <span class="st">"ovos"</span> <span class="ot">=</span> <span class="fl">0.18</span>, <span class="st">"banana"</span> <span class="ot">=</span> <span class="fl">0.20</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>          <span class="st">"tomate"</span> <span class="ot">=</span> <span class="fl">0.18</span>, <span class="st">"queijo"</span> <span class="ot">=</span> <span class="fl">0.10</span>, <span class="st">"salgadinho"</span> <span class="ot">=</span> <span class="fl">0.12</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>          <span class="st">"refrigerante"</span> <span class="ot">=</span> <span class="fl">0.15</span>, <span class="st">"fralda"</span> <span class="ot">=</span> <span class="fl">0.06</span>, <span class="st">"carvão"</span> <span class="ot">=</span> <span class="fl">0.05</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>          <span class="st">"carne"</span> <span class="ot">=</span> <span class="fl">0.15</span>, <span class="st">"cerveja"</span> <span class="ot">=</span> <span class="fl">0.14</span>, <span class="st">"detergente"</span> <span class="ot">=</span> <span class="fl">0.10</span>,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>          <span class="st">"papel higiênico"</span> <span class="ot">=</span> <span class="fl">0.12</span>, <span class="st">"lenço umedecido"</span> <span class="ot">=</span> <span class="fl">0.02</span>, <span class="st">"mamadeira"</span> <span class="ot">=</span> <span class="fl">0.01</span>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>cupons <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="fu">seq_len</span>(n), <span class="cf">function</span>(i) {</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  itens <span class="ot">&lt;-</span> <span class="fu">names</span>(base)[<span class="fu">runif</span>(<span class="fu">length</span>(base)) <span class="sc">&lt;</span> base]</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># associações plantadas (o "gabarito" que o Apriori deve reencontrar)</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="st">"pão"</span> <span class="sc">%in%</span> itens        <span class="sc">&amp;&amp;</span> <span class="fu">runif</span>(<span class="dv">1</span>) <span class="sc">&lt;</span> <span class="fl">0.55</span>) itens <span class="ot">&lt;-</span> <span class="fu">c</span>(itens, <span class="st">"manteiga"</span>)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="st">"pão"</span> <span class="sc">%in%</span> itens       <span class="sc">&amp;&amp;</span> <span class="fu">runif</span>(<span class="dv">1</span>) <span class="sc">&lt;</span> <span class="fl">0.02</span>) itens <span class="ot">&lt;-</span> <span class="fu">c</span>(itens, <span class="st">"manteiga"</span>)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="st">"fralda"</span> <span class="sc">%in%</span> itens     <span class="sc">&amp;&amp;</span> <span class="fu">runif</span>(<span class="dv">1</span>) <span class="sc">&lt;</span> <span class="fl">0.70</span>) itens <span class="ot">&lt;-</span> <span class="fu">c</span>(itens, <span class="st">"lenço umedecido"</span>)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="st">"fralda"</span> <span class="sc">%in%</span> itens     <span class="sc">&amp;&amp;</span> <span class="fu">runif</span>(<span class="dv">1</span>) <span class="sc">&lt;</span> <span class="fl">0.40</span>) itens <span class="ot">&lt;-</span> <span class="fu">c</span>(itens, <span class="st">"mamadeira"</span>)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="st">"fralda"</span> <span class="sc">%in%</span> itens     <span class="sc">&amp;&amp;</span> <span class="fu">runif</span>(<span class="dv">1</span>) <span class="sc">&lt;</span> <span class="fl">0.10</span>) itens <span class="ot">&lt;-</span> <span class="fu">c</span>(itens, <span class="st">"cerveja"</span>)  <span class="co"># a "lenda"</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="st">"salgadinho"</span> <span class="sc">%in%</span> itens <span class="sc">&amp;&amp;</span> <span class="fu">runif</span>(<span class="dv">1</span>) <span class="sc">&lt;</span> <span class="fl">0.45</span>) itens <span class="ot">&lt;-</span> <span class="fu">c</span>(itens, <span class="st">"refrigerante"</span>)</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="st">"carvão"</span> <span class="sc">%in%</span> itens     <span class="sc">&amp;&amp;</span> <span class="fu">runif</span>(<span class="dv">1</span>) <span class="sc">&lt;</span> <span class="fl">0.75</span>) itens <span class="ot">&lt;-</span> <span class="fu">c</span>(itens, <span class="st">"carne"</span>)</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="st">"carvão"</span> <span class="sc">%in%</span> itens     <span class="sc">&amp;&amp;</span> <span class="fu">runif</span>(<span class="dv">1</span>) <span class="sc">&lt;</span> <span class="fl">0.65</span>) itens <span class="ot">&lt;-</span> <span class="fu">c</span>(itens, <span class="st">"cerveja"</span>)</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(itens) <span class="sc">==</span> <span class="dv">0</span>) itens <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">names</span>(base), <span class="dv">1</span>)  <span class="co"># nenhum cupom vazio</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>(itens)</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>trans <span class="ot">&lt;-</span> <span class="fu">as</span>(cupons, <span class="st">"transactions"</span>)</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(trans)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>transactions as itemMatrix in sparse format with
+ 5000 rows (elements/itemsets/transactions) and
+ 21 columns (items) and a density of 0.1623143 
+
+most frequent items:
+  leite   arroz     pão  feijão    café (Other) 
+   1980    1284    1264    1150    1054   10311 
+
+element (itemset/transaction) length distribution:
+sizes
+   1    2    3    4    5    6    7    8    9   10   11   12 
+ 732  974 1139  905  614  354  183   58   26   13    1    1 
+
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  1.000   2.000   3.000   3.409   4.250  12.000 
+
+includes extended item information - examples:
+  labels
+1 açúcar
+2  arroz
+3 banana</code></pre>
+</div>
+</div>
+<p>A função <code>as(cupons, "transactions")</code> transforma a lista de cupons no formato que o <code>{arules}</code> entende: uma matriz esparsa de 5.000 linhas (cupons) por 21 colunas (itens). O <code>summary()</code> mostra que o cupom médio tem <strong>3,4 itens</strong> e que o campeão de vendas é o <strong>leite</strong>, presente em 1.980 cupons. Vamos ver o ranking completo:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>freq <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">item =</span> <span class="fu">itemLabels</span>(trans), <span class="at">suporte =</span> <span class="fu">itemFrequency</span>(trans)) <span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(suporte))</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(freq, <span class="fu">aes</span>(<span class="at">x =</span> suporte, <span class="at">y =</span> <span class="fu">reorder</span>(item, suporte), <span class="at">fill =</span> item <span class="sc">==</span> <span class="st">"leite"</span>)) <span class="sc">+</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"grey70"</span>, <span class="st">"#1f4e79"</span>)) <span class="sc">+</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Suporte (% dos cupons)"</span>, <span class="at">y =</span> <span class="cn">NULL</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"O que mais sai no Supermercado Bom Preço"</span>) <span class="sc">+</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>O leite está em <strong>39,6%</strong> dos cupons, bem à frente de arroz e pão (cerca de 25% cada). Guarde esse campeão de vendas na memória: ele vai aprontar.</p>
+</section>
+<section id="rodando-o-apriori-no-r" class="level2">
+<h2 class="anchored" data-anchor-id="rodando-o-apriori-no-r">⚙️ Rodando o Apriori no R</h2>
+<p>Com os dados prontos, rodar o algoritmo é uma linha. Precisamos apenas dizer os limiares mínimos:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>regras <span class="ot">&lt;-</span> <span class="fu">apriori</span>(trans,</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">parameter =</span> <span class="fu">list</span>(<span class="at">supp =</span> <span class="fl">0.01</span>,   <span class="co"># aparece em pelo menos 1% dos cupons</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">conf =</span> <span class="fl">0.30</span>,   <span class="co"># confiança mínima de 30%</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">minlen =</span> <span class="dv">2</span>),   <span class="co"># pelo menos 1 item de cada lado</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">control =</span> <span class="fu">list</span>(<span class="at">verbose =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(regras)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 215</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>regras <span class="ot">&lt;-</span> regras[<span class="sc">!</span><span class="fu">is.redundant</span>(regras)]</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(regras)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 130</code></pre>
+</div>
+</div>
+<p>O Apriori encontrou <strong>215 regras</strong>. Muitas delas, porém, são <strong>redundantes</strong>: uma regra como {pão, ovos} → {manteiga} é redundante quando não tem confiança maior que a regra mais simples {pão} → {manteiga}. O ovo só pegou carona. Removendo as redundantes com <code>is.redundant()</code>, sobram <strong>130 regras</strong>.</p>
+<p>Sobre os limiares: não existe valor mágico. Suporte baixo demais gera milhares de regras raras (e muitas coincidências); suporte alto demais deixa só o óbvio. Um bom hábito é testar alguns valores e reportar quais foram usados.</p>
+<p>Mesmo assim, 130 regras numa tabela ninguém lê. Precisamos de <strong>critério</strong> e de um <strong>mapa</strong>. Para facilitar, vou criar uma pequena função que transforma regras numa tabela bonita com o <code>{gt}</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>tabela_regras <span class="ot">&lt;-</span> <span class="cf">function</span>(r) {</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">DATAFRAME</span>(r) <span class="sc">|&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(LHS, RHS, support, confidence, lift, count) <span class="sc">|&gt;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cols_label</span>(<span class="at">LHS =</span> <span class="st">"SE (antecedente)"</span>, <span class="at">RHS =</span> <span class="st">"ENTÃO (consequente)"</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">support =</span> <span class="st">"Suporte"</span>, <span class="at">confidence =</span> <span class="st">"Confiança"</span>,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">lift =</span> <span class="st">"Lift"</span>, <span class="at">count =</span> <span class="st">"Cupons"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fmt_percent</span>(<span class="at">columns =</span> <span class="fu">c</span>(support, confidence), <span class="at">decimals =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fmt_number</span>(<span class="at">columns =</span> lift, <span class="at">decimals =</span> <span class="dv">2</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="interpretação-regras-boas-óbvias-enganosas-e-de-acaso" class="level2">
+<h2 class="anchored" data-anchor-id="interpretação-regras-boas-óbvias-enganosas-e-de-acaso">📊 Interpretação: regras boas, óbvias, enganosas e de acaso</h2>
+<section id="o-ranking-por-lift-o-kit-bebê-e-os-caronas" class="level3">
+<h3 class="anchored" data-anchor-id="o-ranking-por-lift-o-kit-bebê-e-os-caronas">1. O ranking por lift: o kit bebê e os “caronas”</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tabela_regras</span>(<span class="fu">head</span>(<span class="fu">sort</span>(regras, <span class="at">by =</span> <span class="st">"lift"</span>), <span class="dv">10</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="vxrfhdnbup" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#vxrfhdnbup table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#vxrfhdnbup thead, #vxrfhdnbup tbody, #vxrfhdnbup tfoot, #vxrfhdnbup tr, #vxrfhdnbup td, #vxrfhdnbup th {
+  border-style: none;
+}
+
+#vxrfhdnbup p {
+  margin: 0;
+  padding: 0;
+}
+
+#vxrfhdnbup .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#vxrfhdnbup .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#vxrfhdnbup .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#vxrfhdnbup .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#vxrfhdnbup .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#vxrfhdnbup .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vxrfhdnbup .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#vxrfhdnbup .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#vxrfhdnbup .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#vxrfhdnbup .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#vxrfhdnbup .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#vxrfhdnbup .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#vxrfhdnbup .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#vxrfhdnbup .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#vxrfhdnbup .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#vxrfhdnbup .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#vxrfhdnbup .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#vxrfhdnbup .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#vxrfhdnbup .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vxrfhdnbup .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#vxrfhdnbup .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#vxrfhdnbup .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#vxrfhdnbup .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vxrfhdnbup .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#vxrfhdnbup .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#vxrfhdnbup .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vxrfhdnbup .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vxrfhdnbup .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#vxrfhdnbup .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vxrfhdnbup .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#vxrfhdnbup .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vxrfhdnbup .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#vxrfhdnbup .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vxrfhdnbup .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#vxrfhdnbup .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vxrfhdnbup .gt_left {
+  text-align: left;
+}
+
+#vxrfhdnbup .gt_center {
+  text-align: center;
+}
+
+#vxrfhdnbup .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#vxrfhdnbup .gt_font_normal {
+  font-weight: normal;
+}
+
+#vxrfhdnbup .gt_font_bold {
+  font-weight: bold;
+}
+
+#vxrfhdnbup .gt_font_italic {
+  font-style: italic;
+}
+
+#vxrfhdnbup .gt_super {
+  font-size: 65%;
+}
+
+#vxrfhdnbup .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#vxrfhdnbup .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#vxrfhdnbup .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#vxrfhdnbup .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#vxrfhdnbup .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#vxrfhdnbup .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#vxrfhdnbup .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#vxrfhdnbup .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#vxrfhdnbup div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_col_headings header">
+<th id="LHS" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">SE (antecedente)</th>
+<th id="RHS" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">ENTÃO (consequente)</th>
+<th id="support" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Suporte</th>
+<th id="confidence" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Confiança</th>
+<th id="lift" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Lift</th>
+<th id="count" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Cupons</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_center" headers="LHS">{lenço umedecido,mamadeira}</td>
+<td class="gt_row gt_center" headers="RHS">{fralda}</td>
+<td class="gt_row gt_right" headers="support">1.7%</td>
+<td class="gt_row gt_right" headers="confidence">98.9%</td>
+<td class="gt_row gt_right" headers="lift">15.54</td>
+<td class="gt_row gt_right" headers="count">86</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="LHS">{fralda,lenço umedecido}</td>
+<td class="gt_row gt_center" headers="RHS">{mamadeira}</td>
+<td class="gt_row gt_right" headers="support">1.7%</td>
+<td class="gt_row gt_right" headers="confidence">40.6%</td>
+<td class="gt_row gt_right" headers="lift">12.29</td>
+<td class="gt_row gt_right" headers="count">86</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="LHS">{cerveja,lenço umedecido}</td>
+<td class="gt_row gt_center" headers="RHS">{fralda}</td>
+<td class="gt_row gt_right" headers="support">1.2%</td>
+<td class="gt_row gt_right" headers="confidence">77.3%</td>
+<td class="gt_row gt_right" headers="lift">12.16</td>
+<td class="gt_row gt_right" headers="count">58</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="LHS">{fralda}</td>
+<td class="gt_row gt_center" headers="RHS">{mamadeira}</td>
+<td class="gt_row gt_right" headers="support">2.4%</td>
+<td class="gt_row gt_right" headers="confidence">38.4%</td>
+<td class="gt_row gt_right" headers="lift">11.63</td>
+<td class="gt_row gt_right" headers="count">122</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="LHS">{mamadeira}</td>
+<td class="gt_row gt_center" headers="RHS">{fralda}</td>
+<td class="gt_row gt_right" headers="support">2.4%</td>
+<td class="gt_row gt_right" headers="confidence">73.9%</td>
+<td class="gt_row gt_right" headers="lift">11.63</td>
+<td class="gt_row gt_right" headers="count">122</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="LHS">{fralda,mamadeira}</td>
+<td class="gt_row gt_center" headers="RHS">{lenço umedecido}</td>
+<td class="gt_row gt_right" headers="support">1.7%</td>
+<td class="gt_row gt_right" headers="confidence">70.5%</td>
+<td class="gt_row gt_right" headers="lift">11.12</td>
+<td class="gt_row gt_right" headers="count">86</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="LHS">{arroz,fralda}</td>
+<td class="gt_row gt_center" headers="RHS">{lenço umedecido}</td>
+<td class="gt_row gt_right" headers="support">1.3%</td>
+<td class="gt_row gt_right" headers="confidence">68.4%</td>
+<td class="gt_row gt_right" headers="lift">10.79</td>
+<td class="gt_row gt_right" headers="count">65</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="LHS">{arroz,lenço umedecido}</td>
+<td class="gt_row gt_center" headers="RHS">{fralda}</td>
+<td class="gt_row gt_right" headers="support">1.3%</td>
+<td class="gt_row gt_right" headers="confidence">68.4%</td>
+<td class="gt_row gt_right" headers="lift">10.76</td>
+<td class="gt_row gt_right" headers="count">65</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="LHS">{leite,lenço umedecido}</td>
+<td class="gt_row gt_center" headers="RHS">{fralda}</td>
+<td class="gt_row gt_right" headers="support">1.6%</td>
+<td class="gt_row gt_right" headers="confidence">66.9%</td>
+<td class="gt_row gt_right" headers="lift">10.53</td>
+<td class="gt_row gt_right" headers="count">79</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="LHS">{lenço umedecido}</td>
+<td class="gt_row gt_center" headers="RHS">{fralda}</td>
+<td class="gt_row gt_right" headers="support">4.2%</td>
+<td class="gt_row gt_right" headers="confidence">66.9%</td>
+<td class="gt_row gt_right" headers="lift">10.52</td>
+<td class="gt_row gt_right" headers="count">212</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>O topo do ranking é todo do <strong>kit bebê</strong>, com lifts acima de 10: quem leva fralda tem mais de 10 vezes a chance de levar lenço umedecido do que um cliente qualquer. Verdadeiro? Sim. Surpreendente? Nem um pouco. É uma regra <strong>óbvia</strong>: qualquer repositor de supermercado sabe disso.</p>
+<p>Repare também em regras como {arroz, fralda} → {lenço umedecido}. O arroz não tem nada a ver com a história; ele <strong>pegou carona</strong> numa regra forte e, por puro acaso, ficou com confiança ligeiramente maior (por isso o <code>is.redundant()</code> não a eliminou). Lição prática: <strong>comece sempre pelas regras curtas</strong>, de dois itens.</p>
+</section>
+<section id="a-armadilha-do-leite" class="level3">
+<h3 class="anchored" data-anchor-id="a-armadilha-do-leite">2. A armadilha do leite</h3>
+<p>Agora vamos olhar só as regras de dois itens, ordenadas por <strong>confiança</strong>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pares <span class="ot">&lt;-</span> <span class="fu">subset</span>(regras, <span class="fu">size</span>(regras) <span class="sc">==</span> <span class="dv">2</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tabela_regras</span>(<span class="fu">head</span>(<span class="fu">sort</span>(pares, <span class="at">by =</span> <span class="st">"confidence"</span>), <span class="dv">10</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="nkyghgkhvi" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#nkyghgkhvi table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#nkyghgkhvi thead, #nkyghgkhvi tbody, #nkyghgkhvi tfoot, #nkyghgkhvi tr, #nkyghgkhvi td, #nkyghgkhvi th {
+  border-style: none;
+}
+
+#nkyghgkhvi p {
+  margin: 0;
+  padding: 0;
+}
+
+#nkyghgkhvi .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#nkyghgkhvi .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#nkyghgkhvi .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#nkyghgkhvi .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#nkyghgkhvi .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#nkyghgkhvi .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#nkyghgkhvi .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#nkyghgkhvi .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#nkyghgkhvi .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#nkyghgkhvi .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#nkyghgkhvi .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#nkyghgkhvi .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#nkyghgkhvi .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#nkyghgkhvi .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#nkyghgkhvi .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#nkyghgkhvi .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#nkyghgkhvi .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#nkyghgkhvi .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#nkyghgkhvi .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#nkyghgkhvi .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#nkyghgkhvi .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#nkyghgkhvi .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#nkyghgkhvi .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#nkyghgkhvi .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#nkyghgkhvi .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#nkyghgkhvi .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#nkyghgkhvi .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#nkyghgkhvi .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#nkyghgkhvi .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#nkyghgkhvi .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#nkyghgkhvi .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#nkyghgkhvi .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#nkyghgkhvi .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#nkyghgkhvi .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#nkyghgkhvi .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#nkyghgkhvi .gt_left {
+  text-align: left;
+}
+
+#nkyghgkhvi .gt_center {
+  text-align: center;
+}
+
+#nkyghgkhvi .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#nkyghgkhvi .gt_font_normal {
+  font-weight: normal;
+}
+
+#nkyghgkhvi .gt_font_bold {
+  font-weight: bold;
+}
+
+#nkyghgkhvi .gt_font_italic {
+  font-style: italic;
+}
+
+#nkyghgkhvi .gt_super {
+  font-size: 65%;
+}
+
+#nkyghgkhvi .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#nkyghgkhvi .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#nkyghgkhvi .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#nkyghgkhvi .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#nkyghgkhvi .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#nkyghgkhvi .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#nkyghgkhvi .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#nkyghgkhvi .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#nkyghgkhvi div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_col_headings header">
+<th id="LHS" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">SE (antecedente)</th>
+<th id="RHS" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">ENTÃO (consequente)</th>
+<th id="support" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Suporte</th>
+<th id="confidence" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Confiança</th>
+<th id="lift" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Lift</th>
+<th id="count" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Cupons</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_center" headers="LHS">{manteiga}</td>
+<td class="gt_row gt_center" headers="RHS">{pão}</td>
+<td class="gt_row gt_right" headers="support">13.3%</td>
+<td class="gt_row gt_right" headers="confidence">88.9%</td>
+<td class="gt_row gt_right" headers="lift">3.52</td>
+<td class="gt_row gt_right" headers="count">665</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="LHS">{carvão}</td>
+<td class="gt_row gt_center" headers="RHS">{carne}</td>
+<td class="gt_row gt_right" headers="support">3.9%</td>
+<td class="gt_row gt_right" headers="confidence">75.5%</td>
+<td class="gt_row gt_right" headers="lift">3.92</td>
+<td class="gt_row gt_right" headers="count">197</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="LHS">{mamadeira}</td>
+<td class="gt_row gt_center" headers="RHS">{fralda}</td>
+<td class="gt_row gt_right" headers="support">2.4%</td>
+<td class="gt_row gt_right" headers="confidence">73.9%</td>
+<td class="gt_row gt_right" headers="lift">11.63</td>
+<td class="gt_row gt_right" headers="count">122</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="LHS">{carvão}</td>
+<td class="gt_row gt_center" headers="RHS">{cerveja}</td>
+<td class="gt_row gt_right" headers="support">3.5%</td>
+<td class="gt_row gt_right" headers="confidence">67.8%</td>
+<td class="gt_row gt_right" headers="lift">3.66</td>
+<td class="gt_row gt_right" headers="count">177</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="LHS">{lenço umedecido}</td>
+<td class="gt_row gt_center" headers="RHS">{fralda}</td>
+<td class="gt_row gt_right" headers="support">4.2%</td>
+<td class="gt_row gt_right" headers="confidence">66.9%</td>
+<td class="gt_row gt_right" headers="lift">10.52</td>
+<td class="gt_row gt_right" headers="count">212</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="LHS">{fralda}</td>
+<td class="gt_row gt_center" headers="RHS">{lenço umedecido}</td>
+<td class="gt_row gt_right" headers="support">4.2%</td>
+<td class="gt_row gt_right" headers="confidence">66.7%</td>
+<td class="gt_row gt_right" headers="lift">10.52</td>
+<td class="gt_row gt_right" headers="count">212</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="LHS">{salgadinho}</td>
+<td class="gt_row gt_center" headers="RHS">{refrigerante}</td>
+<td class="gt_row gt_right" headers="support">6.6%</td>
+<td class="gt_row gt_right" headers="confidence">54.6%</td>
+<td class="gt_row gt_right" headers="lift">2.85</td>
+<td class="gt_row gt_right" headers="count">329</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="LHS">{mamadeira}</td>
+<td class="gt_row gt_center" headers="RHS">{lenço umedecido}</td>
+<td class="gt_row gt_right" headers="support">1.7%</td>
+<td class="gt_row gt_right" headers="confidence">52.7%</td>
+<td class="gt_row gt_right" headers="lift">8.32</td>
+<td class="gt_row gt_right" headers="count">87</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="LHS">{pão}</td>
+<td class="gt_row gt_center" headers="RHS">{manteiga}</td>
+<td class="gt_row gt_right" headers="support">13.3%</td>
+<td class="gt_row gt_right" headers="confidence">52.6%</td>
+<td class="gt_row gt_right" headers="lift">3.52</td>
+<td class="gt_row gt_right" headers="count">665</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="LHS">{manteiga}</td>
+<td class="gt_row gt_center" headers="RHS">{leite}</td>
+<td class="gt_row gt_right" headers="support">6.4%</td>
+<td class="gt_row gt_right" headers="confidence">42.6%</td>
+<td class="gt_row gt_right" headers="lift">1.08</td>
+<td class="gt_row gt_right" headers="count">319</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Lá no décimo lugar aparece {manteiga} → {leite}, com confiança de <strong>42,6%</strong>: quase metade de quem leva manteiga leva leite. Impressionante? Não! <strong>Quase 40% de todo mundo</strong> leva leite. O lift de 1,08 denuncia: levar manteiga praticamente não muda a chance de levar leite.</p>
+<p>E o leite não está sozinho nessa. Quantas das 130 regras terminam em leite?</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>regras_leite <span class="ot">&lt;-</span> <span class="fu">subset</span>(regras, rhs <span class="sc">%in%</span> <span class="st">"leite"</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(regras_leite)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 49</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">quality</span>(regras_leite)<span class="sc">$</span>lift)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 0.9240  0.9605  1.0043  1.0331  1.1003  1.2807 </code></pre>
+</div>
+</div>
+<p>São <strong>49 regras</strong> (mais de um terço do total!), todas com lift entre 0,92 e 1,28. Elas passaram no filtro só porque o leite é tão popular que qualquer regra “→ leite” já nasce com confiança perto de 40%, acima do nosso limiar de 30%. É ruído com cara de descoberta.</p>
+<p>E o par da capa, leite + pão? No sentido {pão} → {leite} ele está entre essas 49 regras. Já no sentido {leite} → {pão}, a confiança fica em 25%, abaixo do nosso limiar de 30%, o mesmo que acontece com a regra da lenda. Para enxergar as duas, rodo o Apriori de novo com limiares mais baixos:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>r_baixo <span class="ot">&lt;-</span> <span class="fu">apriori</span>(trans, <span class="at">parameter =</span> <span class="fu">list</span>(<span class="at">supp =</span> <span class="fl">0.003</span>, <span class="at">conf =</span> <span class="fl">0.05</span>, <span class="at">minlen =</span> <span class="dv">2</span>),</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">control =</span> <span class="fu">list</span>(<span class="at">verbose =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tabela_regras</span>(<span class="fu">subset</span>(r_baixo, (lhs <span class="sc">%oin%</span> <span class="st">"pão"</span>    <span class="sc">&amp;</span> rhs <span class="sc">%in%</span> <span class="st">"manteiga"</span>) <span class="sc">|</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>                              (lhs <span class="sc">%oin%</span> <span class="st">"leite"</span>  <span class="sc">&amp;</span> rhs <span class="sc">%in%</span> <span class="st">"pão"</span>) <span class="sc">|</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>                              (lhs <span class="sc">%oin%</span> <span class="st">"fralda"</span> <span class="sc">&amp;</span> rhs <span class="sc">%in%</span> <span class="st">"cerveja"</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="zamuyiyrxm" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#zamuyiyrxm table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#zamuyiyrxm thead, #zamuyiyrxm tbody, #zamuyiyrxm tfoot, #zamuyiyrxm tr, #zamuyiyrxm td, #zamuyiyrxm th {
+  border-style: none;
+}
+
+#zamuyiyrxm p {
+  margin: 0;
+  padding: 0;
+}
+
+#zamuyiyrxm .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#zamuyiyrxm .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#zamuyiyrxm .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#zamuyiyrxm .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#zamuyiyrxm .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#zamuyiyrxm .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#zamuyiyrxm .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#zamuyiyrxm .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#zamuyiyrxm .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#zamuyiyrxm .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#zamuyiyrxm .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#zamuyiyrxm .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#zamuyiyrxm .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#zamuyiyrxm .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#zamuyiyrxm .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#zamuyiyrxm .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#zamuyiyrxm .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#zamuyiyrxm .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#zamuyiyrxm .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#zamuyiyrxm .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#zamuyiyrxm .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#zamuyiyrxm .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#zamuyiyrxm .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#zamuyiyrxm .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#zamuyiyrxm .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#zamuyiyrxm .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#zamuyiyrxm .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#zamuyiyrxm .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#zamuyiyrxm .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#zamuyiyrxm .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#zamuyiyrxm .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#zamuyiyrxm .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#zamuyiyrxm .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#zamuyiyrxm .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#zamuyiyrxm .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#zamuyiyrxm .gt_left {
+  text-align: left;
+}
+
+#zamuyiyrxm .gt_center {
+  text-align: center;
+}
+
+#zamuyiyrxm .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#zamuyiyrxm .gt_font_normal {
+  font-weight: normal;
+}
+
+#zamuyiyrxm .gt_font_bold {
+  font-weight: bold;
+}
+
+#zamuyiyrxm .gt_font_italic {
+  font-style: italic;
+}
+
+#zamuyiyrxm .gt_super {
+  font-size: 65%;
+}
+
+#zamuyiyrxm .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#zamuyiyrxm .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#zamuyiyrxm .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#zamuyiyrxm .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#zamuyiyrxm .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#zamuyiyrxm .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#zamuyiyrxm .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#zamuyiyrxm .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#zamuyiyrxm div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_col_headings header">
+<th id="LHS" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">SE (antecedente)</th>
+<th id="RHS" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">ENTÃO (consequente)</th>
+<th id="support" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Suporte</th>
+<th id="confidence" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Confiança</th>
+<th id="lift" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Lift</th>
+<th id="count" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Cupons</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_center" headers="LHS">{fralda}</td>
+<td class="gt_row gt_center" headers="RHS">{cerveja}</td>
+<td class="gt_row gt_right" headers="support">1.8%</td>
+<td class="gt_row gt_right" headers="confidence">28.9%</td>
+<td class="gt_row gt_right" headers="lift">1.56</td>
+<td class="gt_row gt_right" headers="count">92</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="LHS">{pão}</td>
+<td class="gt_row gt_center" headers="RHS">{manteiga}</td>
+<td class="gt_row gt_right" headers="support">13.3%</td>
+<td class="gt_row gt_right" headers="confidence">52.6%</td>
+<td class="gt_row gt_right" headers="lift">3.52</td>
+<td class="gt_row gt_right" headers="count">665</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="LHS">{leite}</td>
+<td class="gt_row gt_center" headers="RHS">{pão}</td>
+<td class="gt_row gt_right" headers="support">10.0%</td>
+<td class="gt_row gt_right" headers="confidence">25.3%</td>
+<td class="gt_row gt_right" headers="lift">1.00</td>
+<td class="gt_row gt_right" headers="count">500</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Aqui estão os números da capa do post:</p>
+<ul>
+<li><strong>{pão} → {manteiga}</strong>: suporte de 13,3%, confiança de 52,6% e lift de <strong>3,52</strong>. A regra que plantamos, reencontrada pelo algoritmo. (A capa arredonda para 55% e 3,6.)</li>
+<li><strong>{leite} → {pão}</strong>: suporte de <strong>10%</strong>, o par mais frequente da capa… e lift de <strong>0,999</strong>. Independência perfeita: os dois aparecem juntos o tempo todo simplesmente porque ambos são populares.</li>
+<li><strong>{fralda} → {cerveja}</strong>: confiança de 28,9% e lift de <strong>1,56</strong>, em 92 cupons. A associação existe, mas é modesta.</li>
+</ul>
+</section>
+<section id="as-regras-que-valem-dinheiro" class="level3">
+<h3 class="anchored" data-anchor-id="as-regras-que-valem-dinheiro">3. As regras que valem dinheiro</h3>
+<p>Agora a tabela que eu levaria para a reunião com o gerente: as regras de dois itens com lift acima de 1,2.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tabela_regras</span>(<span class="fu">sort</span>(<span class="fu">subset</span>(pares, lift <span class="sc">&gt;</span> <span class="fl">1.2</span>), <span class="at">by =</span> <span class="st">"lift"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="jxqnmztjlk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#jxqnmztjlk table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#jxqnmztjlk thead, #jxqnmztjlk tbody, #jxqnmztjlk tfoot, #jxqnmztjlk tr, #jxqnmztjlk td, #jxqnmztjlk th {
+  border-style: none;
+}
+
+#jxqnmztjlk p {
+  margin: 0;
+  padding: 0;
+}
+
+#jxqnmztjlk .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#jxqnmztjlk .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#jxqnmztjlk .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#jxqnmztjlk .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#jxqnmztjlk .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#jxqnmztjlk .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#jxqnmztjlk .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#jxqnmztjlk .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#jxqnmztjlk .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#jxqnmztjlk .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#jxqnmztjlk .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#jxqnmztjlk .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#jxqnmztjlk .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#jxqnmztjlk .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#jxqnmztjlk .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#jxqnmztjlk .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#jxqnmztjlk .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#jxqnmztjlk .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#jxqnmztjlk .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jxqnmztjlk .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#jxqnmztjlk .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#jxqnmztjlk .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#jxqnmztjlk .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jxqnmztjlk .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#jxqnmztjlk .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#jxqnmztjlk .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#jxqnmztjlk .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jxqnmztjlk .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#jxqnmztjlk .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#jxqnmztjlk .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#jxqnmztjlk .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#jxqnmztjlk .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#jxqnmztjlk .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jxqnmztjlk .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#jxqnmztjlk .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jxqnmztjlk .gt_left {
+  text-align: left;
+}
+
+#jxqnmztjlk .gt_center {
+  text-align: center;
+}
+
+#jxqnmztjlk .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#jxqnmztjlk .gt_font_normal {
+  font-weight: normal;
+}
+
+#jxqnmztjlk .gt_font_bold {
+  font-weight: bold;
+}
+
+#jxqnmztjlk .gt_font_italic {
+  font-style: italic;
+}
+
+#jxqnmztjlk .gt_super {
+  font-size: 65%;
+}
+
+#jxqnmztjlk .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#jxqnmztjlk .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#jxqnmztjlk .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#jxqnmztjlk .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#jxqnmztjlk .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#jxqnmztjlk .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#jxqnmztjlk .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#jxqnmztjlk .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#jxqnmztjlk div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_col_headings header">
+<th id="LHS" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">SE (antecedente)</th>
+<th id="RHS" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">ENTÃO (consequente)</th>
+<th id="support" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Suporte</th>
+<th id="confidence" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Confiança</th>
+<th id="lift" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Lift</th>
+<th id="count" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Cupons</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_center" headers="LHS">{fralda}</td>
+<td class="gt_row gt_center" headers="RHS">{mamadeira}</td>
+<td class="gt_row gt_right" headers="support">2.4%</td>
+<td class="gt_row gt_right" headers="confidence">38.4%</td>
+<td class="gt_row gt_right" headers="lift">11.63</td>
+<td class="gt_row gt_right" headers="count">122</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="LHS">{mamadeira}</td>
+<td class="gt_row gt_center" headers="RHS">{fralda}</td>
+<td class="gt_row gt_right" headers="support">2.4%</td>
+<td class="gt_row gt_right" headers="confidence">73.9%</td>
+<td class="gt_row gt_right" headers="lift">11.63</td>
+<td class="gt_row gt_right" headers="count">122</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="LHS">{lenço umedecido}</td>
+<td class="gt_row gt_center" headers="RHS">{fralda}</td>
+<td class="gt_row gt_right" headers="support">4.2%</td>
+<td class="gt_row gt_right" headers="confidence">66.9%</td>
+<td class="gt_row gt_right" headers="lift">10.52</td>
+<td class="gt_row gt_right" headers="count">212</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="LHS">{fralda}</td>
+<td class="gt_row gt_center" headers="RHS">{lenço umedecido}</td>
+<td class="gt_row gt_right" headers="support">4.2%</td>
+<td class="gt_row gt_right" headers="confidence">66.7%</td>
+<td class="gt_row gt_right" headers="lift">10.52</td>
+<td class="gt_row gt_right" headers="count">212</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="LHS">{mamadeira}</td>
+<td class="gt_row gt_center" headers="RHS">{lenço umedecido}</td>
+<td class="gt_row gt_right" headers="support">1.7%</td>
+<td class="gt_row gt_right" headers="confidence">52.7%</td>
+<td class="gt_row gt_right" headers="lift">8.32</td>
+<td class="gt_row gt_right" headers="count">87</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="LHS">{carvão}</td>
+<td class="gt_row gt_center" headers="RHS">{carne}</td>
+<td class="gt_row gt_right" headers="support">3.9%</td>
+<td class="gt_row gt_right" headers="confidence">75.5%</td>
+<td class="gt_row gt_right" headers="lift">3.92</td>
+<td class="gt_row gt_right" headers="count">197</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="LHS">{carvão}</td>
+<td class="gt_row gt_center" headers="RHS">{cerveja}</td>
+<td class="gt_row gt_right" headers="support">3.5%</td>
+<td class="gt_row gt_right" headers="confidence">67.8%</td>
+<td class="gt_row gt_right" headers="lift">3.66</td>
+<td class="gt_row gt_right" headers="count">177</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="LHS">{manteiga}</td>
+<td class="gt_row gt_center" headers="RHS">{pão}</td>
+<td class="gt_row gt_right" headers="support">13.3%</td>
+<td class="gt_row gt_right" headers="confidence">88.9%</td>
+<td class="gt_row gt_right" headers="lift">3.52</td>
+<td class="gt_row gt_right" headers="count">665</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="LHS">{pão}</td>
+<td class="gt_row gt_center" headers="RHS">{manteiga}</td>
+<td class="gt_row gt_right" headers="support">13.3%</td>
+<td class="gt_row gt_right" headers="confidence">52.6%</td>
+<td class="gt_row gt_right" headers="lift">3.52</td>
+<td class="gt_row gt_right" headers="count">665</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="LHS">{salgadinho}</td>
+<td class="gt_row gt_center" headers="RHS">{refrigerante}</td>
+<td class="gt_row gt_right" headers="support">6.6%</td>
+<td class="gt_row gt_right" headers="confidence">54.6%</td>
+<td class="gt_row gt_right" headers="lift">2.85</td>
+<td class="gt_row gt_right" headers="count">329</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="LHS">{refrigerante}</td>
+<td class="gt_row gt_center" headers="RHS">{salgadinho}</td>
+<td class="gt_row gt_right" headers="support">6.6%</td>
+<td class="gt_row gt_right" headers="confidence">34.3%</td>
+<td class="gt_row gt_right" headers="lift">2.85</td>
+<td class="gt_row gt_right" headers="count">329</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="LHS">{cerveja}</td>
+<td class="gt_row gt_center" headers="RHS">{carne}</td>
+<td class="gt_row gt_right" headers="support">5.6%</td>
+<td class="gt_row gt_right" headers="confidence">30.1%</td>
+<td class="gt_row gt_right" headers="lift">1.56</td>
+<td class="gt_row gt_right" headers="count">279</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="LHS">{mamadeira}</td>
+<td class="gt_row gt_center" headers="RHS">{arroz}</td>
+<td class="gt_row gt_right" headers="support">1.1%</td>
+<td class="gt_row gt_right" headers="confidence">32.1%</td>
+<td class="gt_row gt_right" headers="lift">1.25</td>
+<td class="gt_row gt_right" headers="count">53</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Classificando cada uma com olhar de negócio:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Tipo</th>
+<th>Exemplos</th>
+<th>O que fazer</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>✅ <strong>Acionável</strong></td>
+<td>salgadinho → refrigerante (lift 2,85), pão → manteiga (3,52), carvão → carne (3,92)</td>
+<td>Combos, posicionamento, promoções</td>
+</tr>
+<tr class="even">
+<td>😴 <strong>Óbvia</strong></td>
+<td>fralda → lenço umedecido (10,5), fralda → mamadeira (11,6)</td>
+<td>Verdadeira, mas pouco surpreendente: melhor uso é recomendação automática</td>
+</tr>
+<tr class="odd">
+<td>🎲 <strong>Acaso</strong></td>
+<td>mamadeira → arroz (lift 1,25, só 53 cupons)</td>
+<td><strong>Não</strong> plantamos isso! Suporte baixo + lift pouco acima de 1 = desconfie</td>
+</tr>
+</tbody>
+</table>
+<p>A regra mamadeira → arroz é um ótimo lembrete: o Apriori vasculha <strong>tudo</strong>, e em 5.000 cupons sempre aparece alguma coincidência que passa nos filtros.</p>
+<p>Para ver as 130 regras de uma vez, um gráfico de suporte × confiança, colorido pelo lift:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">DATAFRAME</span>(regras), <span class="fu">aes</span>(support, confidence, <span class="at">colour =</span> lift)) <span class="sc">+</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_gradient</span>(<span class="at">low =</span> <span class="st">"grey80"</span>, <span class="at">high =</span> <span class="st">"#c0392b"</span>, <span class="at">trans =</span> <span class="st">"log10"</span>,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">10</span>)) <span class="sc">+</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Suporte"</span>, <span class="at">y =</span> <span class="st">"Confiança"</span>, <span class="at">colour =</span> <span class="st">"Lift"</span>,</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Nem toda regra confiante é interessante"</span>) <span class="sc">+</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>A escala de cor está em logaritmo para que lift 1 (independência) fique cinza e só as atrações de verdade fiquem vermelhas. Repare na “prateleira” de pontos cinzentos em torno de 40% de confiança, espalhada por vários níveis de suporte: são, em grande parte, as 49 regras do leite, com confiança “respeitável” e lift ≈ 1. Os pontos mais vermelhos, poucos e com suporte pequeno, são o kit bebê. E os dois pontos isolados lá na direita, com suporte de 13%, são o nosso par pão e manteiga, nos dois sentidos: {manteiga} → {pão} em cima (88,9%) e {pão} → {manteiga} embaixo (52,6%).</p>
+</section>
+</section>
+<section id="o-mapa-do-carrinho-grafo-de-regras-com-arulesviz" class="level2">
+<h2 class="anchored" data-anchor-id="o-mapa-do-carrinho-grafo-de-regras-com-arulesviz">🕸️ O mapa do carrinho: grafo de regras com arulesViz</h2>
+<p>Tabelas mostram as regras uma a uma. Um <strong>grafo</strong> mostra como os produtos se <strong>conectam</strong>, e os padrões saltam aos olhos. O pacote <code>{arulesViz}</code>, de Michael Hahsler, faz isso com uma linha. Antes de olhar, veja como ler:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Elemento</th>
+<th>O que representa</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Nome de produto</td>
+<td>Um <strong>produto</strong></td>
+</tr>
+<tr class="even">
+<td>Círculo</td>
+<td>Uma <strong>regra</strong></td>
+</tr>
+<tr class="odd">
+<td>Seta produto → círculo</td>
+<td>O produto está no <strong>SE</strong> (antecedente)</td>
+</tr>
+<tr class="even">
+<td>Seta círculo → produto</td>
+<td>O produto está no <strong>ENTÃO</strong> (consequente)</td>
+</tr>
+<tr class="odd">
+<td>Tamanho do círculo</td>
+<td><strong>Suporte</strong> (em quantos cupons a regra aparece)</td>
+</tr>
+<tr class="even">
+<td>Cor do círculo</td>
+<td><strong>Lift</strong> (quanto mais vermelho, mais forte a atração)</td>
+</tr>
+</tbody>
+</table>
+<p>Um grafo com 130 regras vira um prato de espaguete. Por isso, vou selecionar só as regras de dois itens com lift acima de 1,2, mais as regras de três itens do churrasco:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>grafo <span class="ot">&lt;-</span> <span class="fu">subset</span>(regras, lift <span class="sc">&gt;</span> <span class="fl">1.2</span> <span class="sc">&amp;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                  (<span class="fu">size</span>(regras) <span class="sc">==</span> <span class="dv">2</span> <span class="sc">|</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                   lhs <span class="sc">%ain%</span> <span class="fu">c</span>(<span class="st">"carne"</span>, <span class="st">"cerveja"</span>) <span class="sc">|</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                   lhs <span class="sc">%ain%</span> <span class="fu">c</span>(<span class="st">"carvão"</span>, <span class="st">"carne"</span>)))</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>grafo <span class="ot">&lt;-</span> <span class="fu">sort</span>(grafo[<span class="sc">!</span><span class="fu">is.redundant</span>(grafo, <span class="at">measure =</span> <span class="st">"lift"</span>)], <span class="at">by =</span> <span class="st">"lift"</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2026</span>)  <span class="co"># o layout do grafo também tem uma parte aleatória</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(grafo, <span class="at">method =</span> <span class="st">"graph"</span>, <span class="at">engine =</span> <span class="st">"ggplot2"</span>,</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">control =</span> <span class="fu">list</span>(</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">layout =</span> <span class="st">"stress"</span>,</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">edges  =</span> ggraph<span class="sc">::</span><span class="fu">geom_edge_link</span>(</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">colour =</span> <span class="st">"grey55"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>,</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>         <span class="at">start_cap =</span> ggraph<span class="sc">::</span><span class="fu">circle</span>(<span class="dv">4</span>, <span class="st">"mm"</span>), <span class="at">end_cap =</span> ggraph<span class="sc">::</span><span class="fu">circle</span>(<span class="dv">4</span>, <span class="st">"mm"</span>),</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>         <span class="at">arrow =</span> grid<span class="sc">::</span><span class="fu">arrow</span>(<span class="at">length =</span> grid<span class="sc">::</span><span class="fu">unit</span>(<span class="fl">2.5</span>, <span class="st">"mm"</span>), <span class="at">type =</span> <span class="st">"closed"</span>)),</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">colors =</span> <span class="fu">c</span>(<span class="st">"#c0392b"</span>, <span class="st">"#f6e3a1"</span>))) <span class="sc">+</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"As 4 'ilhas' do carrinho no Supermercado Bom Preço"</span>,</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">size =</span> <span class="st">"Suporte"</span>, <span class="at">colour =</span> <span class="st">"Lift"</span>) <span class="sc">+</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">"bold"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>O argumento <code>engine = "ggplot2"</code> desenha o grafo com o <code>{ggraph}</code>, o que permite personalizar setas, cores e título como em qualquer <code>ggplot</code>. O <code>layout = "stress"</code> posiciona os nós de forma a evitar sobreposições.</p>
+<p>Olhe com calma e você vai ver <strong>quatro “ilhas”</strong>, quatro <strong>missões de compra</strong> diferentes:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Ilha</th>
+<th>Produtos</th>
+<th>Leitura de negócio</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>☕ Café da manhã</td>
+<td>pão ⇄ manteiga</td>
+<td>Os maiores círculos do mapa (maior suporte), lift moderado</td>
+</tr>
+<tr class="even">
+<td>🔥 Churrasco</td>
+<td>carvão, carne, cerveja</td>
+<td>A rede mais densa, com regras de três itens: candidata a “kit” na ponta de gôndola</td>
+</tr>
+<tr class="odd">
+<td>👶 Bebê</td>
+<td>fralda, lenço umedecido, mamadeira</td>
+<td>Os círculos mais vermelhos (lift altíssimo), mas óbvios</td>
+</tr>
+<tr class="even">
+<td>🍿 Petisco</td>
+<td>salgadinho ⇄ refrigerante</td>
+<td>O combo clássico</td>
+</tr>
+</tbody>
+</table>
+<p>E três achados que a tabela não mostrava com tanta clareza:</p>
+<ol type="1">
+<li><strong>O leite não aparece no mapa.</strong> O produto mais vendido da loja não está conectado a nada. Ele está em quase 40% dos cupons, mas não “puxa” nem é “puxado” por nenhum outro produto.</li>
+<li><strong>A cerveja está na ilha do churrasco, não na do bebê.</strong> A regra da lenda, fralda → cerveja, nem passou no filtro de lift. Veredito: a associação existe nos nossos dados, mas é modesta. Uma boa história não substitui uma boa métrica.</li>
+<li><strong>Os galhos soltos.</strong> A seta mamadeira → arroz, pendurada na ilha do bebê, é a coincidência que já tínhamos identificado. E há uma “ponte” fina entre o churrasco e o pão ({carne, carvão} → {pão}, lift 1,33), que também <strong>não</strong> foi plantada. Círculos pequenos e claros são sempre os primeiros suspeitos.</li>
+</ol>
+<blockquote class="blockquote">
+<p><strong>O produto mais vendido da loja não tem nenhuma regra interessante. Popular não é o mesmo que conectado.</strong></p>
+</blockquote>
+<p>Repare que as ilhas lembram os clusters do <a href="../../posts/kmeans_segmentacao_de_mercado/index.html">post sobre K-Means</a>, mas com uma diferença importante: lá agrupamos <strong>clientes</strong> pelo perfil; aqui, os grupos são de <strong>produtos</strong>, formados pelas compras.</p>
+<section id="a-versão-interativa" class="level3">
+<h3 class="anchored" data-anchor-id="a-versão-interativa">A versão interativa</h3>
+<p>Como este blog é uma página HTML, dá para fazer melhor ainda: trocando para <code>engine = "htmlwidget"</code>, o mesmo grafo vira um mapa interativo. <strong>Arraste os nós, use o zoom e passe o mouse sobre os círculos</strong> para ver o suporte, a confiança e o lift de cada regra:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(grafo, <span class="at">method =</span> <span class="st">"graph"</span>, <span class="at">engine =</span> <span class="st">"htmlwidget"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="visNetwork html-widget html-fill-item" id="htmlwidget-34752dcafca93bc90862" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-34752dcafca93bc90862">{"x":{"nodes":{"id":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27],"label":["arroz","carne","carvão","cerveja","fralda","lenço umedecido","mamadeira","manteiga","pão","refrigerante","salgadinho","rule 1","rule 2","rule 3","rule 4","rule 5","rule 6","rule 7","rule 8","rule 9","rule 10","rule 11","rule 12","rule 13","rule 14","rule 15","rule 16"],"group":[1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],"value":[1,1,1,1,1,1,1,1,1,1,1,12.16176470588235,12.16176470588235,26.72058823529412,26.72058823529412,15.39705882352941,6.499999999999998,24.29411764705882,15.39705882352941,21.05882352941176,100,100,45.64705882352941,45.64705882352941,37.55882352941177,3.102941176470588,1],"color":["#CBD2FC","#CBD2FC","#CBD2FC","#CBD2FC","#CBD2FC","#CBD2FC","#CBD2FC","#CBD2FC","#CBD2FC","#CBD2FC","#CBD2FC","#EE1B1B","#EE1B1B","#EE3737","#EE3737","#EE4A4A","#EE6C6C","#EEB8B8","#EEB8B8","#EEBCBC","#EEBDBD","#EEBDBD","#EEC6C6","#EEC6C6","#EED7D7","#EEDBDB","#EEDCDC"],"title":["arroz","carne","carvão","cerveja","fralda","lenço umedecido","mamadeira","manteiga","pão","refrigerante","salgadinho","<B>[1]<\/B><BR><B>{fralda}<\/B><BR>&nbsp;&nbsp; => <B>{mamadeira}<\/B><BR><BR>support = 0.0244<BR>confidence = 0.384<BR>coverage = 0.0636<BR>lift = 11.6<BR>count = 122<BR>order = 2<BR>id = 1","<B>[2]<\/B><BR><B>{mamadeira}<\/B><BR>&nbsp;&nbsp; => <B>{fralda}<\/B><BR><BR>support = 0.0244<BR>confidence = 0.739<BR>coverage = 0.033<BR>lift = 11.6<BR>count = 122<BR>order = 2<BR>id = 2","<B>[3]<\/B><BR><B>{lenço umedecido}<\/B><BR>&nbsp;&nbsp; => <B>{fralda}<\/B><BR><BR>support = 0.0424<BR>confidence = 0.669<BR>coverage = 0.0634<BR>lift = 10.5<BR>count = 212<BR>order = 2<BR>id = 3","<B>[4]<\/B><BR><B>{fralda}<\/B><BR>&nbsp;&nbsp; => <B>{lenço umedecido}<\/B><BR><BR>support = 0.0424<BR>confidence = 0.667<BR>coverage = 0.0636<BR>lift = 10.5<BR>count = 212<BR>order = 2<BR>id = 4","<B>[5]<\/B><BR><B>{carne,<BR>&nbsp;&nbsp;cerveja}<\/B><BR>&nbsp;&nbsp; => <B>{carvão}<\/B><BR><BR>support = 0.0284<BR>confidence = 0.509<BR>coverage = 0.0558<BR>lift = 9.75<BR>count = 142<BR>order = 3<BR>id = 5","<B>[6]<\/B><BR><B>{mamadeira}<\/B><BR>&nbsp;&nbsp; => <B>{lenço umedecido}<\/B><BR><BR>support = 0.0174<BR>confidence = 0.527<BR>coverage = 0.033<BR>lift = 8.32<BR>count = 87<BR>order = 2<BR>id = 6","<B>[7]<\/B><BR><B>{carvão}<\/B><BR>&nbsp;&nbsp; => <B>{carne}<\/B><BR><BR>support = 0.0394<BR>confidence = 0.755<BR>coverage = 0.0522<BR>lift = 3.92<BR>count = 197<BR>order = 2<BR>id = 7","<B>[8]<\/B><BR><B>{carne,<BR>&nbsp;&nbsp;carvão}<\/B><BR>&nbsp;&nbsp; => <B>{cerveja}<\/B><BR><BR>support = 0.0284<BR>confidence = 0.721<BR>coverage = 0.0394<BR>lift = 3.89<BR>count = 142<BR>order = 3<BR>id = 8","<B>[9]<\/B><BR><B>{carvão}<\/B><BR>&nbsp;&nbsp; => <B>{cerveja}<\/B><BR><BR>support = 0.0354<BR>confidence = 0.678<BR>coverage = 0.0522<BR>lift = 3.66<BR>count = 177<BR>order = 2<BR>id = 9","<B>[10]<\/B><BR><B>{manteiga}<\/B><BR>&nbsp;&nbsp; => <B>{pão}<\/B><BR><BR>support = 0.133<BR>confidence = 0.889<BR>coverage = 0.15<BR>lift = 3.52<BR>count = 665<BR>order = 2<BR>id = 10","<B>[11]<\/B><BR><B>{pão}<\/B><BR>&nbsp;&nbsp; => <B>{manteiga}<\/B><BR><BR>support = 0.133<BR>confidence = 0.526<BR>coverage = 0.253<BR>lift = 3.52<BR>count = 665<BR>order = 2<BR>id = 11","<B>[12]<\/B><BR><B>{salgadinho}<\/B><BR>&nbsp;&nbsp; => <B>{refrigerante}<\/B><BR><BR>support = 0.0658<BR>confidence = 0.546<BR>coverage = 0.121<BR>lift = 2.85<BR>count = 329<BR>order = 2<BR>id = 12","<B>[13]<\/B><BR><B>{refrigerante}<\/B><BR>&nbsp;&nbsp; => <B>{salgadinho}<\/B><BR><BR>support = 0.0658<BR>confidence = 0.343<BR>coverage = 0.192<BR>lift = 2.85<BR>count = 329<BR>order = 2<BR>id = 13","<B>[14]<\/B><BR><B>{cerveja}<\/B><BR>&nbsp;&nbsp; => <B>{carne}<\/B><BR><BR>support = 0.0558<BR>confidence = 0.301<BR>coverage = 0.185<BR>lift = 1.56<BR>count = 279<BR>order = 2<BR>id = 14","<B>[15]<\/B><BR><B>{carne,<BR>&nbsp;&nbsp;carvão}<\/B><BR>&nbsp;&nbsp; => <B>{pão}<\/B><BR><BR>support = 0.0132<BR>confidence = 0.335<BR>coverage = 0.0394<BR>lift = 1.33<BR>count = 66<BR>order = 3<BR>id = 15","<B>[16]<\/B><BR><B>{mamadeira}<\/B><BR>&nbsp;&nbsp; => <B>{arroz}<\/B><BR><BR>support = 0.0106<BR>confidence = 0.321<BR>coverage = 0.033<BR>lift = 1.25<BR>count = 53<BR>order = 2<BR>id = 16"],"shape":["box","box","box","box","box","box","box","box","box","box","box","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle"],"x":[1,0.3888431355718545,0.5299448392036412,0.8445400594970671,0.1061600162842438,-0.3020780826204429,0.3892460180257891,-0.6097102816074715,-0.2255692148302501,-0.8437132625155295,-0.8547443306389052,0.4535390822727845,0.2720498766495469,-0.2392504325085545,-0.1340499062358497,0.7207612454520278,-0.007270409537644906,0.3136660063441119,0.5981742979613782,0.9155731761106511,-0.5240972649814258,-0.3562826282186068,-0.6869243087393453,-1,0.5605400127749984,0.1244733004948935,0.7331639330993545],"y":[0.3938064118355853,-0.6775809358610847,-0.4250436494880122,-0.7593315934330548,0.9658903137932779,0.6587416110737467,0.5284145885828773,-0.9214403734603863,-0.7160507760794752,-0.1759995052401292,0.2641002552204261,0.8786425954061501,0.7530473413675993,1,0.8101476338205149,-0.5404829476496584,0.4445793226602206,-0.3085767604490726,-0.7467758897341938,-0.3948148063745301,-0.6659074137530165,-0.9959108637724357,0.05309506002527509,0.03409953189691417,-1,-0.5925877948357929,0.4489864827427881]},"edges":{"from":[5,7,6,5,2,4,7,3,2,3,3,8,9,11,10,4,2,3,7,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27],"to":[12,13,14,15,16,16,17,18,19,19,20,21,22,23,24,25,26,26,27,7,5,5,6,3,6,2,4,4,9,8,10,11,2,9,1],"arrows":["to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":false},"physics":{"stabilization":false},"interaction":{"hover":true,"zoomSpeed":1}},"groups":["1","2"],"width":null,"height":null,"idselection":{"enabled":true,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","igraphlayout":{"type":"square"},"tooltipStay":300,"tooltipStyle":"position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;font-family: verdana;font-size:14px;font-color:#000000;background-color: #f5f4ed;-moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);","highlight":{"enabled":true,"hoverNearest":true,"degree":1,"algorithm":"all","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":false,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+</section>
+<section id="como-usar-esses-insights" class="level2">
+<h2 class="anchored" data-anchor-id="como-usar-esses-insights">💰 Como usar esses insights</h2>
+<p>Voltando ao painel verde da capa, as regras viram três tipos de ação:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Uso</th>
+<th>Ilha / regra</th>
+<th>Cuidado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Promoções combinadas</td>
+<td>🍿 salgadinho + refrigerante; 🔥 kit churrasco</td>
+<td>Não dar desconto para quem já compraria os dois de qualquer jeito</td>
+</tr>
+<tr class="even">
+<td>Posicionamento de produtos</td>
+<td>☕ manteiga <strong>perto</strong> do pão (conveniência) ou <strong>longe</strong> (o cliente atravessa a loja e vê outros produtos no caminho)</td>
+<td>As duas estratégias existem: depende do objetivo da loja</td>
+</tr>
+<tr class="odd">
+<td>Ofertas personalizadas</td>
+<td>👶 “quem levou fralda também levou…” no aplicativo ou no e-commerce</td>
+<td>Regras óbvias cansam o cliente: prefira lift alto <strong>e</strong> alguma surpresa</td>
+</tr>
+</tbody>
+</table>
+<p>Uma conta de guardanapo: dos 1.264 cupons com pão, <strong>599 saíram sem manteiga</strong>. Se uma ação de gôndola convencer uma parte desses clientes, quanto isso vale? Depende de quantos converterem e da margem da manteiga, dois números incertos. Para lidar com essa incerteza, o caminho é o que mostrei no <a href="../../posts/simulacao_monte_carlo_roi_campanhas/index.html">post sobre Simulação de Monte Carlo para o ROI de campanhas</a>.</p>
+</section>
+<section id="cuidados-antes-de-levar-o-apriori-para-a-sua-loja" class="level2">
+<h2 class="anchored" data-anchor-id="cuidados-antes-de-levar-o-apriori-para-a-sua-loja">⚠️ Cuidados antes de levar o Apriori para a sua loja</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Cuidado</th>
+<th>Por quê</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Associação não é causalidade</td>
+<td>A regra mostra que os itens aparecem juntos, não que um <strong>causa</strong> a compra do outro. Para saber se mudar a gôndola aumenta as vendas, faça um <a href="../../posts/teste_ab_significancia_e_tamanho_do_efeito/index.html">Teste A/B</a></td>
+</tr>
+<tr class="even">
+<td>Itens populares enganam</td>
+<td>Confiança respeitável com lift ≈ 1 (as 49 regras do leite)</td>
+</tr>
+<tr class="odd">
+<td>Regras raras ou de acaso</td>
+<td>Suporte baixo e lift pouco acima de 1 (mamadeira → arroz)</td>
+</tr>
+<tr class="even">
+<td>Regras “carona”</td>
+<td>Itens que entram de carona em regras fortes ({arroz, fralda} → lenço)</td>
+</tr>
+<tr class="odd">
+<td>Escolha dos limiares</td>
+<td>Muda completamente o resultado; teste alguns valores e reporte</td>
+</tr>
+<tr class="even">
+<td>Grafos poluídos</td>
+<td>Filtre antes de desenhar; um grafo com centenas de regras não comunica nada</td>
+</tr>
+<tr class="odd">
+<td>Quantidade e preço somem</td>
+<td>A transação é binária: comprou ou não comprou</td>
+</tr>
+<tr class="even">
+<td>Tempo e sazonalidade</td>
+<td>As regras de dezembro não são as de julho; o churrasco é mais forte no fim de semana</td>
+</tr>
+<tr class="odd">
+<td>Segmentos diferentes</td>
+<td>As regras podem mudar de um perfil de cliente para outro; vale rodar o Apriori dentro de cada segmento do K-Means</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="em-resumo" class="level2">
+<h2 class="anchored" data-anchor-id="em-resumo">🎯 Em resumo:</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Etapa</th>
+<th>O que fizemos</th>
+<th>Ferramenta no R</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Preparar</td>
+<td>Transformar cupons em transações</td>
+<td><code>as(lista, "transactions")</code></td>
+</tr>
+<tr class="even">
+<td>Explorar</td>
+<td>Ver os itens mais frequentes</td>
+<td><code>itemFrequency()</code> + <code>ggplot2</code></td>
+</tr>
+<tr class="odd">
+<td>Minerar</td>
+<td>Encontrar itemsets frequentes e regras</td>
+<td><code>apriori()</code></td>
+</tr>
+<tr class="even">
+<td>Filtrar</td>
+<td>Ordenar por lift e remover redundantes</td>
+<td><code>sort()</code>, <code>subset()</code>, <code>is.redundant()</code></td>
+</tr>
+<tr class="odd">
+<td>Interpretar</td>
+<td>Separar acionáveis, óbvias, enganosas e de acaso</td>
+<td><code>DATAFRAME()</code> + <code>gt</code></td>
+</tr>
+<tr class="even">
+<td>Visualizar</td>
+<td>Desenhar o mapa das regras</td>
+<td><code>arulesViz::plot(method = "graph")</code></td>
+</tr>
+<tr class="odd">
+<td>Decidir</td>
+<td>Combos, layout, recomendações</td>
+<td>Teste A/B antes de escalar</td>
+</tr>
+</tbody>
+</table>
+<ol type="1">
+<li>A Análise de Cesta de Compras procura regras <strong>“SE… ENTÃO…”</strong> entre produtos, a partir dos cupons fiscais.</li>
+<li><strong>Suporte</strong> mede a frequência, <strong>confiança</strong> mede a força e <strong>lift</strong> mede se existe atração de verdade.</li>
+<li>O Apriori é rápido porque <strong>poda</strong> combinações que contêm itens raros, sem precisar contá-las.</li>
+<li>Confiança sem lift engana: o leite gerou <strong>49 regras</strong> com confiança de ~40% e nenhuma relevância.</li>
+<li>O grafo do <code>{arulesViz}</code> revela as <strong>missões de compra</strong> (as ilhas) e expõe as coincidências.</li>
+<li>O produto mais vendido não é, necessariamente, o mais conectado.</li>
+</ol>
+<p>Quer praticar? O próprio <code>{arules}</code> traz uma base real, o <code>Groceries</code>, com 9.835 cupons e 169 produtos de um supermercado. Basta rodar <code>data("Groceries")</code> e repetir os passos deste post. Desafio: desenhe o grafo das 20 regras de maior lift e me conte quantas ilhas você encontrou. Para se aprofundar, o capítulo 6 do livro <strong>Data Mining: Concepts and Techniques</strong>, de Jiawei Han, Micheline Kamber e Jian Pei, é a referência clássica sobre o tema.</p>
+<p>E aquela pergunta do começo: manteiga perto ou longe do pão? Agora você sabe que a resposta começa por um número (o lift de 3,52 diz que a associação é real) e termina numa decisão de negócio (conveniência ou passeio pela loja?). E se alguém contar a história das fraldas e cervejas na próxima reunião, você já pode perguntar: <em>“Qual era o lift?”</em></p>
+<blockquote class="blockquote">
+<p><strong>Isso, para mim, é a alfabetização de dados na veia!</strong></p>
+</blockquote>
+<p>EDA | TESTE T | ENQUETES | ANOVA | MODELOS DE REGRESSÃO | ANÁLISE FATORIAL | MODELAGEM DE EQUAÇÕES ESTRUTURAIS | TRI | RASCH MODELS | MACHINE LEARNING</p>
+<p><img src="images/whatsapp_logo.png" width="20" height="20"> <a href="https://wa.me/5562992138972"><strong>Prof.&nbsp;Jobenil Júnior</strong></a></p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/jobenil\.github\.io\/MeuNomeEhJob\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

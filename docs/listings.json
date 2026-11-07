@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/analise_cesta_de_compras_apriori/index.html",
       "/posts/kmeans_segmentacao_de_mercado/index.html",
       "/posts/regressao_logistica_previsao_de_churn/index.html",
       "/posts/tamanho_do_efeito_na_anova_eta_omega/index.html",
